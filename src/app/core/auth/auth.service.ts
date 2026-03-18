@@ -63,5 +63,6 @@ export class AuthService {
   private cleanLocalAuth() {
     localStorage.removeItem(this.TOKEN_KEY);
     this.currentUserToken.set(null);
+    this.currentUser.set(null);
   }
 }
