@@ -1,3 +1,39 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  // Public routes
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./features//auth/login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./features//auth/register/register.component').then((m) => m.RegisterComponent),
+  },
+
+  // Protected routes (requires authentication)
+  {
+    path: 'tasks',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/tasks/task-list/task-list.component').then((m) => m.TaskListComponent),
+  },
+
+  // Admin routes (requires authentication and admin role)
+  {
+    path: 'admin',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () =>
+      import('./features/admin/admin-dashboard/admin-dashboard.component').then(
+        (m) => m.AdminDashboardComponent,
+      ),
+  },
+
+  // Default redirect and 404 error handling
+  { path: '', redirectTo: 'tasks', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' },
+];

@@ -1,0 +1,35 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Bienvenido</h2>
+    <p>Ingresa tus credenciales para gestionar tus tareas</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" formControlName="email" placeholder="ejemplo@correo.com" />
+        @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']) {
+          <small class="error">El correo no es válido</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" formControlName="password" placeholder="******" />
+      </div>
+
+      @if (errorMessage()) {
+        <div class="alert-error">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <button type="submit" [disabled]="loginForm.invalid || isLoading()">
+        {{ isLoading() ? 'Iniciando sesión...' : 'Entrar' }}
+      </button>
+
+      <div class="footer-links">
+        <span>¿No tienes cuenta? <a routerLink="/register">Registrate aquí</a></span>
+      </div>
+    </form>
+  </div>
+</div>

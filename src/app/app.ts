@@ -1,21 +1,12 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from './core/auth/auth.service';
+import { NavbarComponent } from './layouts/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NavbarComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {
-  public authService = inject(AuthService);
-
-  testLogin(email: string, pass: string) {
-    this.authService.login({ email, password: pass }).subscribe({
-      next: (res) => console.log('Login exitoso', res),
-      error: (err) => console.error('Error de login', err),
-    });
-  }
-}
+export class App {}

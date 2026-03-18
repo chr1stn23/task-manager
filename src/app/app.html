@@ -1,24 +1,4 @@
-<div style="padding: 20px">
-  <h1>Prueba de Login</h1>
-
-  <div style="margin-bottom: 10px">
-    <input #email type="email" placeholder="Email" value="tu@email.com" />
-    <input #password type="password" placeholder="Password" value="Password123!" />
-    <button (click)="testLogin(email.value, password.value)">Iniciar Sesión</button>
-  </div>
-
-  <hr />
-
-  @if (authService.currentUser()) {
-    <div style="color: green">
-      <h3>✅ Sesión Iniciada</h3>
-      <p>Bienvenido: {{ authService.currentUser()?.name }}</p>
-      <p>Roles: {{ authService.currentUser()?.roles }}</p>
-      <button (click)="authService.logout()">Cerrar Sesión</button>
-    </div>
-  } @else {
-    <p style="color: gray">No hay sesión activa.</p>
-  }
-</div>
-
-<router-outlet />
+<app-navbar />
+<main class="main-container">
+  <router-outlet />
+</main>

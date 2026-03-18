@@ -1,0 +1,25 @@
+<nav class="navbar">
+  <div class="brand">
+    <a routerLink="/tasks">Task Manager</a>
+  </div>
+
+  <ul class="nav-links">
+    @if (authService.currentUserToken()) {
+      <li><a routerLink="/tasks" routerLinkActive="active">Mis tareas</a></li>
+
+      @if (authService.isAdmin()) {
+        <li><a routerLink="/admin" routerLinkActive="active">Panel Admin</a></li>
+      }
+
+      <li class="user-info">
+        <span
+          >Hola, <strong>{{ authService.currentUser()?.name }}</strong></span
+        >
+        <button class="btn-logout" (click)="authService.logout()">Cerrar Sesión</button>
+      </li>
+    } @else {
+      <li><a routerLink="/login">Iniciar Sesión</a></li>
+      <li><a routerLink="/register">Registrarse</a></li>
+    }
+  </ul>
+</nav>
