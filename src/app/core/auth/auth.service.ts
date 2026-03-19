@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { AuthRequestDTO } from '../../shared/models/request/auth-request.model';
+import { AuthRequestDTO, RegisterRequestDTO } from '../../shared/models/request/auth-request.model';
 import { ApiResponseWrapper } from '../../shared/models/api-response.model';
 import { AuthResponseDTO } from '../../shared/models/response/auth-response.model';
 import { catchError, Observable, of, tap } from 'rxjs';
@@ -17,6 +17,19 @@ export class AuthService {
   currentUser = signal<UserResponseDTO | null>(null);
 
   isAdmin = computed(() => this.currentUser()?.roles.includes('ROLE_ADMIN') ?? false);
+
+  register(data: RegisterRequestDTO): Observable<ApiResponseWrapper<AuthResponseDTO>> {
+    return this.http.post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/register', data).pipe(
+      tap((response) => {
+        if (response.success) {
+          const token = response.data.token;
+          localStorage.setItem(this.TOKEN_KEY, token);
+          this.currentUserToken.set(token);
+          this.loadUserProfile().subscribe();
+        }
+      }),
+    );
+  }
 
   login(credentials: AuthRequestDTO) {
     return this.http.post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/login', credentials).pipe(

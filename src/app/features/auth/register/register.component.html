@@ -1,1 +1,47 @@
-<p>register works!</p>
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Crear tu cuenta</h2>
+    <p>Únete para organizar tus tareas de forma eficiente</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="form-group">
+        <label>Nombre Completo</label>
+        <input type="text" formControlName="name" />
+        @let nameError = getError('name');
+        @if (nameError) {
+          <small class="error"> {{ nameError }} </small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Correo Electrónico</label>
+        <input type="email" formControlName="email" />
+        @let emailError = getError('email');
+        @if (emailError) {
+          <small class="error"> {{ emailError }} </small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" formControlName="password" />
+        @let passwordError = getError('password');
+        @if (passwordError) {
+          <small class="error"> {{ passwordError }} </small>
+        }
+      </div>
+
+      @if (errorMessage()) {
+        <div class="alert-error">{{ errorMessage() }}</div>
+      }
+
+      <button type="submit" [disabled]="registerForm.invalid || isLoading()">
+        {{ isLoading() ? 'Creando cuenta...' : 'Registrarse' }}
+      </button>
+
+      <div class="footer-links">
+        <span>¿Ya tienes cuenta? <a routerLink="/login">Iniciar sesión</a></span>
+      </div>
+    </form>
+  </div>
+</div>
