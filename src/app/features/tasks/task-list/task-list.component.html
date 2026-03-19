@@ -1,1 +1,86 @@
-<p>task-list works!</p>
+<div class="tasks-container">
+  <header class="tasks-header">
+    <h1>Mis tareas</h1>
+    <button class="btn-primary">+ Nueva Tarea</button>
+  </header>
+
+  <section class="filters-bar">
+    <div class="filter-group">
+      <label for="status">Estado:</label>
+      <select id="status" (change)="onFilterStatus($event)">
+        <option value="">Todos</option>
+        <option value="TODO">Pendiente</option>
+        <option value="IN_PROGRESS">En progreso</option>
+        <option value="DONE">Completada</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="priority">Prioridad:</label>
+      <select id="priority" (change)="onFilterPriority($event)">
+        <option value="">Todas</option>
+        <option value="LOW">Baja</option>
+        <option value="MEDIUM">Media</option>
+        <option value="HIGH">Alta</option>
+      </select>
+    </div>
+
+    <div class="filter-group checkbox">
+      <label> <input type="checkbox" (change)="onFilterDeleted($event)" /> Ver eliminadas </label>
+    </div>
+
+    <div class="filter-group">
+      <label>Mostrar:</label>
+      <select (change)="onPageSizeChange($event)">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+  </section>
+
+  @if (isLoading()) {
+    <div class="loading">Cargando tus tareas...</div>
+  } @else {
+    <div class="task-grid">
+      @for (task of tasks(); track task.id) {
+        <article class="task-card">
+          <div class="priority-tag" [attr.data-priority]="task.priority">
+            {{ priorityLabels[task.priority] || task.priority }}
+          </div>
+          <h3>{{ task.title }}</h3>
+          <p>{{ task.description }}</p>
+
+          <div class="task-footer">
+            <span class="status-badge">{{ statusLabels[task.status] || task.status }}</span>
+            <div class="actions">
+              <button (click)="deleteTask(task.id)" class="btn-icon-delete" title="Eliminar">
+                🗑️
+              </button>
+            </div>
+          </div>
+        </article>
+      } @empty {
+        <div class="empty-state">
+          <p>No se encontraron tareas con estos filtros.</p>
+        </div>
+      }
+    </div>
+
+    @if (totalPages() > 1) {
+      <div class="pagination">
+        <button [disabled]="currentPage() === 0" (click)="changePage(currentPage() - 1)">
+          Anterior
+        </button>
+        <span class="page-info">Página {{ currentPage() + 1 }} de {{ totalPages() }}</span>
+        <button
+          [disabled]="currentPage() + 1 === totalPages()"
+          (click)="changePage(currentPage() + 1)"
+        >
+          Siguiente
+        </button>
+      </div>
+    }
+  }
+</div>
