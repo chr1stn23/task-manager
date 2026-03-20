@@ -4,11 +4,12 @@ import { TaskService } from '../services/task.service';
 import { TaskResponseDTO } from '../../../shared/models/response/task-response.model';
 import { Priority, TaskStatus } from '../../../shared/models/enums';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TaskFormComponent } from '../components/task-form/task-form.component';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TaskFormComponent],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })
@@ -28,6 +29,8 @@ export class TaskListComponent implements OnInit {
   selectedStatus = signal<TaskStatus | undefined>(undefined);
   selectedPriority = signal<Priority | undefined>(undefined);
 
+  showModal = signal<boolean>(false);
+
   readonly statusLabels: Record<string, string> = {
     TODO: 'Pendiente',
     IN_PROGRESS: 'En Progreso',
@@ -46,10 +49,23 @@ export class TaskListComponent implements OnInit {
     if (params['status']) this.selectedStatus.set(params['status']);
     if (params['priority']) this.selectedPriority.set(params['priority']);
     if (params['deleted']) this.showDeleted.set(params['deleted'] === 'true');
-    if (params['page']) this.currentPage.set(Number(params['page']));
+    if (params['page']) this.currentPage.set(Number(params['page']) - 1);
     if (params['size']) this.pageSize.set(Number(params['size']));
 
     this.loadTasks();
+  }
+
+  openModal() {
+    this.showModal.set(true);
+  }
+
+  closeModal() {
+    this.showModal.set(false);
+  }
+
+  handleTaskCreated() {
+    this.loadTasks();
+    this.closeModal();
   }
 
   private updateUrlAndLoad() {
@@ -59,7 +75,7 @@ export class TaskListComponent implements OnInit {
         status: this.selectedStatus() || null,
         priority: this.selectedPriority() || null,
         deleted: this.showDeleted() ? true : null,
-        page: this.currentPage() > 0 ? this.currentPage() : null,
+        page: this.currentPage() > 0 ? this.currentPage() + 1 : null,
         size: this.pageSize() !== 10 ? this.pageSize() : null,
       },
       queryParamsHandling: 'merge',

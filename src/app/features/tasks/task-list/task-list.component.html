@@ -1,8 +1,11 @@
 <div class="tasks-container">
   <header class="tasks-header">
     <h1>Mis tareas</h1>
-    <button class="btn-primary">+ Nueva Tarea</button>
+    <button class="btn-primary" (click)="openModal()">+ Nueva Tarea</button>
   </header>
+  @if (showModal()) {
+    <app-task-form (close)="closeModal()" (taskCreated)="handleTaskCreated()" />
+  }
 
   <section class="filters-bar">
     <div class="filter-group">
