@@ -7,7 +7,7 @@
   <section class="filters-bar">
     <div class="filter-group">
       <label for="status">Estado:</label>
-      <select id="status" (change)="onFilterStatus($event)">
+      <select [value]="selectedStatus() || ''" id="status" (change)="onFilterStatus($event)">
         <option value="">Todos</option>
         <option value="TODO">Pendiente</option>
         <option value="IN_PROGRESS">En progreso</option>
@@ -17,7 +17,7 @@
 
     <div class="filter-group">
       <label for="priority">Prioridad:</label>
-      <select id="priority" (change)="onFilterPriority($event)">
+      <select [value]="selectedPriority() || ''" id="priority" (change)="onFilterPriority($event)">
         <option value="">Todas</option>
         <option value="LOW">Baja</option>
         <option value="MEDIUM">Media</option>
@@ -26,17 +26,26 @@
     </div>
 
     <div class="filter-group checkbox">
-      <label> <input type="checkbox" (change)="onFilterDeleted($event)" /> Ver eliminadas </label>
+      <label>
+        <input type="checkbox" [checked]="showDeleted()" (change)="onFilterDeleted($event)" />
+        Ver eliminadas
+      </label>
     </div>
 
     <div class="filter-group">
       <label>Mostrar:</label>
-      <select (change)="onPageSizeChange($event)">
+      <select [value]="pageSize()" (change)="onPageSizeChange($event)">
         <option value="5">5</option>
-        <option value="10" selected>10</option>
+        <option value="10">10</option>
         <option value="20">20</option>
         <option value="50">50</option>
       </select>
+    </div>
+
+    <div class="filter-group">
+      <button class="btn-reset" (click)="resetFilters()" title="Limpiar filtros">
+        Reestrablecer
+      </button>
     </div>
   </section>
 
