@@ -1,11 +1,8 @@
 <div class="tasks-container">
   <header class="tasks-header">
     <h1>Mis tareas</h1>
-    <button class="btn-primary" (click)="openModal()">+ Nueva Tarea</button>
+    <button class="btn-primary" (click)="openModal()">Nueva Tarea</button>
   </header>
-  @if (showModal()) {
-    <app-task-form (close)="closeModal()" (taskCreated)="handleTaskCreated()" />
-  }
 
   <section class="filters-bar">
     <div class="filter-group">
@@ -57,26 +54,20 @@
   } @else {
     <div class="task-grid">
       @for (task of tasks(); track task.id) {
-        <article class="task-card">
-          <div class="priority-tag" [attr.data-priority]="task.priority">
-            {{ priorityLabels[task.priority] || task.priority }}
-          </div>
-          <h3>{{ task.title }}</h3>
-          <p>{{ task.description }}</p>
-
-          <div class="task-footer">
-            <span class="status-badge">{{ statusLabels[task.status] || task.status }}</span>
-            <div class="actions">
-              <button (click)="deleteTask(task.id)" class="btn-icon-delete" title="Eliminar">
-                🗑️
-              </button>
-            </div>
-          </div>
-        </article>
+        <app-task-card [task]="task" (edit)="editTask($event)" (delete)="deleteTask($event)" />
       } @empty {
         <div class="empty-state">
           <p>No se encontraron tareas con estos filtros.</p>
         </div>
+      }
+
+      @if (showModal()) {
+        <app-task-form
+          [taskToEdit]="selectedTask()"
+          (close)="closeModal()"
+          (taskCreated)="loadTasks()"
+          (taskUpdated)="loadTasks()"
+        />
       }
     </div>
 

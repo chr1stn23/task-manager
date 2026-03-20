@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 
@@ -11,4 +11,23 @@ import { AuthService } from '../../core/auth/auth.service';
 })
 export class NavbarComponent {
   public authService = inject(AuthService);
+
+  isMenuOpen = signal<boolean>(false);
+
+  toggleMenu() {
+    this.isMenuOpen.update((v) => !v);
+  }
+
+  @HostListener('document:click', ['$event'])
+  closeMenu(event: Event) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.user-dropdown')) {
+      this.isMenuOpen.set(false);
+    }
+  }
+
+  onLogout() {
+    this.isMenuOpen.set(false);
+    this.authService.logout();
+  }
 }

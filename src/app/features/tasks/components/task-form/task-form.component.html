@@ -1,7 +1,7 @@
 <div class="modal-overlay" (click)="close.emit()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <header class="modal-header">
-      <h2>Nueva tarea</h2>
+      <h2>{{ taskToEdit ? 'Editar Tarea' : 'Nueva Tarea' }}</h2>
       <button class="btn-close" (click)="close.emit()" title="Cerrar">&times;</button>
     </header>
 
@@ -20,6 +20,7 @@
         <textarea
           formControlName="description"
           rows="3"
+          maxlength="500"
           placeholder="Detalles de la tarea..."
         ></textarea>
       </div>
@@ -60,7 +61,11 @@
           Cancelar
         </button>
         <button type="submit" class="btn-primary" [disabled]="taskForm.invalid || isLoading()">
-          {{ isLoading() ? 'Guardando...' : 'Crear Tarea' }}
+          @if (isLoading()) {
+            {{ taskToEdit ? 'Actualizando...' : 'Guardando...' }}
+          } @else {
+            {{ taskToEdit ? 'Guardar Cambios' : 'Crear Tarea' }}
+          }
         </button>
       </footer>
     </form>

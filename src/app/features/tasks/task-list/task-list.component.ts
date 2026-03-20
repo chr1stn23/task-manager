@@ -5,11 +5,12 @@ import { TaskResponseDTO } from '../../../shared/models/response/task-response.m
 import { Priority, TaskStatus } from '../../../shared/models/enums';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskFormComponent } from '../components/task-form/task-form.component';
+import { TaskCardComponent } from '../components/task-card/task-card.component';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, TaskFormComponent],
+  imports: [CommonModule, TaskFormComponent, TaskCardComponent],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })
@@ -30,6 +31,7 @@ export class TaskListComponent implements OnInit {
   selectedPriority = signal<Priority | undefined>(undefined);
 
   showModal = signal<boolean>(false);
+  selectedTask = signal<TaskResponseDTO | undefined>(undefined);
 
   readonly statusLabels: Record<string, string> = {
     TODO: 'Pendiente',
@@ -55,11 +57,18 @@ export class TaskListComponent implements OnInit {
     this.loadTasks();
   }
 
+  editTask(task: TaskResponseDTO) {
+    this.selectedTask.set(task);
+    this.showModal.set(true);
+  }
+
   openModal() {
+    this.selectedTask.set(undefined);
     this.showModal.set(true);
   }
 
   closeModal() {
+    this.selectedTask.set(undefined);
     this.showModal.set(false);
   }
 

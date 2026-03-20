@@ -11,11 +11,25 @@
         <li><a routerLink="/admin" routerLinkActive="active">Panel Admin</a></li>
       }
 
-      <li class="user-info">
-        <span
-          >Hola, <strong>{{ authService.currentUser()?.name }}</strong></span
-        >
-        <button class="btn-logout" (click)="authService.logout()">Cerrar Sesión</button>
+      <li class="user-dropdown">
+        <button class="dropdown-trigger" (click)="toggleMenu()">
+          <span
+            >Hola, <strong>{{ authService.currentUser()?.name }}</strong></span
+          >
+          <span class="arrow" [class.open]="isMenuOpen()">▼</span>
+        </button>
+
+        @if (isMenuOpen()) {
+          <div class="dropdown-menu">
+            <a routerLink="/profile" class="dropdown-item">
+              <span class="icon">👤</span> Mi Cuenta
+            </a>
+            <div class="divider"></div>
+            <button class="dropdown-item logout" (click)="onLogout()">
+              <span class="icon">🚪</span> Cerrar Sesión
+            </button>
+          </div>
+        }
       </li>
     } @else {
       <li><a routerLink="/login">Iniciar Sesión</a></li>

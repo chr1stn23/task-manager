@@ -1,9 +1,10 @@
-import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
 import { TaskRequestDTO } from '../../../../shared/models/request/task-request.model';
 import { CommonModule } from '@angular/common';
 import { getFieldError } from '../../../../shared/utils/form-errors';
+import { TaskResponseDTO } from '../../../../shared/models/response/task-response.model';
 
 @Component({
   selector: 'app-task-form',
@@ -12,10 +13,12 @@ import { getFieldError } from '../../../../shared/utils/form-errors';
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss',
 })
-export class TaskFormComponent {
+export class TaskFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private taskService = inject(TaskService);
 
+  @Input() taskToEdit?: TaskResponseDTO;
+  @Output() taskUpdated = new EventEmitter<void>();
   @Output() taskCreated = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
@@ -28,11 +31,23 @@ export class TaskFormComponent {
       validators: [Validators.required, Validators.minLength(3)],
       nonNullable: true,
     }),
-    description: [''],
+    description: this.fb.control<string | null>(null, { validators: [Validators.maxLength(500)] }),
     priority: this.fb.control('LOW', { validators: [Validators.required], nonNullable: true }),
     status: this.fb.control('TODO', { validators: [Validators.required], nonNullable: true }),
-    dueDate: [null],
+    dueDate: this.fb.control<string | null>(null),
   });
+
+  ngOnInit(): void {
+    if (this.taskToEdit) {
+      this.taskForm.patchValue({
+        title: this.taskToEdit.title,
+        description: this.taskToEdit.description,
+        priority: this.taskToEdit.priority,
+        status: this.taskToEdit.status,
+        dueDate: this.taskToEdit.dueDate ? this.taskToEdit.dueDate.substring(0, 10) : null,
+      });
+    }
+  }
 
   onSubmit() {
     this.submitted.set(true);
@@ -48,10 +63,14 @@ export class TaskFormComponent {
       dueDate: rawValue.dueDate ? new Date(rawValue.dueDate).toISOString() : undefined,
     };
 
-    this.taskService.createTask(taskRequest).subscribe({
+    const request$ = this.taskToEdit
+      ? this.taskService.updateTask(this.taskToEdit.id, taskRequest)
+      : this.taskService.createTask(taskRequest);
+
+    request$.subscribe({
       next: (req) => {
         if (req.success) {
-          this.taskCreated.emit();
+          this.taskToEdit ? this.taskUpdated.emit() : this.taskCreated.emit();
           this.close.emit();
         }
 

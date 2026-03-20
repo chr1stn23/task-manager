@@ -1,0 +1,27 @@
+<article class="task-card" (click)="edit.emit(task)" style="cursor: pointer">
+  <div class="priority-tag" [attr.data-priority]="task.priority">
+    {{ priorityLabels[task.priority] || task.priority }}
+  </div>
+
+  <h3>{{ task.title }}</h3>
+  <p>{{ task.description }}</p>
+
+  @if (task.dueDate) {
+    <div class="due-date" [class.expired]="isExpired(task)">
+      <span>📅 Expira: {{ task.dueDate | date: 'dd/MM/yyyy' }}</span>
+    </div>
+  }
+
+  <div class="task-footer">
+    <span class="status-badge">{{ statusLabels[task.status] || task.status }}</span>
+    <div class="actions">
+      <button
+        (click)="$event.stopPropagation(); delete.emit(task.id)"
+        class="btn-icon-delete"
+        title="Eliminar"
+      >
+        🗑️
+      </button>
+    </div>
+  </div>
+</article>
