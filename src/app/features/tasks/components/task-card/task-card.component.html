@@ -15,13 +15,15 @@
   <div class="task-footer">
     <span class="status-badge">{{ statusLabels[task.status] || task.status }}</span>
     <div class="actions">
-      <button
-        (click)="$event.stopPropagation(); delete.emit(task.id)"
-        class="btn-icon-delete"
-        title="Eliminar"
-      >
-        🗑️
-      </button>
+      @if (showActions) {
+        <button
+          (click)="$event.stopPropagation(); delete.emit(task.id)"
+          class="btn-icon-delete"
+          title="Eliminar"
+        >
+          🗑️
+        </button>
+      }
     </div>
   </div>
 </article>

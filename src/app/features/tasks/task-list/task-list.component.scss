@@ -86,19 +86,39 @@
     }
   }
 
-  .checkbox label {
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
+  .view-toggle-group {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #475569;
+    background: #f1f5f9;
+    padding: 0.25rem;
+    border-radius: 8px;
+    gap: 0.25rem;
+    margin-left: auto; // Esto lo empuja al extremo derecho de la barra de filtros
 
-    input {
-      width: 16px;
-      height: 16px;
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
       cursor: pointer;
+      color: #64748b;
+      background: transparent;
+      transition: all 0.2s ease;
+
+      &.active {
+        background: white;
+        color: #2563eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      &:hover:not(.active) {
+        color: #1e293b;
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      &.btn-trash.active {
+        color: #ef4444; // Rojo si la papelera está activa
+      }
     }
   }
 }

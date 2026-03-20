@@ -137,9 +137,10 @@ export class TaskListComponent implements OnInit {
     this.updateUrlAndLoad();
   }
 
-  onFilterDeleted(event: Event) {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    this.showDeleted.set(isChecked);
+  toggleView(viewDeleted: boolean) {
+    if (this.showDeleted() === viewDeleted) return;
+
+    this.showDeleted.set(viewDeleted);
     this.currentPage.set(0);
     this.updateUrlAndLoad();
   }

@@ -1,7 +1,9 @@
 <div class="modal-overlay" (click)="close.emit()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <header class="modal-header">
-      <h2>{{ taskToEdit ? 'Editar Tarea' : 'Nueva Tarea' }}</h2>
+      <h2>
+        {{ isReadOnly ? 'Tarea Eliminada' : taskToEdit ? 'Editar Tarea' : 'Nueva Tarea' }}
+      </h2>
       <button class="btn-close" (click)="close.emit()" title="Cerrar">&times;</button>
     </header>
 
@@ -58,15 +60,17 @@
 
       <footer class="modal-footer">
         <button type="button" class="btn-secondary" (click)="close.emit()" [disabled]="isLoading()">
-          Cancelar
+          {{ isReadOnly ? 'Cerrar' : 'Cancelar' }}
         </button>
-        <button type="submit" class="btn-primary" [disabled]="taskForm.invalid || isLoading()">
-          @if (isLoading()) {
-            {{ taskToEdit ? 'Actualizando...' : 'Guardando...' }}
-          } @else {
-            {{ taskToEdit ? 'Guardar Cambios' : 'Crear Tarea' }}
-          }
-        </button>
+        @if (isReadOnly) {
+          <button type="button" class="btn-restore" (click)="onRestore()" [disabled]="isLoading()">
+            {{ isLoading() ? 'Restaurando...' : 'Restaurar Tarea' }}
+          </button>
+        } @else {
+          <button type="submit" class="btn-primary" [disabled]="taskForm.invalid || isLoading()">
+            {{ isLoading() ? 'Procesando...' : taskToEdit ? 'Guardar Cambios' : 'Crear Tarea' }}
+          </button>
+        }
       </footer>
     </form>
   </div>

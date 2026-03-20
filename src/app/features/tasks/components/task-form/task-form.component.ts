@@ -18,8 +18,10 @@ export class TaskFormComponent implements OnInit {
   private taskService = inject(TaskService);
 
   @Input() taskToEdit?: TaskResponseDTO;
+  @Input() isReadOnly? = false;
   @Output() taskUpdated = new EventEmitter<void>();
   @Output() taskCreated = new EventEmitter<void>();
+  @Output() taskRestored = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
   errorMessage = signal<string | null>(null);
@@ -46,6 +48,10 @@ export class TaskFormComponent implements OnInit {
         status: this.taskToEdit.status,
         dueDate: this.taskToEdit.dueDate ? this.taskToEdit.dueDate.substring(0, 10) : null,
       });
+
+      if (this.isReadOnly) {
+        this.taskForm.disable();
+      }
     }
   }
 
@@ -78,6 +84,25 @@ export class TaskFormComponent implements OnInit {
       },
       error: (err) => {
         this.errorMessage.set(err.error?.error?.message || 'Error al crear la tarea');
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  onRestore() {
+    if (!this.taskToEdit) return;
+
+    this.taskService.restoreTask(this.taskToEdit.id).subscribe({
+      next: (req) => {
+        if (req.success) {
+          this.taskRestored.emit();
+          this.close.emit();
+        }
+
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.errorMessage.set(err.error?.error?.message || 'Error al restaurar la tarea');
         this.isLoading.set(false);
       },
     });

@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class TaskCardComponent {
   @Input({ required: true }) task!: TaskResponseDTO;
+  @Input() showActions: boolean = true;
   @Output() edit = new EventEmitter<TaskResponseDTO>();
   @Output() delete = new EventEmitter<number>();
 

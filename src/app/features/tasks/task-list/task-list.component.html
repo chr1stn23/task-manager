@@ -25,13 +25,6 @@
       </select>
     </div>
 
-    <div class="filter-group checkbox">
-      <label>
-        <input type="checkbox" [checked]="showDeleted()" (change)="onFilterDeleted($event)" />
-        Ver eliminadas
-      </label>
-    </div>
-
     <div class="filter-group">
       <label>Mostrar:</label>
       <select [value]="pageSize()" (change)="onPageSizeChange($event)">
@@ -44,7 +37,21 @@
 
     <div class="filter-group">
       <button class="btn-reset" (click)="resetFilters()" title="Limpiar filtros">
-        Reestrablecer
+        Reestrablecer Filtros
+      </button>
+    </div>
+
+    <div class="view-toggle-group">
+      <button type="button" [class.active]="!showDeleted()" (click)="toggleView(false)">
+        Tareas Activas
+      </button>
+      <button
+        type="button"
+        [class.active]="showDeleted()"
+        (click)="toggleView(true)"
+        class="btn-trash"
+      >
+        Papelera
       </button>
     </div>
   </section>
@@ -54,7 +61,12 @@
   } @else {
     <div class="task-grid">
       @for (task of tasks(); track task.id) {
-        <app-task-card [task]="task" (edit)="editTask($event)" (delete)="deleteTask($event)" />
+        <app-task-card
+          [task]="task"
+          [showActions]="!showDeleted()"
+          (edit)="editTask($event)"
+          (delete)="deleteTask($event)"
+        />
       } @empty {
         <div class="empty-state">
           <p>No se encontraron tareas con estos filtros.</p>
@@ -64,9 +76,11 @@
       @if (showModal()) {
         <app-task-form
           [taskToEdit]="selectedTask()"
+          [isReadOnly]="showDeleted()"
           (close)="closeModal()"
           (taskCreated)="loadTasks()"
           (taskUpdated)="loadTasks()"
+          (taskRestored)="loadTasks()"
         />
       }
     </div>
