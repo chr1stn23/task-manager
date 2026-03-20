@@ -1,6 +1,11 @@
 <div class="tasks-container">
   <header class="tasks-header">
-    <h1>Mis tareas</h1>
+    <h1>
+      Mis tareas
+      @if (!isLoading() && totalElements() > 0) {
+        <span class="task-count">{{ totalElements() }}</span>
+      }
+    </h1>
     <button class="btn-primary" (click)="openModal()">Nueva Tarea</button>
   </header>
 
