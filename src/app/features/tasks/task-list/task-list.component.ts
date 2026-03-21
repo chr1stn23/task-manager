@@ -6,11 +6,12 @@ import { Priority, TaskStatus } from '../../../shared/models/enums';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskFormComponent } from '../components/task-form/task-form.component';
 import { TaskCardComponent } from '../components/task-card/task-card.component';
+import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, TaskFormComponent, TaskCardComponent],
+  imports: [CommonModule, TaskFormComponent, TaskCardComponent, ConfirmModalComponent],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })
@@ -32,6 +33,9 @@ export class TaskListComponent implements OnInit {
 
   showModal = signal<boolean>(false);
   selectedTask = signal<TaskResponseDTO | undefined>(undefined);
+
+  showConfirm = signal<boolean>(false);
+  taskIdToDelete = signal<number | null>(null);
 
   readonly statusLabels: Record<string, string> = {
     TODO: 'Pendiente',
@@ -150,12 +154,6 @@ export class TaskListComponent implements OnInit {
     this.updateUrlAndLoad();
   }
 
-  deleteTask(id: number) {
-    if (confirm('¿Seguro que deseas eliminar esta tarea?')) {
-      this.taskService.deleteTask(id).subscribe(() => this.loadTasks());
-    }
-  }
-
   resetFilters() {
     this.selectedStatus.set(undefined);
     this.selectedPriority.set(undefined);
@@ -169,5 +167,25 @@ export class TaskListComponent implements OnInit {
     });
 
     this.loadTasks();
+  }
+
+  deleteTask(id: number) {
+    this.taskIdToDelete.set(id);
+    this.showConfirm.set(true);
+  }
+
+  confirmDelete() {
+    const id = this.taskIdToDelete();
+    if (id) {
+      this.taskService.deleteTask(id).subscribe(() => {
+        this.loadTasks();
+        this.closeConfirm();
+      });
+    }
+  }
+
+  closeConfirm() {
+    this.taskIdToDelete.set(null);
+    this.showConfirm.set(false);
   }
 }

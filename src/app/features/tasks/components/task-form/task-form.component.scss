@@ -85,6 +85,12 @@
     }
   }
 
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+    max-height: 150px;
+  }
+
   .error {
     color: #ef4444;
     font-size: 0.8rem;
