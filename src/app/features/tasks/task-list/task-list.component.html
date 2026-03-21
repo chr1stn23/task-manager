@@ -77,17 +77,6 @@
           <p>No se encontraron tareas con estos filtros.</p>
         </div>
       }
-
-      @if (showModal()) {
-        <app-task-form
-          [taskToEdit]="selectedTask()"
-          [isReadOnly]="showDeleted()"
-          (close)="closeModal()"
-          (taskCreated)="loadTasks()"
-          (taskUpdated)="loadTasks()"
-          (taskRestored)="loadTasks()"
-        />
-      }
     </div>
 
     @if (totalPages() > 1) {
@@ -106,6 +95,17 @@
     }
   }
 </div>
+
+@if (showModal()) {
+  <app-task-form
+    [taskToEdit]="selectedTask()"
+    [isReadOnly]="showDeleted()"
+    (close)="closeModal()"
+    (taskCreated)="loadTasks()"
+    (taskUpdated)="loadTasks()"
+    (taskRestored)="loadTasks()"
+  />
+}
 
 @if (showConfirm()) {
   <app-confirm-modal
