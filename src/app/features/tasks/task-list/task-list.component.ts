@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { TaskService } from '../services/task.service';
 import { TaskResponseDTO } from '../../../shared/models/response/task-response.model';
 import { Priority, TaskStatus } from '../../../shared/models/enums';
@@ -7,11 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TaskFormComponent } from '../components/task-form/task-form.component';
 import { TaskCardComponent } from '../components/task-card/task-card.component';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
+import { TaskFiltersComponent } from '../components/task-filters/task-filters.component';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, TaskFormComponent, TaskCardComponent, ConfirmModalComponent],
+  imports: [TaskFormComponent, TaskCardComponent, ConfirmModalComponent, TaskFiltersComponent],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })
@@ -36,18 +36,6 @@ export class TaskListComponent implements OnInit {
 
   showConfirm = signal<boolean>(false);
   taskIdToDelete = signal<number | null>(null);
-
-  readonly statusLabels: Record<string, string> = {
-    TODO: 'Pendiente',
-    IN_PROGRESS: 'En Progreso',
-    DONE: 'Completada',
-  };
-
-  readonly priorityLabels: Record<string, string> = {
-    LOW: 'Baja',
-    MEDIUM: 'Media',
-    HIGH: 'Alta',
-  };
 
   ngOnInit() {
     const params = this.route.snapshot.queryParams;
@@ -74,11 +62,6 @@ export class TaskListComponent implements OnInit {
   closeModal() {
     this.selectedTask.set(undefined);
     this.showModal.set(false);
-  }
-
-  handleTaskCreated() {
-    this.loadTasks();
-    this.closeModal();
   }
 
   private updateUrlAndLoad() {

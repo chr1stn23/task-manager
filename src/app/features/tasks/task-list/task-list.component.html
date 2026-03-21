@@ -9,57 +9,17 @@
     <button class="btn-primary" (click)="openModal()">Nueva Tarea</button>
   </header>
 
-  <section class="filters-bar">
-    <div class="filter-group">
-      <label for="status">Estado:</label>
-      <select [value]="selectedStatus() || ''" id="status" (change)="onFilterStatus($event)">
-        <option value="">Todos</option>
-        <option value="TODO">Pendiente</option>
-        <option value="IN_PROGRESS">En progreso</option>
-        <option value="DONE">Completada</option>
-      </select>
-    </div>
-
-    <div class="filter-group">
-      <label for="priority">Prioridad:</label>
-      <select [value]="selectedPriority() || ''" id="priority" (change)="onFilterPriority($event)">
-        <option value="">Todas</option>
-        <option value="LOW">Baja</option>
-        <option value="MEDIUM">Media</option>
-        <option value="HIGH">Alta</option>
-      </select>
-    </div>
-
-    <div class="filter-group">
-      <label>Mostrar:</label>
-      <select [value]="pageSize()" (change)="onPageSizeChange($event)">
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="50">50</option>
-      </select>
-    </div>
-
-    <div class="filter-group">
-      <button class="btn-reset" (click)="resetFilters()" title="Limpiar filtros">
-        Reestrablecer Filtros
-      </button>
-    </div>
-
-    <div class="view-toggle-group">
-      <button type="button" [class.active]="!showDeleted()" (click)="toggleView(false)">
-        Tareas Activas
-      </button>
-      <button
-        type="button"
-        [class.active]="showDeleted()"
-        (click)="toggleView(true)"
-        class="btn-trash"
-      >
-        Papelera
-      </button>
-    </div>
-  </section>
+  <app-task-filters
+    [selectedStatus]="selectedStatus()"
+    [selectedPriority]="selectedPriority()"
+    [pageSize]="pageSize()"
+    [showDeleted]="showDeleted()"
+    (statusChange)="onFilterStatus($event)"
+    (priorityChange)="onFilterPriority($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+    (reset)="resetFilters()"
+    (viewToggled)="toggleView($event)"
+  />
 
   @if (isLoading()) {
     <div class="loading">Cargando tus tareas...</div>

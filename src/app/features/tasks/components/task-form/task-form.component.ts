@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
+import { Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
 import { TaskRequestDTO } from '../../../../shared/models/request/task-request.model';
@@ -17,12 +17,12 @@ export class TaskFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private taskService = inject(TaskService);
 
-  @Input() taskToEdit?: TaskResponseDTO;
-  @Input() isReadOnly? = false;
-  @Output() taskUpdated = new EventEmitter<void>();
-  @Output() taskCreated = new EventEmitter<void>();
-  @Output() taskRestored = new EventEmitter<void>();
-  @Output() close = new EventEmitter<void>();
+  taskToEdit = input<TaskResponseDTO | undefined>(undefined);
+  isReadOnly = input<boolean>(false);
+  taskUpdated = output<void>();
+  taskCreated = output<void>();
+  taskRestored = output<void>();
+  close = output<void>();
 
   errorMessage = signal<string | null>(null);
   isLoading = signal(false);
@@ -40,16 +40,17 @@ export class TaskFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    if (this.taskToEdit) {
+    const task = this.taskToEdit();
+    if (task) {
       this.taskForm.patchValue({
-        title: this.taskToEdit.title,
-        description: this.taskToEdit.description,
-        priority: this.taskToEdit.priority,
-        status: this.taskToEdit.status,
-        dueDate: this.taskToEdit.dueDate ? this.taskToEdit.dueDate.substring(0, 10) : null,
+        title: task.title,
+        description: task.description,
+        priority: task.priority,
+        status: task.status,
+        dueDate: task.dueDate ? task.dueDate.substring(0, 10) : null,
       });
 
-      if (this.isReadOnly) {
+      if (this.isReadOnly()) {
         this.taskForm.disable();
       }
     }
@@ -69,14 +70,15 @@ export class TaskFormComponent implements OnInit {
       dueDate: rawValue.dueDate ? new Date(rawValue.dueDate).toISOString() : undefined,
     };
 
-    const request$ = this.taskToEdit
-      ? this.taskService.updateTask(this.taskToEdit.id, taskRequest)
+    const task = this.taskToEdit();
+    const request$ = task
+      ? this.taskService.updateTask(task.id, taskRequest)
       : this.taskService.createTask(taskRequest);
 
     request$.subscribe({
       next: (req) => {
         if (req.success) {
-          this.taskToEdit ? this.taskUpdated.emit() : this.taskCreated.emit();
+          task ? this.taskUpdated.emit() : this.taskCreated.emit();
           this.close.emit();
         }
 
@@ -90,9 +92,10 @@ export class TaskFormComponent implements OnInit {
   }
 
   onRestore() {
-    if (!this.taskToEdit) return;
+    const task = this.taskToEdit();
+    if (!task) return;
 
-    this.taskService.restoreTask(this.taskToEdit.id).subscribe({
+    this.taskService.restoreTask(task.id).subscribe({
       next: (req) => {
         if (req.success) {
           this.taskRestored.emit();

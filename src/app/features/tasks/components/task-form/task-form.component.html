@@ -2,7 +2,7 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <header class="modal-header">
       <h2>
-        {{ isReadOnly ? 'Tarea Eliminada' : taskToEdit ? 'Editar Tarea' : 'Nueva Tarea' }}
+        {{ isReadOnly() ? 'Tarea Eliminada' : taskToEdit() ? 'Editar Tarea' : 'Nueva Tarea' }}
       </h2>
       <button class="btn-close" (click)="close.emit()" title="Cerrar">&times;</button>
     </header>
@@ -60,15 +60,15 @@
 
       <footer class="modal-footer">
         <button type="button" class="btn-secondary" (click)="close.emit()" [disabled]="isLoading()">
-          {{ isReadOnly ? 'Cerrar' : 'Cancelar' }}
+          {{ isReadOnly() ? 'Cerrar' : 'Cancelar' }}
         </button>
-        @if (isReadOnly) {
+        @if (isReadOnly()) {
           <button type="button" class="btn-restore" (click)="onRestore()" [disabled]="isLoading()">
             {{ isLoading() ? 'Restaurando...' : 'Restaurar Tarea' }}
           </button>
         } @else {
           <button type="submit" class="btn-primary" [disabled]="taskForm.invalid || isLoading()">
-            {{ isLoading() ? 'Procesando...' : taskToEdit ? 'Guardar Cambios' : 'Crear Tarea' }}
+            {{ isLoading() ? 'Procesando...' : taskToEdit() ? 'Guardar Cambios' : 'Crear Tarea' }}
           </button>
         }
       </footer>

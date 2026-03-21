@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { TaskResponseDTO } from '../../../../shared/models/response/task-response.model';
 import { CommonModule } from '@angular/common';
 
@@ -10,10 +10,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './task-card.component.scss',
 })
 export class TaskCardComponent {
-  @Input({ required: true }) task!: TaskResponseDTO;
-  @Input() showActions: boolean = true;
-  @Output() edit = new EventEmitter<TaskResponseDTO>();
-  @Output() delete = new EventEmitter<number>();
+  task = input.required<TaskResponseDTO>();
+  showActions = input<boolean>(true);
+  edit = output<TaskResponseDTO>();
+  delete = output<number>();
 
   readonly statusLabels: Record<string, string> = {
     TODO: 'Pendiente',
