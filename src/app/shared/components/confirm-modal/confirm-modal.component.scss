@@ -23,8 +23,16 @@
   animation: scaleUp 0.2s ease-out;
 
   .icon-warning {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: #f59e0b;
+
+    lucide-icon {
+      background: #fef3c7;
+      padding: 1rem;
+      border-radius: 50%;
+    }
   }
   h3 {
     font-size: 1.4rem;

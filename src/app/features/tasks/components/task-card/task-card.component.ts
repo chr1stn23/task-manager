@@ -1,11 +1,12 @@
 import { Component, input, output } from '@angular/core';
 import { TaskResponseDTO } from '../../../../shared/models/response/task-response.model';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule, Trash2, Calendar } from 'lucide-angular';
 
 @Component({
   selector: 'app-task-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './task-card.component.html',
   styleUrl: './task-card.component.scss',
 })
@@ -14,6 +15,9 @@ export class TaskCardComponent {
   showActions = input<boolean>(true);
   edit = output<TaskResponseDTO>();
   delete = output<number>();
+
+  readonly Trash2 = Trash2;
+  readonly Calendar = Calendar;
 
   readonly statusLabels: Record<string, string> = {
     TODO: 'Pendiente',

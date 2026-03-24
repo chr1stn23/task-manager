@@ -23,7 +23,7 @@ export class TaskListComponent implements OnInit {
   tasks = signal<TaskResponseDTO[]>([]);
   isLoading = signal<boolean>(false);
 
-  pageSize = signal<number>(10);
+  pageSize = signal<number>(6);
   currentPage = signal<number>(0);
   totalPages = signal<number>(0);
   totalElements = signal<number>(0);
@@ -36,6 +36,10 @@ export class TaskListComponent implements OnInit {
 
   showConfirm = signal<boolean>(false);
   taskIdToDelete = signal<number | null>(null);
+  confirmTitle = signal<string>('Eliminar Tarea');
+  confirmMessage = signal<string>(
+    '¿Estás seguro de que quieres eliminar esta tarea? Se moverá a la papelera.',
+  );
 
   ngOnInit() {
     const params = this.route.snapshot.queryParams;
@@ -161,7 +165,11 @@ export class TaskListComponent implements OnInit {
     const id = this.taskIdToDelete();
     if (id) {
       this.taskService.deleteTask(id).subscribe(() => {
-        this.loadTasks();
+        if (this.tasks().length === 1 && this.currentPage() > 0) {
+          this.currentPage.update((p) => p - 1);
+        }
+
+        this.updateUrlAndLoad();
         this.closeConfirm();
       });
     }

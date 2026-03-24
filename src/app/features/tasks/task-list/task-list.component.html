@@ -69,8 +69,8 @@
 
 @if (showConfirm()) {
   <app-confirm-modal
-    title="Eliminar Tarea"
-    message="¿Estás seguro de que deseas eliminar esta tarea? Se moverá a la papelera."
+    [title]="confirmTitle()"
+    [message]="confirmMessage()"
     (confirm)="confirmDelete()"
     (cancel)="closeConfirm()"
   />
