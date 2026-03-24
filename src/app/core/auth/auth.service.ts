@@ -18,30 +18,57 @@ export class AuthService {
 
   isAdmin = computed(() => this.currentUser()?.roles.includes('ROLE_ADMIN') ?? false);
 
+  loginFeedback = signal<string | null>(null);
+
+  private readonly httpOptions = { withCredentials: true };
+
   register(data: RegisterRequestDTO): Observable<ApiResponseWrapper<AuthResponseDTO>> {
-    return this.http.post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/register', data).pipe(
-      tap((response) => {
-        if (response.success) {
-          const token = response.data.token;
-          localStorage.setItem(this.TOKEN_KEY, token);
-          this.currentUserToken.set(token);
-          this.loadUserProfile().subscribe();
-        }
-      }),
-    );
+    return this.http
+      .post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/register', data, this.httpOptions)
+      .pipe(tap((response) => this.handleAuthResponse(response)));
   }
 
   login(credentials: AuthRequestDTO) {
-    return this.http.post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/login', credentials).pipe(
-      tap((response) => {
-        if (response.success) {
-          const token = response.data.token;
-          localStorage.setItem(this.TOKEN_KEY, token);
-          this.currentUserToken.set(token);
-          this.loadUserProfile().subscribe();
-        }
-      }),
-    );
+    this.loginFeedback.set(null);
+    return this.http
+      .post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/login', credentials, this.httpOptions)
+      .pipe(tap((response) => this.handleAuthResponse(response)));
+  }
+
+  refreshToken(): Observable<ApiResponseWrapper<AuthResponseDTO>> {
+    return this.http
+      .post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/refresh', {}, this.httpOptions)
+      .pipe(tap((response) => this.handleAuthResponse(response)));
+  }
+
+  private handleAuthResponse(response: ApiResponseWrapper<AuthResponseDTO>) {
+    if (response.success) {
+      const token = response.data.token;
+      localStorage.setItem(this.TOKEN_KEY, token);
+      this.currentUserToken.set(token);
+      this.loadUserProfile().subscribe();
+    }
+  }
+
+  logout() {
+    return this.http
+      .post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/logout', {}, this.httpOptions)
+      .pipe(
+        tap(() => this.cleanLocalAuth()),
+        catchError(() => {
+          this.cleanLocalAuth();
+          return of(null);
+        }),
+      )
+      .subscribe(() => {
+        this.router.navigate(['/login']);
+      });
+  }
+
+  logoutWithReason(reason: string) {
+    this.cleanLocalAuth();
+    this.loginFeedback.set(reason);
+    this.router.navigate(['/login']);
   }
 
   loadUserProfile(): Observable<ApiResponseWrapper<UserResponseDTO> | null> {
@@ -56,21 +83,6 @@ export class AuthService {
         return of(null);
       }),
     );
-  }
-
-  logout() {
-    return this.http
-      .post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/logout', {})
-      .pipe(
-        tap(() => this.cleanLocalAuth()),
-        catchError(() => {
-          this.cleanLocalAuth();
-          return of(null);
-        }),
-      )
-      .subscribe(() => {
-        this.router.navigate(['/login']);
-      });
   }
 
   private cleanLocalAuth() {

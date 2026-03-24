@@ -13,7 +13,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
+  public authService = inject(AuthService);
   private router = inject(Router);
 
   errorMessage = signal<string | null>(null);
