@@ -5,6 +5,7 @@ import { TaskRequestDTO } from '../../../../shared/models/request/task-request.m
 import { CommonModule } from '@angular/common';
 import { getFieldError } from '../../../../shared/utils/form-errors';
 import { TaskResponseDTO } from '../../../../shared/models/response/task-response.model';
+import { Priority, TaskStatus } from '../../../../shared/models/enums';
 
 @Component({
   selector: 'app-task-form',
@@ -64,8 +65,8 @@ export class TaskFormComponent implements OnInit {
     const rawValue = this.taskForm.getRawValue();
     const taskRequest: TaskRequestDTO = {
       title: rawValue.title,
-      priority: rawValue.priority as any,
-      status: rawValue.status as any,
+      priority: rawValue.priority as Priority,
+      status: rawValue.status as TaskStatus,
       description: rawValue.description || undefined,
       dueDate: rawValue.dueDate ? new Date(rawValue.dueDate).toISOString() : undefined,
     };
@@ -78,7 +79,11 @@ export class TaskFormComponent implements OnInit {
     request$.subscribe({
       next: (req) => {
         if (req.success) {
-          task ? this.taskUpdated.emit() : this.taskCreated.emit();
+          if (task) {
+            this.taskUpdated.emit();
+          } else {
+            this.taskCreated.emit();
+          }
           this.close.emit();
         }
 
