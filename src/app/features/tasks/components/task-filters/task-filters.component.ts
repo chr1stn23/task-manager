@@ -13,9 +13,25 @@ export class TaskFiltersComponent {
   pageSize = input<number>(10);
   showDeleted = input<boolean>(false);
 
-  statusChange = output<Event>();
-  priorityChange = output<Event>();
-  pageSizeChange = output<Event>();
+  statusChange = output<TaskStatus | undefined>();
+  priorityChange = output<Priority | undefined>();
+  pageSizeChange = output<number>();
+
   reset = output<void>();
   viewToggled = output<boolean>();
+
+  onStatusChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value as TaskStatus;
+    this.statusChange.emit(value || undefined);
+  }
+
+  onPriorityChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value as Priority;
+    this.priorityChange.emit(value || undefined);
+  }
+
+  onPageSizeChange(event: Event) {
+    const value = Number((event.target as HTMLSelectElement).value);
+    this.pageSizeChange.emit(value);
+  }
 }

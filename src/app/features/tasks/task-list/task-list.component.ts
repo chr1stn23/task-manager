@@ -107,23 +107,20 @@ export class TaskListComponent implements OnInit {
       });
   }
 
-  onPageSizeChange(event: Event) {
-    const newSize = Number((event.target as HTMLSelectElement).value);
-    this.pageSize.set(newSize);
+  onPageSizeChange(size: number) {
+    this.pageSize.set(size);
     this.currentPage.set(0);
     this.updateUrlAndLoad();
   }
 
-  onFilterStatus(event: Event) {
-    const value = (event.target as HTMLSelectElement).value as TaskStatus;
-    this.selectedStatus.set(value || undefined);
+  onFilterStatus(status: TaskStatus | undefined) {
+    this.selectedStatus.set(status);
     this.currentPage.set(0);
     this.updateUrlAndLoad();
   }
 
-  onFilterPriority(event: Event) {
-    const value = (event.target as HTMLSelectElement).value as Priority;
-    this.selectedPriority.set(value || undefined);
+  onFilterPriority(priority: Priority | undefined) {
+    this.selectedPriority.set(priority);
     this.currentPage.set(0);
     this.updateUrlAndLoad();
   }
@@ -146,7 +143,7 @@ export class TaskListComponent implements OnInit {
     this.selectedPriority.set(undefined);
     this.showDeleted.set(false);
     this.currentPage.set(0);
-    this.pageSize.set(10);
+    this.pageSize.set(6);
 
     this.router.navigate([], {
       relativeTo: this.route,

@@ -1,7 +1,7 @@
 <section class="filters-bar">
   <div class="filter-group">
     <label for="status">Estado:</label>
-    <select [value]="selectedStatus() || ''" id="status" (change)="statusChange.emit($event)">
+    <select [value]="selectedStatus() || ''" id="status" (change)="onStatusChange($event)">
       <option value="">Todos</option>
       <option value="TODO">Pendiente</option>
       <option value="IN_PROGRESS">En progreso</option>
@@ -11,7 +11,7 @@
 
   <div class="filter-group">
     <label for="priority">Prioridad:</label>
-    <select [value]="selectedPriority() || ''" id="priority" (change)="priorityChange.emit($event)">
+    <select [value]="selectedPriority() || ''" id="priority" (change)="onPriorityChange($event)">
       <option value="">Todas</option>
       <option value="LOW">Baja</option>
       <option value="MEDIUM">Media</option>
@@ -21,11 +21,10 @@
 
   <div class="filter-group">
     <label>Mostrar:</label>
-    <select [value]="pageSize()" (change)="pageSizeChange.emit($event)">
+    <select [value]="pageSize()" (change)="onPageSizeChange($event)">
       <option value="6">6</option>
       <option value="12">12</option>
       <option value="24">24</option>
-      <option value="48">48</option>
     </select>
   </div>
 
