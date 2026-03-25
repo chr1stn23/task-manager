@@ -16,7 +16,6 @@ export class LoginComponent {
   public authService = inject(AuthService);
   private router = inject(Router);
 
-  errorMessage = signal<string | null>(null);
   isLoading = signal<boolean>(false);
 
   loginForm: FormGroup = this.fb.group({
@@ -28,19 +27,16 @@ export class LoginComponent {
     if (this.loginForm.invalid) return;
 
     this.isLoading.set(true);
-    this.errorMessage.set(null);
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
-        if (response.success) {
+        if (response?.success) {
           this.router.navigate(['/tasks']);
         }
         this.isLoading.set(false);
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
-        const apiError = err.error?.error?.message || 'Crendenciales invalidas o error de servidor';
-        this.errorMessage.set(apiError);
       },
     });
   }

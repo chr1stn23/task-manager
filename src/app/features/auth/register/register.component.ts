@@ -14,10 +14,9 @@ import { getFieldError } from '../../../shared/utils/form-errors';
 })
 export class RegisterComponent {
   private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
+  authService = inject(AuthService);
   private router = inject(Router);
 
-  errorMessage = signal<string | null>(null);
   isLoading = signal(false);
   submitted = signal(false);
 
@@ -40,7 +39,6 @@ export class RegisterComponent {
     if (this.registerForm.invalid) return;
 
     this.isLoading.set(true);
-    this.errorMessage.set(null);
 
     this.authService.register(this.registerForm.value).subscribe({
       next: (response) => {
@@ -50,10 +48,8 @@ export class RegisterComponent {
 
         this.isLoading.set(false);
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
-        const apiError = err.error?.error?.message || 'Error al registrar usuario';
-        this.errorMessage.set(apiError);
       },
     });
   }

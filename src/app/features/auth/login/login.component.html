@@ -17,15 +17,9 @@
         <input type="password" formControlName="password" placeholder="******" />
       </div>
 
-      @if (authService.loginFeedback()) {
-        <div class="alert-warning">
-          {{ authService.loginFeedback() }}
-        </div>
-      }
-
-      @if (errorMessage()) {
+      @if (authService.authError()) {
         <div class="alert-error">
-          {{ errorMessage() }}
+          {{ authService.authError() }}
         </div>
       }
 

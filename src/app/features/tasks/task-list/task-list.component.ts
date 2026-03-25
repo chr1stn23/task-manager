@@ -96,11 +96,15 @@ export class TaskListComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          if (res.success) {
-            this.tasks.set(res.data.content);
-            this.totalElements.set(res.data.page.totalElements);
-            this.totalPages.set(res.data.page.totalPages);
+          if (!res.success || !res.data) {
+            this.isLoading.set(false);
+            return;
           }
+
+          this.tasks.set(res.data.content);
+          this.totalElements.set(res.data.page.totalElements);
+          this.totalPages.set(res.data.page.totalPages);
+
           this.isLoading.set(false);
         },
         error: () => this.isLoading.set(false),

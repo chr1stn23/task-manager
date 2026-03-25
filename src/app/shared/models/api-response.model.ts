@@ -6,6 +6,6 @@ export interface ErrorResponse {
 export interface ApiResponseWrapper<T> {
   success: boolean;
   timestamp: string; // ISO string format
-  data: T;
+  data: T | null;
   error?: ErrorResponse;
 }

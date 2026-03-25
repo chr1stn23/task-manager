@@ -31,8 +31,8 @@
         }
       </div>
 
-      @if (errorMessage()) {
-        <div class="alert-error">{{ errorMessage() }}</div>
+      @if (authService.authError()) {
+        <div class="alert-error">{{ authService.authError() }}</div>
       }
 
       <button type="submit" [disabled]="registerForm.invalid || isLoading()">

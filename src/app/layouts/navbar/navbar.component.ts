@@ -1,5 +1,5 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
@@ -11,6 +11,7 @@ import { AuthService } from '../../core/auth/auth.service';
 })
 export class NavbarComponent {
   public authService = inject(AuthService);
+  private router = inject(Router);
 
   isMenuOpen = signal<boolean>(false);
 
@@ -28,6 +29,8 @@ export class NavbarComponent {
 
   onLogout() {
     this.isMenuOpen.set(false);
-    this.authService.logout();
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/login']);
+    });
   }
 }
