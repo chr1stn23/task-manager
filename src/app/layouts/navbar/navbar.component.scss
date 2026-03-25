@@ -55,7 +55,8 @@
         }
 
         .arrow {
-          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
           transition: transform 0.3s;
           &.open {
             transform: rotate(180deg);
@@ -91,6 +92,11 @@
           cursor: pointer;
           transition: background 0.2s;
 
+          lucide-icon {
+            stroke-width: 2;
+            stroke: currentColor;
+          }
+
           &:hover {
             background: #f8fafc;
             color: #2563eb;
@@ -98,13 +104,11 @@
 
           &.logout {
             color: #ef4444;
+
             &:hover {
               background: #fef2f2;
               color: #dc2626;
             }
-          }
-          .icon {
-            font-size: 1.1rem;
           }
         }
 

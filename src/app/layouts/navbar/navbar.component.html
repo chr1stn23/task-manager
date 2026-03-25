@@ -16,17 +16,20 @@
           <span
             >Hola, <strong>{{ authService.currentUser()?.name }}</strong></span
           >
-          <span class="arrow" [class.open]="isMenuOpen()">▼</span>
+          <lucide-icon [img]="icons.chevron" class="arrow" [class.open]="isMenuOpen()" size="16">
+          </lucide-icon>
         </button>
 
         @if (isMenuOpen()) {
           <div class="dropdown-menu">
             <a routerLink="/profile" class="dropdown-item">
-              <span class="icon">👤</span> Mi Cuenta
+              <lucide-icon [img]="icons.user" size="18"></lucide-icon>
+              Mi Cuenta
             </a>
             <div class="divider"></div>
             <button class="dropdown-item logout" (click)="onLogout()">
-              <span class="icon">🚪</span> Cerrar Sesión
+              <lucide-icon [img]="icons.logout" size="18"></lucide-icon>
+              Cerrar Sesión
             </button>
           </div>
         }
