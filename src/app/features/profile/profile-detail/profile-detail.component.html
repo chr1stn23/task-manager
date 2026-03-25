@@ -1,0 +1,127 @@
+<div class="profile-container">
+  <header class="profile-header">
+    <h1>Mi Cuenta</h1>
+    <p>Gestiona tu información personal y seguridad de la cuenta.</p>
+  </header>
+
+  @if (user()) {
+    <div class="profile-card">
+      <div class="card-top">
+        <div class="user-info">
+          <div class="avatar">{{ user()?.name?.charAt(0) }}</div>
+          <div class="details">
+            <h2>{{ user()?.name }}</h2>
+            <span class="badge" [class.admin]="authService.isAdmin()">
+              {{ authService.isAdmin() ? 'Administrador' : 'Usuario Standard' }}
+            </span>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-outline">Editar Perfil</button>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Correo Electrónico</label>
+          <p>{{ user()?.email }}</p>
+        </div>
+        <div class="info-item">
+          <label>ID de Usuario</label>
+          <p>#{{ user()?.id }}</p>
+        </div>
+        <div class="info-item">
+          <label>Seguridad</label>
+          <button class="btn-text">Cambiar contraseña de acceso</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="section-header">
+        <div class="header-text">
+          <h3>Sesiones Activas</h3>
+          <p class="section-desc">Gestiona los dispositivos que tienen acceso a tu cuenta.</p>
+        </div>
+        <button class="btn-revoke-all" (click)="showRevokeAllSessionsConfirm.set(true)">
+          Cerrar todas las sesiones
+        </button>
+      </div>
+
+      <hr />
+
+      <div class="sessions-list">
+        @if (isLoadingSessions()) {
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Sincronizando dispositivos...</p>
+          </div>
+        } @else {
+          @for (session of sessions(); track session.id) {
+            <div class="session-item" [class.is-current]="session.current">
+              <div class="session-content">
+                <div class="device-icon-wrapper">
+                  @switch (session.deviceName) {
+                    @case ('Windows PC') {
+                      <lucide-icon [img]="icons.windows" size="22"></lucide-icon>
+                    }
+                    @case ('MacBook/iMac') {
+                      <lucide-icon [img]="icons.mac" size="22"></lucide-icon>
+                    }
+                    @case ('Android Device') {
+                      <lucide-icon [img]="icons.smartphone" size="22"></lucide-icon>
+                    }
+                    @case ('iOS Device') {
+                      <lucide-icon [img]="icons.ios" size="22"></lucide-icon>
+                    }
+                    @case ('Linux Device') {
+                      <lucide-icon [img]="icons.linux" size="22"></lucide-icon>
+                    }
+                    @default {
+                      <lucide-icon [img]="icons.unknown" size="22"></lucide-icon>
+                    }
+                  }
+                </div>
+                <div class="session-details">
+                  <p class="device-name">
+                    {{ session.deviceName }}
+                    @if (session.current) {
+                      <span class="current-badge">Sesión Actual</span>
+                    }
+                  </p>
+                  <p class="session-meta">
+                    <span class="ip">{{ session.ipAddress }}</span> •
+                    <span class="date">{{ session.createdAt | date: 'medium' }}</span>
+                  </p>
+                </div>
+              </div>
+
+              @if (!session.current) {
+                <button
+                  class="btn-revoke"
+                  (click)="onRevoke(session.id)"
+                  title="Cerrar sesión en este dispositivo"
+                >
+                  Finalizar
+                </button>
+              }
+            </div>
+          } @empty {
+            <div class="empty-state">No se encontraron sesiones activas.</div>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>
+
+@if (showRevokeAllSessionsConfirm()) {
+  <app-confirm-modal
+    [title]="confirmRevokeAllSessionsTitle()"
+    [message]="confirmRevokeAllSessionsMessage()"
+    (confirm)="revokeAllSessions()"
+    (cancel)="closeRevokeAllSessionsConfirm()"
+  />
+}
