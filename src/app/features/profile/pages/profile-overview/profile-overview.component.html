@@ -45,9 +45,7 @@
           <h3>Sesiones Activas</h3>
           <p class="section-desc">Gestiona los dispositivos que tienen acceso a tu cuenta.</p>
         </div>
-        <button class="btn-revoke-all" (click)="showRevokeAllSessionsConfirm.set(true)">
-          Cerrar todas las sesiones
-        </button>
+        <button class="btn-revoke-all" (click)="onRevokeAll()">Cerrar todas las sesiones</button>
       </div>
 
       <hr />
@@ -117,11 +115,12 @@
   }
 </div>
 
-@if (showRevokeAllSessionsConfirm()) {
+@if (showConfirmModal()) {
   <app-confirm-modal
-    [title]="confirmRevokeAllSessionsTitle()"
-    [message]="confirmRevokeAllSessionsMessage()"
-    (confirm)="revokeAllSessions()"
-    (cancel)="closeRevokeAllSessionsConfirm()"
+    [modalTitle]="modalConfig().title"
+    [message]="modalConfig().message"
+    [confirmText]="modalConfig().confirmText"
+    (confirm)="modalConfig().action()"
+    (cancel)="showConfirmModal.set(false)"
   />
 }

@@ -1,0 +1,52 @@
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: sticky;
+  top: 2rem;
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: #64748b;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    lucide-icon {
+      transition: transform 0.2s ease;
+      display: flex;
+    }
+
+    &:hover {
+      background-color: #f1f5f9;
+      color: var(--primary-color);
+      cursor: pointer;
+
+      lucide-icon {
+        transform: translateX(2px);
+      }
+    }
+
+    &.active {
+      background-color: transparent;
+      color: var(--primary-color);
+      font-weight: 600;
+
+      position: relative;
+      &::before {
+        content: '';
+        position: absolute;
+        left: -4px;
+        height: 60%;
+        width: 3px;
+        background-color: var(--primary-color);
+        border-radius: 4px;
+      }
+    }
+  }
+}

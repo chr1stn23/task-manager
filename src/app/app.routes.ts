@@ -28,10 +28,7 @@ export const routes: Routes = [
   {
     path: 'profile',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/profile/profile-detail/profile-detail.component').then(
-        (m) => m.ProfileDetailComponent,
-      ),
+    loadChildren: () => import('./features/profile/profile.routes').then((m) => m.PROFILE_ROUTES),
   },
 
   // Admin routes (requires authentication and admin role)

@@ -36,10 +36,6 @@ export class TaskListComponent implements OnInit {
 
   showConfirm = signal<boolean>(false);
   taskIdToDelete = signal<number | null>(null);
-  confirmTitle = signal<string>('Eliminar Tarea');
-  confirmMessage = signal<string>(
-    '¿Estás seguro de que quieres eliminar esta tarea? Se moverá a la papelera.',
-  );
 
   ngOnInit() {
     const params = this.route.snapshot.queryParams;

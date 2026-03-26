@@ -22,12 +22,12 @@
 
         @if (isMenuOpen()) {
           <div class="dropdown-menu">
-            <a routerLink="/profile" class="dropdown-item">
+            <a routerLink="/profile" (click)="toggleMenu()" class="dropdown-item">
               <lucide-icon [img]="icons.user" size="18"></lucide-icon>
               Mi Cuenta
             </a>
             <div class="divider"></div>
-            <button class="dropdown-item logout" (click)="onLogout()">
+            <button class="dropdown-item logout" (click)="onLogoutClick()">
               <lucide-icon [img]="icons.logout" size="18"></lucide-icon>
               Cerrar Sesión
             </button>
@@ -40,3 +40,13 @@
     }
   </ul>
 </nav>
+
+@if (showLogoutConfirm()) {
+  <app-confirm-modal
+    modalTitle="Cerrar Sesión"
+    message="¿Estás seguro de que deseas salir? Deberás ingresar tus credenciales nuevamente."
+    confirmText="Cerrar Sesión"
+    (confirm)="confirmLogout()"
+    (cancel)="cancelLogout()"
+  />
+}

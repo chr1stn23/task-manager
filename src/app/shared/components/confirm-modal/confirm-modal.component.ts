@@ -10,8 +10,9 @@ import { LucideAngularModule, TriangleAlert } from 'lucide-angular';
 export class ConfirmModalComponent {
   readonly TriangleAlert = TriangleAlert;
 
-  title = input<string>('¿Estás seguro?');
+  modalTitle = input<string>('¿Estás seguro?');
   message = input<string>('Esta acción no se puede revertir.');
+  confirmText = input<string>('Confirmar');
   confirm = output<void>();
   cancel = output<void>();
 }
