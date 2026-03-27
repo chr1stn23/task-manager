@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiResponseWrapper } from '../../shared/models/api-response.model';
-import { SessionResponseDTO } from '../../shared/models/response/auth-response.model';
+import { SessionResponseDTO } from '../../shared/models/response/session-response.model';
 
 @Injectable({
   providedIn: 'root',

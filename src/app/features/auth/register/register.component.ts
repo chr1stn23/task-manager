@@ -21,7 +21,9 @@ export class RegisterComponent {
   submitted = signal(false);
 
   registerForm: FormGroup = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
+    firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+    lastName: ['', [Validators.minLength(2), Validators.maxLength(50)]],
+    nickName: ['', [Validators.required, Validators.maxLength(30)]],
     email: ['', [Validators.required, Validators.email]],
     password: [
       '',
@@ -55,7 +57,9 @@ export class RegisterComponent {
   }
 
   labels = {
-    name: 'El nombre',
+    firstName: 'El nombre',
+    lastName: 'El apellido',
+    nickName: 'El apodo',
     email: 'El correo',
     password: 'La contraseña',
   };

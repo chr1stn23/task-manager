@@ -8,16 +8,26 @@
     <div class="profile-card">
       <div class="card-top">
         <div class="user-info">
-          <div class="avatar">{{ user()?.name?.charAt(0) }}</div>
+          <!-- AVATAR -->
+          <div class="avatar">
+            @if (user()?.profileImageUrl) {
+              <img [src]="user()?.profileImageUrl!" alt="Profile image" class="avatar-img" />
+            } @else {
+              {{ user()?.firstName?.charAt(0) }}{{ user()?.lastName?.charAt(0) }}
+            }
+          </div>
+
+          <!-- USER DETAILS -->
           <div class="details">
-            <h2>{{ user()?.name }}</h2>
+            <h2>{{ user()?.firstName }} {{ user()?.lastName }}</h2>
             <span class="badge" [class.admin]="authService.isAdmin()">
               {{ authService.isAdmin() ? 'Administrador' : 'Usuario Standard' }}
             </span>
           </div>
         </div>
+
         <div class="card-actions">
-          <button class="btn-outline">Editar Perfil</button>
+          <button class="btn-outline" routerLink="../edit">Editar Perfil</button>
         </div>
       </div>
 
@@ -28,10 +38,17 @@
           <label>Correo Electrónico</label>
           <p>{{ user()?.email }}</p>
         </div>
+
         <div class="info-item">
           <label>ID de Usuario</label>
           <p>#{{ user()?.id }}</p>
         </div>
+
+        <div class="info-item">
+          <label>Nombre de Usuario</label>
+          <p>{{ user()?.nickName }}</p>
+        </div>
+
         <div class="info-item">
           <label>Seguridad</label>
           <button class="btn-text">Cambiar contraseña de acceso</button>
@@ -39,6 +56,7 @@
       </div>
     </div>
 
+    <!-- SESIONES -->
     <div class="profile-card">
       <div class="section-header">
         <div class="header-text">
@@ -82,6 +100,7 @@
                     }
                   }
                 </div>
+
                 <div class="session-details">
                   <p class="device-name">
                     {{ session.deviceName }}
@@ -89,9 +108,12 @@
                       <span class="current-badge">Sesión Actual</span>
                     }
                   </p>
+
                   <p class="session-meta">
                     <span class="ip">{{ session.ipAddress }}</span> •
-                    <span class="date">{{ session.createdAt | date: 'medium' }}</span>
+                    <span class="date">
+                      {{ session.createdAt | date: 'medium' }}
+                    </span>
                   </p>
                 </div>
               </div>

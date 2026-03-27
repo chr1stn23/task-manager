@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../../../core/services/session.service';
 import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { SessionResponseDTO } from '../../../../shared/models/response/auth-response.model';
+import { SessionResponseDTO } from '../../../../shared/models/response/session-response.model';
 import {
   CircleQuestionMark,
   Laptop,
@@ -18,7 +18,7 @@ import {
 @Component({
   selector: 'app-profile-overview',
   standalone: true,
-  imports: [CommonModule, ConfirmModalComponent, LucideAngularModule],
+  imports: [CommonModule, ConfirmModalComponent, LucideAngularModule, RouterLink],
   templateUrl: './profile-overview.component.html',
   styleUrl: './profile-overview.component.scss',
 })

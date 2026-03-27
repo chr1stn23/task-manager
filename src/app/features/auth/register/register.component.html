@@ -5,30 +5,38 @@
 
     <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
       <div class="form-group">
-        <label>Nombre Completo</label>
-        <input type="text" formControlName="name" />
-        @let nameError = getError('name');
-        @if (nameError) {
-          <small class="error"> {{ nameError }} </small>
-        }
+        <label>Nombre</label>
+        <input type="text" formControlName="firstName" />
+        @let firstNameError = getError('firstName');
+        <small class="error" [class.show]="firstNameError"> {{ firstNameError }} </small>
+      </div>
+
+      <div class="form-group">
+        <label>Apellido</label>
+        <input type="text" formControlName="lastName" />
+        @let lastNameError = getError('lastName');
+        <small class="error" [class.show]="lastNameError"> {{ lastNameError }} </small>
+      </div>
+
+      <div class="form-group">
+        <label>Apodo</label>
+        <input type="text" formControlName="nickName" />
+        @let nickNameError = getError('nickName');
+        <small class="error" [class.show]="nickNameError"> {{ nickNameError }} </small>
       </div>
 
       <div class="form-group">
         <label>Correo Electrónico</label>
         <input type="email" formControlName="email" />
         @let emailError = getError('email');
-        @if (emailError) {
-          <small class="error"> {{ emailError }} </small>
-        }
+        <small class="error" [class.show]="emailError"> {{ emailError }} </small>
       </div>
 
-      <div class="form-group">
+      <div class="form-group full-width">
         <label>Contraseña</label>
         <input type="password" formControlName="password" />
         @let passwordError = getError('password');
-        @if (passwordError) {
-          <small class="error"> {{ passwordError }} </small>
-        }
+        <small class="error" [class.show]="passwordError"> {{ passwordError }} </small>
       </div>
 
       @if (authService.authError()) {

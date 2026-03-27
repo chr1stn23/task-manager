@@ -1,7 +1,7 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
-import { ChevronDown, LogOut, LucideAngularModule, User } from 'lucide-angular';
+import { ChevronDown, LogOut, LucideAngularModule, Menu, User, X } from 'lucide-angular';
 import { ConfirmModalComponent } from '../../shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
@@ -19,10 +19,26 @@ export class NavbarComponent {
     user: User,
     logout: LogOut,
     chevron: ChevronDown,
+    menu: Menu,
+    close: X,
   };
 
   isMenuOpen = signal<boolean>(false);
+
   showLogoutConfirm = signal<boolean>(false);
+
+  isMobileMenuOpen = signal<boolean>(false);
+  isMobile = signal(window.innerWidth <= 768);
+
+  @HostListener('window:resize')
+  onResize() {
+    this.isMobile.set(window.innerWidth <= 768);
+  }
+
+  toggleMobileMenu() {
+    this.isMenuOpen.set(false);
+    this.isMobileMenuOpen.update((v) => !v);
+  }
 
   toggleMenu() {
     this.isMenuOpen.update((v) => !v);
@@ -30,6 +46,7 @@ export class NavbarComponent {
 
   onLogoutClick() {
     this.isMenuOpen.set(false);
+    this.isMobileMenuOpen.set(false);
     this.showLogoutConfirm.set(true);
   }
 
@@ -51,6 +68,14 @@ export class NavbarComponent {
     const target = event.target as HTMLElement;
     if (!target.closest('.user-dropdown')) {
       this.isMenuOpen.set(false);
+    }
+
+    if (
+      this.isMobileMenuOpen() &&
+      !target.closest('.menu-toggle') &&
+      !target.closest('.nav-links')
+    ) {
+      this.isMobileMenuOpen.set(false);
     }
   }
 }

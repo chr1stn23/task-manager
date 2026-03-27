@@ -4,7 +4,9 @@ export interface AuthRequestDTO {
 }
 
 export interface RegisterRequestDTO {
-  name: string;
+  firstName: string;
+  lastName: string;
+  nickName: string;
   email: string;
   password: string;
 }
