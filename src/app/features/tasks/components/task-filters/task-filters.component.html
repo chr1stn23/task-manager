@@ -1,4 +1,14 @@
 <section class="filters-bar">
+  <div class="filter-group search-input">
+    <label for="search">Buscar tarea:</label>
+    <input
+      type="text"
+      id="search"
+      [value]="searchTerm()"
+      placeholder="Buscar por titulo o descripción..."
+      (input)="onSearchKeyup($event)"
+    />
+  </div>
   <div class="filter-group">
     <label for="status">Estado:</label>
     <select [value]="selectedStatus() || ''" id="status" (change)="onStatusChange($event)">

@@ -1,7 +1,7 @@
 .filters-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 1rem;
   background: #f8fafc;
   padding: 1rem;
   border-radius: 10px;
@@ -14,6 +14,7 @@
     flex-direction: column;
     align-items: flex-start !important;
     gap: 0.4rem;
+    flex: 1 1 140px;
 
     label {
       text-transform: uppercase;
@@ -23,21 +24,27 @@
       font-weight: 600;
     }
 
-    select {
-      min-width: 100px;
+    select,
+    input {
+      width: 100%;
+      min-width: 0;
       padding: 0.5rem 0.8rem;
       border-radius: 6px;
       border: 1px solid #cbd5e1;
       background-color: white;
       color: #1e293b;
       outline: none;
+      height: 38px;
+
       &:focus {
         border-color: #2563eb;
       }
     }
 
     .btn-reset {
-      height: 34px;
+      white-space: nowrap;
+      width: 100%;
+      height: 38px;
       background: white;
       border: 1px solid #cbd5e1;
       color: #64748b;
@@ -51,8 +58,15 @@
       &:hover {
         background: #f1f5f9;
         color: #1e293b;
-        border-color: #94a3b8;
       }
+    }
+  }
+
+  .filter-group.search-input {
+    flex: 1 1 100%;
+
+    @media (min-width: 768px) {
+      flex: 2 1 300px;
     }
   }
 
@@ -62,10 +76,12 @@
     padding: 0.25rem;
     border-radius: 8px;
     gap: 0.25rem;
-    margin-left: auto;
+    width: 100%;
+    margin-top: 0.5rem;
 
     button {
-      padding: 0.5rem 1rem;
+      flex: 1;
+      padding: 0.6rem;
       border: none;
       border-radius: 6px;
       font-size: 0.85rem;
@@ -73,7 +89,7 @@
       cursor: pointer;
       color: #64748b;
       background: transparent;
-      transition: all 0.2s ease;
+      white-space: nowrap;
 
       &.active {
         background: white;
@@ -81,14 +97,40 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
 
-      &:hover:not(.active) {
-        color: #1e293b;
-        background: rgba(255, 255, 255, 0.5);
-      }
-
       &.btn-trash.active {
         color: #ef4444;
       }
     }
+
+    @media (min-width: 1024px) {
+      width: auto;
+      margin-left: auto;
+      margin-top: 0;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .filters-bar {
+    gap: 0.8rem;
+    padding: 0.8rem;
+
+    .filter-group {
+      flex: 1 1 calc(50% - 0.4rem);
+
+      &.search-input {
+        flex: 1 1 100%;
+      }
+
+      &:has(.btn-reset) {
+        flex: 1 1 100%;
+      }
+    }
+  }
+}
+
+select {
+  @media (min-width: 768px) {
+    font-size: 0.85rem !important;
   }
 }

@@ -28,6 +28,7 @@ export class TaskListComponent implements OnInit {
   totalPages = signal<number>(0);
   totalElements = signal<number>(0);
   showDeleted = signal<boolean>(false);
+  searchTerm = signal<string>('');
   selectedStatus = signal<TaskStatus | undefined>(undefined);
   selectedPriority = signal<Priority | undefined>(undefined);
 
@@ -43,6 +44,7 @@ export class TaskListComponent implements OnInit {
     if (params['status']) this.selectedStatus.set(params['status']);
     if (params['priority']) this.selectedPriority.set(params['priority']);
     if (params['deleted']) this.showDeleted.set(params['deleted'] === 'true');
+    if (params['search']) this.searchTerm.set(params['search']);
     if (params['page']) this.currentPage.set(Number(params['page']) - 1);
     if (params['size']) this.pageSize.set(Number(params['size']));
 
@@ -71,6 +73,7 @@ export class TaskListComponent implements OnInit {
         status: this.selectedStatus() || null,
         priority: this.selectedPriority() || null,
         deleted: this.showDeleted() ? true : null,
+        search: this.searchTerm() || null,
         page: this.currentPage() > 0 ? this.currentPage() + 1 : null,
         size: this.pageSize() !== 10 ? this.pageSize() : null,
       },
@@ -85,6 +88,7 @@ export class TaskListComponent implements OnInit {
     this.taskService
       .getTasks(
         this.showDeleted(),
+        this.searchTerm(),
         this.selectedStatus(),
         this.selectedPriority(),
         this.currentPage(),
@@ -133,6 +137,12 @@ export class TaskListComponent implements OnInit {
     this.updateUrlAndLoad();
   }
 
+  onSearch(query: string) {
+    this.searchTerm.set(query);
+    this.currentPage.set(0);
+    this.updateUrlAndLoad();
+  }
+
   changePage(newPage: number) {
     this.currentPage.set(newPage);
     this.updateUrlAndLoad();
@@ -142,6 +152,7 @@ export class TaskListComponent implements OnInit {
     this.selectedStatus.set(undefined);
     this.selectedPriority.set(undefined);
     this.showDeleted.set(false);
+    this.searchTerm.set('');
     this.currentPage.set(0);
     this.pageSize.set(6);
 

@@ -14,11 +14,13 @@
     [selectedPriority]="selectedPriority()"
     [pageSize]="pageSize()"
     [showDeleted]="showDeleted()"
+    [searchTerm]="searchTerm()"
     (statusChange)="onFilterStatus($event)"
     (priorityChange)="onFilterPriority($event)"
     (pageSizeChange)="onPageSizeChange($event)"
     (reset)="resetFilters()"
     (viewToggled)="toggleView($event)"
+    (searchTermChange)="onSearch($event)"
   />
 
   @if (isLoading()) {

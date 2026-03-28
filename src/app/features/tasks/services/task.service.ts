@@ -14,6 +14,7 @@ export class TaskService {
 
   getTasks(
     deleted?: boolean,
+    search?: string,
     status?: TaskStatus,
     priority?: Priority,
     page: number = 0,
@@ -22,6 +23,7 @@ export class TaskService {
     let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
 
     if (deleted !== undefined) params = params.set('deleted', deleted);
+    if (search) params = params.set('search', search);
     if (status) params = params.set('status', status);
     if (priority) params = params.set('priority', priority);
 
