@@ -10,18 +10,23 @@
   align-items: center;
   z-index: 2000;
   backdrop-filter: blur(2px);
+  padding: 1rem;
 }
 
 .modal-content {
   background: white;
-  width: 90%;
+  width: 100%;
   max-width: 600px;
-  padding: 2rem;
+  max-height: 95vh;
+  overflow-y: auto;
+  padding: 1.5rem;
   border-radius: 12px;
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   animation: slideIn 0.3s ease-out;
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
 
   .modal-header {
     display: flex;
@@ -30,9 +35,12 @@
     margin-bottom: 1.5rem;
 
     h2 {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       color: #1e293b;
       margin: 0;
+      @media (min-width: 640px) {
+        font-size: 1.5rem;
+      }
     }
 
     .btn-close {
@@ -41,6 +49,7 @@
       font-size: 1.8rem;
       color: #94a3b8;
       cursor: pointer;
+      line-height: 1;
       &:hover {
         color: #1e293b;
       }
@@ -48,6 +57,7 @@
   }
 }
 
+/* --- Formulario --- */
 .form-group {
   margin-bottom: 1.2rem;
 
@@ -63,106 +73,94 @@
   textarea,
   select {
     width: 100%;
-    padding: 0.6rem 0.8rem;
+    padding: 0.7rem 0.8rem;
     border: 1px solid #cbd5e1;
     border-radius: 6px;
     font-family: inherit;
-    font-size: 0.95rem;
     outline: none;
     transition: border-color 0.2s;
+
+    @media (min-width: 768px) {
+      padding: 0.5rem 0.7rem;
+    }
 
     &:focus {
       border-color: #2563eb;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
-
-    &:disabled {
-      background-color: #f8fafc;
-      color: #64748b;
-      border-color: #e2e8f0;
-      cursor: not-allowed;
-      opacity: 0.8;
-    }
   }
 
   textarea {
     resize: vertical;
-    min-height: 100px;
-    max-height: 180px;
   }
 
   .error {
+    display: block;
     color: #ef4444;
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-top: 0.35rem;
+    margin-left: 0.35rem;
+    animation: fadeIn 0.2s ease-in;
+  }
+
+  .helper-text {
+    display: block;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 0.3rem;
+    margin-left: 0.35rem;
+    font-weight: 400;
   }
 }
 
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
+  grid-template-columns: 1fr;
+  gap: 0;
 
-.alert-error {
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #b91c1c;
-  padding: 0.75rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  margin-bottom: 1.2rem;
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
 }
 
 .modal-footer {
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
 
   button {
-    padding: 0.6rem 1.2rem;
+    width: 100%;
+    padding: 0.8rem 1.2rem;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    border: none;
+
+    @media (min-width: 640px) {
+      width: auto;
+      padding: 0.6rem 1.2rem;
+    }
   }
 
   .btn-secondary {
     background: #f1f5f9;
     color: #475569;
-    border: none;
-    &:hover:not(:disabled) {
-      background: #e2e8f0;
-    }
   }
-
   .btn-primary {
     background: #2563eb;
     color: white;
-    border: none;
-    &:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
-    &:hover:not(:disabled) {
-      background: #1d4ed8;
-    }
   }
-
   .btn-restore {
     background-color: #10b981;
     color: white;
-    border: none;
-
-    &:hover:not(:disabled) {
-      background-color: #059669;
-    }
-
-    &:disabled {
-      background-color: #94a3b8;
-      cursor: not-allowed;
-    }
   }
 }
 

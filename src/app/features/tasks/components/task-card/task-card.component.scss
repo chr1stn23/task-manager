@@ -5,13 +5,17 @@
 .task-card {
   background: white;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.25rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   height: 100%;
   transition: all 0.2s ease;
+
+  @media (min-width: 768px) {
+    padding: 1.5rem;
+  }
 
   &:hover {
     transform: translateY(-4px);
@@ -44,9 +48,13 @@
 
   h3 {
     color: #1e293b;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin: 0.5rem 0;
     font-weight: 700;
+
+    @media (min-width: 768px) {
+      font-size: 1.25rem;
+    }
   }
 
   p {
@@ -97,6 +105,8 @@
     align-items: center;
     padding-top: 1rem;
     border-top: 1px solid #f1f5f9;
+    margin-top: auto;
+    gap: 0.5rem;
 
     .status-badge {
       font-size: 0.75rem;

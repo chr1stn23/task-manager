@@ -26,7 +26,7 @@
   @if (isLoading()) {
     <div class="loading">Cargando tus tareas...</div>
   } @else {
-    <div class="task-grid">
+    <div class="tasks-grid">
       @for (task of tasks(); track task.id) {
         <app-task-card
           [task]="task"
