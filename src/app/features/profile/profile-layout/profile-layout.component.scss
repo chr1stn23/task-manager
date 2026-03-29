@@ -1,20 +1,46 @@
 .profile-container {
   display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
   max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1.5rem;
+  margin: 0 auto;
+  padding: 0;
+
+  min-width: 0;
+  overflow: hidden;
+
   align-items: start;
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  @media (min-width: 769px) {
+    grid-template-columns: 220px 1fr;
+    gap: 2rem;
+    margin: 1rem auto;
+    padding: 0 1.5rem 5rem 1.5rem;
+    overflow: visible;
+  }
+}
+
+.sidebar {
+  display: block;
+  width: 100%;
+  min-width: 0;
+
+  @media (min-width: 769px) {
+    position: sticky;
+    top: 7rem;
+
+    max-height: calc(100vh - 9rem);
+    overflow-y: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 
 .profile-content {
-  background: transparent;
-  padding: 0;
-  box-shadow: none;
+  padding: 1rem;
+  @media (min-width: 769px) {
+    padding: 0;
+  }
 }
