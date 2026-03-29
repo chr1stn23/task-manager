@@ -1,0 +1,127 @@
+.profile-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+  @media (max-width: 480px) {
+    padding: 1.25rem;
+  }
+
+  .section-header {
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+
+    @media (max-width: 576px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+    }
+
+    .header-text {
+      h3 {
+        font-size: 1.4rem;
+        color: #1e293b;
+        margin: 0 0 0.3rem 0;
+      }
+      .section-desc {
+        color: #64748b;
+        font-size: 0.95rem;
+        margin: 0;
+      }
+    }
+  }
+
+  hr {
+    border: 0;
+    height: 1px;
+    background: #f1f5f9;
+    margin: 1.25rem 0;
+  }
+
+  .sessions-list {
+    .session-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      transition: all 0.2s;
+
+      &:last-child {
+        border-bottom: none;
+      }
+      @media (max-width: 576px) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+      }
+
+      .session-content {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+
+        .device-icon-wrapper {
+          width: 45px;
+          height: 45px;
+          background: #f1f5f9;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.4rem;
+        }
+        .device-name {
+          font-weight: 600;
+          color: #1e293b;
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: 0.7rem;
+        }
+        .current-badge {
+          background: #dcfce7;
+          color: #15803d;
+          font-size: 0.65rem;
+          padding: 0.1rem 0.6rem;
+          border-radius: 20px;
+          font-weight: 700;
+        }
+        .session-meta {
+          font-size: 0.85rem;
+          color: #94a3b8;
+          margin: 0.3rem 0 0 0;
+        }
+      }
+    }
+  }
+}
+
+.btn-revoke,
+.btn-revoke-all {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #fee2e2;
+  background: white;
+  color: #ef4444;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    background: #ef4444;
+    color: white;
+  }
+  @media (max-width: 576px) {
+    width: 100%;
+    text-align: center;
+  }
+}

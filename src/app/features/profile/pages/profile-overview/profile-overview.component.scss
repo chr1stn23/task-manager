@@ -5,15 +5,15 @@
   animation: fadeIn 0.4s ease-out;
 
   @media (max-width: 768px) {
-    margin: 0rem auto;
-    padding: 0 1rem;
+    margin: 0 auto;
+    padding: 0;
   }
 
   .profile-header {
     margin: 1.5rem;
 
     @media (max-width: 768px) {
-      margin: 0;
+      margin: 0 1rem;
       margin-bottom: 1rem;
     }
 
@@ -192,68 +192,6 @@
     background: #f1f5f9;
     margin: 1.25rem 0;
   }
-
-  .sessions-list {
-    .session-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 0;
-      border-bottom: 1px solid #f1f5f9;
-      transition: all 0.2s;
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      @media (max-width: 576px) {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
-      }
-
-      .session-content {
-        display: flex;
-        align-items: center;
-        gap: 1.2rem;
-
-        .device-icon-wrapper {
-          width: 45px;
-          height: 45px;
-          background: #f1f5f9;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.4rem;
-        }
-
-        .device-name {
-          font-weight: 600;
-          color: #1e293b;
-          margin: 0;
-          display: flex;
-          align-items: center;
-          gap: 0.7rem;
-        }
-
-        .current-badge {
-          background: #dcfce7;
-          color: #15803d;
-          font-size: 0.65rem;
-          padding: 0.1rem 0.6rem;
-          border-radius: 20px;
-          font-weight: 700;
-        }
-
-        .session-meta {
-          font-size: 0.85rem;
-          color: #94a3b8;
-          margin: 0.3rem 0 0 0;
-        }
-      }
-    }
-  }
 }
 
 .btn-outline {
@@ -279,44 +217,6 @@
   @media (max-width: 576px) {
     width: 100%;
     justify-content: center;
-  }
-}
-
-.btn-revoke {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #fee2e2;
-  background: white;
-  color: #ef4444;
-  font-weight: 600;
-  cursor: pointer;
-  &:hover {
-    background: #ef4444;
-    color: white;
-  }
-
-  @media (max-width: 576px) {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-.btn-revoke-all {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #fee2e2;
-  background: white;
-  color: #ef4444;
-  font-weight: 600;
-  cursor: pointer;
-  &:hover {
-    background: #ef4444;
-    color: white;
-  }
-
-  @media (max-width: 576px) {
-    width: 100%;
-    text-align: center;
   }
 }
 
