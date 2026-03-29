@@ -15,10 +15,10 @@
     grid-template-columns: 220px 1fr;
     gap: 2rem;
     margin: 1rem auto;
-    padding: 0 1.5rem 5rem 1.5rem;
+    padding: 0 1.5rem 1.5rem 1.5rem;
     overflow: visible;
 
-    height: calc(100vh - 9rem);
+    min-height: calc(100vh - 9rem);
   }
 }
 

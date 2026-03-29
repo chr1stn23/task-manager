@@ -4,8 +4,19 @@
   padding: 0 1.5rem;
   animation: fadeIn 0.4s ease-out;
 
+  @media (max-width: 768px) {
+    margin: 0rem auto;
+    padding: 0 1rem;
+  }
+
   .profile-header {
     margin: 1.5rem;
+
+    @media (max-width: 768px) {
+      margin: 0;
+      margin-bottom: 1rem;
+    }
+
     h1 {
       display: flex;
       align-items: center;
@@ -13,6 +24,10 @@
       font-size: 1.8rem;
       color: #0f172a;
       font-weight: 700;
+
+      @media (max-width: 768px) {
+        font-size: 1.5rem;
+      }
     }
     p {
       color: #64748b;
@@ -29,6 +44,13 @@
   padding: 2rem;
   margin-bottom: 2rem;
 
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+  @media (max-width: 480px) {
+    padding: 1.25rem;
+  }
+
   .card-top,
   .section-header {
     margin-bottom: 0;
@@ -37,6 +59,12 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 1.5rem;
+
+    @media (max-width: 576px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+    }
   }
 
   .section-header {
@@ -58,6 +86,12 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
 
     .avatar {
       width: 70px;
@@ -107,6 +141,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 2.5rem;
+
+    @media (max-width: 768px) {
+      gap: 1.5rem;
+    }
 
     .info-item {
       label {
@@ -166,6 +204,12 @@
 
       &:last-child {
         border-bottom: none;
+      }
+
+      @media (max-width: 576px) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
       }
 
       .session-content {
@@ -231,6 +275,11 @@
     background: #f8fafc;
     border-color: #cbd5e1;
   }
+
+  @media (max-width: 576px) {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .btn-revoke {
@@ -245,6 +294,11 @@
     background: #ef4444;
     color: white;
   }
+
+  @media (max-width: 576px) {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 .btn-revoke-all {
@@ -258,6 +312,11 @@
   &:hover {
     background: #ef4444;
     color: white;
+  }
+
+  @media (max-width: 576px) {
+    width: 100%;
+    text-align: center;
   }
 }
 
