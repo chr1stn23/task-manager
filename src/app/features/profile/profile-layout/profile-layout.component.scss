@@ -17,6 +17,8 @@
     margin: 1rem auto;
     padding: 0 1.5rem 5rem 1.5rem;
     overflow: visible;
+
+    height: calc(100vh - 9rem);
   }
 }
 
@@ -40,6 +42,9 @@
 
 .profile-content {
   padding: 1rem;
+  overflow-y: auto;
+  min-height: 0;
+
   @media (min-width: 769px) {
     padding: 0;
   }
