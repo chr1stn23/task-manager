@@ -67,7 +67,7 @@
     }
 
     &.active {
-      color: var(--primary-color);
+      color: #2563eb;
       font-weight: 600;
 
       &::after {
@@ -75,7 +75,7 @@
       }
 
       lucide-icon {
-        color: var(--primary-color);
+        color: #2563eb;
       }
     }
 

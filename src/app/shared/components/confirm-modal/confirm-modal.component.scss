@@ -10,6 +10,7 @@
   align-items: center;
   z-index: 3000;
   backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
 }
 
 .modal-content {
@@ -19,68 +20,130 @@
   width: 90%;
   max-width: 400px;
   text-align: center;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
   animation: scaleUp 0.2s ease-out;
+
+  @media (max-width: 480px) {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
 
   .icon-warning {
     display: flex;
     justify-content: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     color: #f59e0b;
 
     lucide-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: #fef3c7;
-      padding: 1rem;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
+
+      ::ng-deep svg {
+        width: 32px;
+        height: 32px;
+      }
     }
   }
+
   h3 {
     font-size: 1.4rem;
     color: #1e293b;
-    margin-bottom: 0.5rem;
+    margin: 0 0 0.5rem 0;
+
+    @media (max-width: 480px) {
+      font-size: 1.25rem;
+    }
   }
+
   p {
     color: #64748b;
-    margin-bottom: 2rem;
+    margin: 0 0 2rem 0;
     line-height: 1.5;
+    font-size: 0.95rem;
+
+    @media (max-width: 480px) {
+      margin: 0 0 1rem 0;
+    }
   }
 }
 
 .modal-actions {
   display: flex;
   gap: 1rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+
   button {
     flex: 1;
-    padding: 0.75rem;
+    padding: 0.75rem 1.5rem;
     border-radius: 10px;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     border: none;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
+    outline: none;
+
+    @media (max-width: 480px) {
+      width: 100%;
+      padding: 0.85rem;
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.98);
+    }
   }
+
   .btn-cancel {
     background: #f1f5f9;
     color: #475569;
     &:hover {
       background: #e2e8f0;
+      color: #1e293b;
     }
   }
+
   .btn-confirm {
     background: #ef4444;
     color: white;
+
     &:hover {
       background: #dc2626;
+      transform: translateY(-1px);
     }
   }
 }
 
 @keyframes scaleUp {
   from {
-    transform: scale(0.9);
+    transform: scale(0.95);
     opacity: 0;
   }
   to {
     transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 }
