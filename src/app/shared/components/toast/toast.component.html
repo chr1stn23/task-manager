@@ -1,0 +1,12 @@
+<div
+  class="toast"
+  [ngClass]="{
+    success: toastService.toast()?.type === 'success',
+    error: toastService.toast()?.type === 'error',
+    info: toastService.toast()?.type === 'info',
+    warning: toastService.toast()?.type === 'warning',
+    show: !!toastService.toast(),
+  }"
+>
+  {{ toastService.toast()?.message }}
+</div>

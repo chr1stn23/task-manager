@@ -59,7 +59,7 @@ export class RegisterComponent {
   labels = {
     firstName: 'El nombre',
     lastName: 'El apellido',
-    nickName: 'El apodo',
+    nickName: 'El nombre de usuario',
     email: 'El correo',
     password: 'La contraseña',
   };

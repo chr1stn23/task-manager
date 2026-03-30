@@ -1,1 +1,76 @@
-<p>profile-edit works!</p>
+<div class="edit-container">
+  <header class="edit-header">
+    <h1>Editar Perfil</h1>
+    <p>Actualiza tu información personal y preferencias de cuenta.</p>
+  </header>
+
+  <div class="avatar-section">
+    <div class="avatar-wrapper">
+      <div class="avatar">
+        @if (previewUrl() || authService.currentUser()?.profileImageUrl) {
+          <img
+            [src]="previewUrl() || authService.currentUser()?.profileImageUrl"
+            alt="Foto de perfil"
+            class="avatar-img"
+          />
+        } @else {
+          <span class="avatar-initials">
+            {{ authService.currentUser()?.firstName?.charAt(0)
+            }}{{ authService.currentUser()?.lastName?.charAt(0) }}
+          </span>
+        }
+      </div>
+
+      <input type="file" #fileInput hidden accept="image/*" (change)="onFileSelected($event)" />
+
+      <button type="button" class="avatar-btn" (click)="fileInput.click()">Cambiar foto</button>
+    </div>
+  </div>
+
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-card">
+    <div class="section-header">
+      <div class="header-text">
+        <h3>Información Personal</h3>
+        <p class="section-desc">Estos datos serán visibles en tu perfil público.</p>
+      </div>
+      <div class="card-actions">
+        <button type="button" class="btn-outline secondary" routerLink="..">Cancelar</button>
+        <button type="submit" class="btn-save" [disabled]="profileForm.invalid">
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="info-grid">
+      <div class="form-group">
+        <label for="firstName">Nombre</label>
+        <input id="firstName" type="text" formControlName="firstName" />
+        @let firstNameError = getError('firstName');
+        <small class="error" [class.show]="firstNameError"> {{ firstNameError }} </small>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Apellidos</label>
+        <input id="lastName" type="text" formControlName="lastName" />
+        @let lastNameError = getError('lastName');
+        <small class="error" [class.show]="lastNameError"> {{ lastNameError }} </small>
+      </div>
+
+      <div class="form-group">
+        <label for="nickName">Nombre de Usuario</label>
+        <input id="nickName" type="text" formControlName="nickName" />
+        @let nickNameError = getError('nickName');
+        <small class="error" [class.show]="nickNameError"> {{ nickNameError }} </small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Correo Electrónico</label>
+        <input id="email" type="email" formControlName="email" />
+        @let emailError = getError('email');
+        <small class="error" [class.show]="emailError"> {{ emailError }} </small>
+      </div>
+    </div>
+  </form>
+</div>
