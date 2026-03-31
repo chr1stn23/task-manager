@@ -42,6 +42,12 @@
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
     padding: 2rem;
 
+    @media (max-width: 768px) {
+      padding: 1.5rem;
+      border-left: none;
+      border-right: none;
+    }
+
     .section-header {
       display: flex;
       justify-content: space-between;
@@ -59,6 +65,28 @@
         font-size: 0.9rem;
         margin-top: 0.2rem;
       }
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .card-actions {
+          width: 100%;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.75rem;
+        }
+
+        .btn-outline,
+        .btn-save {
+          width: 100%;
+          padding: 0.8rem 0.5rem;
+          font-size: 0.9rem;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+        }
+      }
     }
   }
 
@@ -66,6 +94,11 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem 2.5rem;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
   }
 
   .form-group {
@@ -115,6 +148,10 @@
     height: 1px;
     background: #f1f5f9;
     margin: 2rem 0;
+
+    @media (max-width: 768px) {
+      margin: 1rem 0;
+    }
   }
 
   .card-actions {
@@ -170,6 +207,14 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
 }
 
 .avatar {
@@ -190,9 +235,8 @@
   }
 
   @media (max-width: 768px) {
-    width: 110px;
-    height: 110px;
-    border-radius: 16px;
+    width: 140px !important;
+    height: 140px !important;
   }
 }
 
@@ -212,10 +256,6 @@
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
-
-  @media (max-width: 768px) {
-    font-size: 2.2rem;
-  }
 }
 
 .avatar-btn {

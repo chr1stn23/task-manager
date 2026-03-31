@@ -10,6 +10,7 @@ import { getFieldError } from '../../../../shared/utils/form-errors';
 import { UserResponseDTO } from '../../../../shared/models/response/user-response.model';
 
 import { of, switchMap, map, catchError, finalize } from 'rxjs';
+import { LoaderService } from '../../../../shared/services/loader.service';
 
 @Component({
   selector: 'app-profile-edit',
@@ -21,9 +22,10 @@ export class ProfileEditComponent implements OnInit {
   private fb = inject(FormBuilder);
   public authService = inject(AuthService);
   private userService = inject(UserService);
-  private toast = inject(ToastService);
 
-  isLoading = signal(false);
+  private toast = inject(ToastService);
+  loader = inject(LoaderService);
+
   submitted = signal(false);
 
   selectedFile = signal<File | null>(null);
@@ -46,10 +48,8 @@ export class ProfileEditComponent implements OnInit {
 
   onSubmit(): void {
     this.submitted.set(true);
-
-    if (this.profileForm.invalid) return;
-
-    this.isLoading.set(true);
+    if (this.profileForm.invalid || this.loader.isLoading()) return;
+    this.loader.show();
 
     const formValue = {
       ...this.profileForm.value,
@@ -94,7 +94,7 @@ export class ProfileEditComponent implements OnInit {
         }),
 
         finalize(() => {
-          this.isLoading.set(false);
+          this.loader.hide();
         }),
       )
       .subscribe((result: UserResponseDTO | null) => {
