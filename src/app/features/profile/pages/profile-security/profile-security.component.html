@@ -1,1 +1,101 @@
-<p>profile-security works!</p>
+<div class="security-container">
+  <header class="security-header">
+    <h1>Seguridad</h1>
+    <p>Gestiona la protección de tu cuenta y el acceso.</p>
+  </header>
+
+  <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="security-card">
+    <div class="section-header">
+      <div class="header-text">
+        <h3>Actualizar Contraseña</h3>
+        <p class="section-desc">
+          Asegúrate de usar una contraseña segura que no uses en otros sitios.
+        </p>
+      </div>
+      <div class="card-actions">
+        <button
+          type="submit"
+          class="btn-save"
+          [disabled]="passwordForm.invalid || loader.isLoading()"
+        >
+          Actualizar Contraseña
+        </button>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="info-grid">
+      <div class="form-group">
+        <label for="oldPassword">Contraseña Actual</label>
+        <input
+          id="oldPassword"
+          type="password"
+          formControlName="oldPassword"
+          placeholder="••••••••"
+        />
+        @let oldErr = getError('oldPassword');
+        <small class="error" [class.show]="oldErr">{{ oldErr }}</small>
+      </div>
+
+      <div class="form-group">
+        <label for="newPassword">Nueva Contraseña</label>
+        <input
+          id="newPassword"
+          type="password"
+          formControlName="newPassword"
+          placeholder="Mínimo 8 caracteres"
+        />
+        @let newErr = getError('newPassword');
+        <small class="error" [class.show]="newErr">{{ newErr }}</small>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Repite la contraseña"
+        />
+        @let confirmErr = getError('confirmPassword');
+        <small class="error" [class.show]="confirmErr">{{ confirmErr }}</small>
+      </div>
+    </div>
+  </form>
+
+  <section class="security-card danger-zone">
+    <div class="section-header">
+      <div class="header-text">
+        <h3 class="danger-title">Zona de Peligro</h3>
+        <p class="section-desc">Acciones permanentes sobre tu cuenta.</p>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="danger-action">
+      <div class="action-text">
+        <strong>Desactivar esta cuenta</strong>
+        <p class="section-desc">
+          Una vez desactivada, no podrás acceder a tus tareas hasta que un administrador la
+          reactive.
+        </p>
+      </div>
+      <button type="button" class="btn-danger-outline" (click)="onDisableAccount()">
+        Desactivar Cuenta
+      </button>
+    </div>
+  </section>
+</div>
+
+@if (showDisableConfirm()) {
+  <app-confirm-modal
+    modalTitle="Desactivar Cuenta"
+    message="¿Estás seguro? Esta acción es irreversible y perderás acceso a tu cuenta."
+    confirmText="Desactivar"
+    cancelText="Cancelar"
+    (confirm)="confirmDisableAccount()"
+    (cancel)="cancelDisableAccount()"
+  />
+}
