@@ -7,6 +7,8 @@ import { TaskFormComponent } from '../components/task-form/task-form.component';
 import { TaskCardComponent } from '../components/task-card/task-card.component';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { TaskFiltersComponent } from '../components/task-filters/task-filters.component';
+import { ToastService } from '../../../shared/services/toast.service';
+import { LoaderService } from '../../../shared/services/loader.service';
 
 @Component({
   selector: 'app-task-list',
@@ -19,6 +21,9 @@ export class TaskListComponent implements OnInit {
   private taskService = inject(TaskService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+
+  private toast = inject(ToastService);
+  public loader = inject(LoaderService);
 
   tasks = signal<TaskResponseDTO[]>([]);
   isLoading = signal<boolean>(false);
@@ -35,7 +40,7 @@ export class TaskListComponent implements OnInit {
   showModal = signal<boolean>(false);
   selectedTask = signal<TaskResponseDTO | undefined>(undefined);
 
-  showConfirm = signal<boolean>(false);
+  showDeleteConfirm = signal<boolean>(false);
   taskIdToDelete = signal<number | null>(null);
 
   ngOnInit() {
@@ -96,6 +101,8 @@ export class TaskListComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
+          this.isLoading.set(false);
+
           if (!res.success || !res.data) {
             this.isLoading.set(false);
             return;
@@ -104,10 +111,11 @@ export class TaskListComponent implements OnInit {
           this.tasks.set(res.data.content);
           this.totalElements.set(res.data.page.totalElements);
           this.totalPages.set(res.data.page.totalPages);
-
-          this.isLoading.set(false);
         },
-        error: () => this.isLoading.set(false),
+        error: () => {
+          this.isLoading.set(false);
+          this.toast.error('Error al cargar las tareas');
+        },
       });
   }
 
@@ -166,25 +174,37 @@ export class TaskListComponent implements OnInit {
 
   deleteTask(id: number) {
     this.taskIdToDelete.set(id);
-    this.showConfirm.set(true);
+    this.showDeleteConfirm.set(true);
   }
 
   confirmDelete() {
     const id = this.taskIdToDelete();
     if (id) {
-      this.taskService.deleteTask(id).subscribe(() => {
-        if (this.tasks().length === 1 && this.currentPage() > 0) {
-          this.currentPage.update((p) => p - 1);
-        }
+      this.loader.show();
+      this.taskService.deleteTask(id).subscribe({
+        next: () => {
+          this.loader.hide();
+          this.toast.success('Tarea eliminada con éxito');
 
-        this.updateUrlAndLoad();
-        this.closeConfirm();
+          if (this.tasks().length === 1 && this.currentPage() > 0) {
+            this.currentPage.update((p) => p - 1);
+          }
+
+          this.updateUrlAndLoad();
+          this.closeConfirm();
+        },
+        error: (err) => {
+          this.loader.hide();
+          const errorMsg = err.error?.error?.message || 'Error al eliminar la tarea';
+          this.toast.error(errorMsg);
+          this.closeConfirm();
+        },
       });
     }
   }
 
   closeConfirm() {
     this.taskIdToDelete.set(null);
-    this.showConfirm.set(false);
+    this.showDeleteConfirm.set(false);
   }
 }

@@ -59,16 +59,36 @@
       }
 
       <footer class="modal-footer">
-        <button type="button" class="btn-secondary" (click)="close.emit()" [disabled]="isLoading()">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="close.emit()"
+          [disabled]="loader.isLoading()"
+        >
           {{ isReadOnly() ? 'Cerrar' : 'Cancelar' }}
         </button>
         @if (isReadOnly()) {
-          <button type="button" class="btn-restore" (click)="onRestore()" [disabled]="isLoading()">
-            {{ isLoading() ? 'Restaurando...' : 'Restaurar Tarea' }}
+          <button
+            type="button"
+            class="btn-restore"
+            (click)="onRestore()"
+            [disabled]="loader.isLoading()"
+          >
+            {{ loader.isLoading() ? 'Restaurando...' : 'Restaurar Tarea' }}
           </button>
         } @else {
-          <button type="submit" class="btn-primary" [disabled]="taskForm.invalid || isLoading()">
-            {{ isLoading() ? 'Procesando...' : taskToEdit() ? 'Guardar Cambios' : 'Crear Tarea' }}
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="taskForm.invalid || loader.isLoading()"
+          >
+            {{
+              loader.isLoading()
+                ? 'Procesando...'
+                : taskToEdit()
+                  ? 'Guardar Cambios'
+                  : 'Crear Tarea'
+            }}
           </button>
         }
       </footer>
