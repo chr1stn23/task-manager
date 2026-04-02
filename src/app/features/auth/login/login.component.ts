@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { LoaderService } from '../../../shared/services/loader.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +18,7 @@ export class LoginComponent {
   public authService = inject(AuthService);
   private router = inject(Router);
 
-  isLoading = signal<boolean>(false);
+  loader = inject(LoaderService);
 
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -26,18 +28,20 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.invalid) return;
 
-    this.isLoading.set(true);
+    this.loader.show();
 
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (response) => {
-        if (response?.success) {
-          this.router.navigate(['/tasks']);
-        }
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.isLoading.set(false);
-      },
-    });
+    this.authService
+      .login(this.loginForm.value)
+      .pipe(finalize(() => this.loader.hide()))
+      .subscribe({
+        next: (response) => {
+          if (response?.success) {
+            this.router.navigate(['/tasks']);
+          }
+        },
+        error: () => {
+          this.loginForm.reset();
+        },
+      });
   }
 }

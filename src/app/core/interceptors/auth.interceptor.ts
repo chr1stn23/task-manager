@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
-import { catchError, switchMap, throwError, BehaviorSubject, filter, take } from 'rxjs';
+import { catchError, switchMap, throwError, BehaviorSubject, filter, take, EMPTY } from 'rxjs';
 import { ToastService } from '../../shared/services/toast.service';
 import { ErrorMessagesService } from '../../shared/services/error-mesage.service';
 
@@ -12,8 +12,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const toast = inject(ToastService);
   const errorMessage = inject(ErrorMessagesService);
-  const token = authService.currentUserToken();
 
+  const token = authService.currentUserToken();
   const url = req.url.toLowerCase();
 
   const isPublicPath =
@@ -22,6 +22,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const isPasswordPath = url.includes('users/me/change-password');
 
   let authReq = req;
+
   if (token && !isPublicPath) {
     authReq = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` },
@@ -30,6 +31,15 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
+      const backendCode = error.error?.error?.code;
+
+      if (backendCode === 'USER_DISABLED') {
+        const message = 'Usuario deshabilitado.';
+        toast.error(message);
+        authService.logoutWithReason(message);
+        return EMPTY;
+      }
+
       if (error.status !== 401 || isPublicPath || isPasswordPath) {
         const message = errorMessage.processErrorResponse(error);
         toast.error(message);
@@ -40,13 +50,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return refreshTokenSubject.pipe(
           filter((t) => t !== null),
           take(1),
-          switchMap((newToken) => {
-            return next(
+          switchMap((newToken) =>
+            next(
               req.clone({
                 setHeaders: { Authorization: `Bearer ${newToken}` },
               }),
-            );
-          }),
+            ),
+          ),
         );
       }
 
@@ -56,9 +66,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       return authService.refreshToken().pipe(
         switchMap((res) => {
           isRefreshing = false;
+
           if (!res.success || !res.data) {
             authService.logoutWithReason('Sesión expirada');
-            return throwError(() => new Error('Refresh inválido'));
+            return EMPTY;
           }
 
           const newToken = res.data.token;
@@ -73,10 +84,19 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         catchError((refreshErr) => {
           isRefreshing = false;
           refreshTokenSubject.next(null);
+
+          const backendCode = refreshErr.error?.error?.code;
+
+          if (backendCode === 'USER_DISABLED') {
+            authService.logoutWithReason('Usuario deshabilitado');
+            return EMPTY;
+          }
+
           const message = errorMessage.processErrorResponse(refreshErr);
-          toast.error(message);
+
           authService.logoutWithReason(message);
-          return throwError(() => refreshErr);
+
+          return EMPTY;
         }),
       );
     }),

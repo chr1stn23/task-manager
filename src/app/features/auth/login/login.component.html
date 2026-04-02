@@ -17,14 +17,8 @@
         <input type="password" formControlName="password" placeholder="******" />
       </div>
 
-      @if (authService.authError()) {
-        <div class="alert-error">
-          {{ authService.authError() }}
-        </div>
-      }
-
-      <button type="submit" [disabled]="loginForm.invalid || isLoading()">
-        {{ isLoading() ? 'Iniciando sesión...' : 'Entrar' }}
+      <button type="submit" [disabled]="loginForm.invalid || loader.isLoading()">
+        {{ loader.isLoading() ? 'Iniciando sesión...' : 'Entrar' }}
       </button>
 
       <div class="footer-links">
