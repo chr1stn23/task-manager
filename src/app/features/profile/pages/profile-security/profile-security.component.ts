@@ -90,7 +90,6 @@ export class ProfileSecurityComponent {
             this.submitted.set(false);
           }
         },
-        error: () => this.toast.error('Error al actualizar la contraseña'),
       });
   }
 
@@ -111,7 +110,6 @@ export class ProfileSecurityComponent {
             this.router.navigate(['/login']);
           }
         },
-        error: () => this.toast.error('Error al deshabilitar la cuenta'),
       });
   }
 

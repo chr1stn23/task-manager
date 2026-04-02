@@ -10,20 +10,19 @@ const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const token = authService.currentUserToken();
-
   const toast = inject(ToastService);
   const errorMessage = inject(ErrorMessagesService);
+  const token = authService.currentUserToken();
 
-  const isAuthPath =
-    req.url.toLowerCase().includes('auth/login') ||
-    req.url.toLowerCase().includes('auth/refresh') ||
-    req.url.toLowerCase().includes('auth/register');
+  const url = req.url.toLowerCase();
 
-  if (isAuthPath) return next(req);
+  const isPublicPath =
+    url.includes('auth/login') || url.includes('auth/register') || url.includes('auth/refresh');
+
+  const isPasswordPath = url.includes('users/me/change-password');
 
   let authReq = req;
-  if (token) {
+  if (token && !isPublicPath) {
     authReq = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` },
     });
@@ -31,7 +30,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status !== 401) {
+      if (error.status !== 401 || isPublicPath || isPasswordPath) {
         const message = errorMessage.processErrorResponse(error);
         toast.error(message);
         return throwError(() => error);
@@ -39,13 +38,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
       if (isRefreshing) {
         return refreshTokenSubject.pipe(
-          filter((token) => token !== null),
+          filter((t) => t !== null),
           take(1),
           switchMap((newToken) => {
-            const retryReq = req.clone({
-              setHeaders: { Authorization: `Bearer ${newToken}` },
-            });
-            return next(retryReq);
+            return next(
+              req.clone({
+                setHeaders: { Authorization: `Bearer ${newToken}` },
+              }),
+            );
           }),
         );
       }
@@ -56,36 +56,26 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       return authService.refreshToken().pipe(
         switchMap((res) => {
           isRefreshing = false;
-
           if (!res.success || !res.data) {
             authService.logoutWithReason('Sesión expirada');
             return throwError(() => new Error('Refresh inválido'));
           }
 
           const newToken = res.data.token;
-
           refreshTokenSubject.next(newToken);
 
-          const retryReq = req.clone({
-            setHeaders: { Authorization: `Bearer ${newToken}` },
-          });
-
-          return next(retryReq);
+          return next(
+            req.clone({
+              setHeaders: { Authorization: `Bearer ${newToken}` },
+            }),
+          );
         }),
         catchError((refreshErr) => {
           isRefreshing = false;
           refreshTokenSubject.next(null);
-
-          const errorCode = refreshErr.error?.error?.code;
-
-          const messages: Record<string, string> = {
-            REFRESH_TOKEN_REVOKED: 'Tu sesión ha expirado. Por favor inicia sesión nuevamente.',
-            REFRESH_TOKEN_EXPIRED: 'Tu sesión ha expirado. Por favor inicia sesión nuevamente.',
-          };
-
-          const message = messages[errorCode] ?? 'Sesión expirada';
+          const message = errorMessage.processErrorResponse(refreshErr);
+          toast.error(message);
           authService.logoutWithReason(message);
-
           return throwError(() => refreshErr);
         }),
       );

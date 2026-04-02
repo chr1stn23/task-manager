@@ -30,7 +30,6 @@ export class TaskFormComponent implements OnInit {
   taskRestored = output<void>();
   close = output<void>();
 
-  errorMessage = signal<string | null>(null);
   submitted = signal(false);
 
   taskForm = this.fb.group({
@@ -95,12 +94,6 @@ export class TaskFormComponent implements OnInit {
 
         this.loader.hide();
       },
-      error: (err) => {
-        this.loader.hide();
-        const errorMsg = err.error?.error?.message || 'Error al restaurar la tarea';
-        this.errorMessage.set(errorMsg);
-        this.toast.error(errorMsg);
-      },
     });
   }
 
@@ -119,12 +112,6 @@ export class TaskFormComponent implements OnInit {
         }
 
         this.loader.hide();
-      },
-      error: (err) => {
-        this.loader.hide();
-        const errorMsg = err.error?.error?.message || 'Error al restaurar la tarea';
-        this.errorMessage.set(errorMsg);
-        this.toast.error(errorMsg);
       },
     });
   }

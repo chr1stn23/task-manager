@@ -144,6 +144,11 @@
     cursor: pointer;
     border: none;
 
+    &:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
     @media (min-width: 640px) {
       width: auto;
       padding: 0.6rem 1.2rem;
