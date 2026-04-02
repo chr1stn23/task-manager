@@ -39,10 +39,6 @@
         <small class="error" [class.show]="passwordError"> {{ passwordError }} </small>
       </div>
 
-      @if (authService.authError()) {
-        <div class="alert-error">{{ authService.authError() }}</div>
-      }
-
       <button type="submit" [disabled]="registerForm.invalid || loader.isLoading()">
         {{ loader.isLoading() ? 'Creando cuenta...' : 'Registrarse' }}
       </button>

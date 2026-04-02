@@ -34,9 +34,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       const backendCode = error.error?.error?.code;
 
       if (backendCode === 'USER_DISABLED') {
-        const message = 'Usuario deshabilitado.';
-        toast.error(message);
-        authService.logoutWithReason(message);
+        toast.error('Usuario deshabilitado.');
+        authService.logoutAndRedirect();
         return EMPTY;
       }
 
@@ -68,7 +67,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           isRefreshing = false;
 
           if (!res.success || !res.data) {
-            authService.logoutWithReason('Sesión expirada');
+            authService.logoutAndRedirect();
             return EMPTY;
           }
 
@@ -81,21 +80,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             }),
           );
         }),
-        catchError((refreshErr) => {
+        catchError(() => {
           isRefreshing = false;
           refreshTokenSubject.next(null);
-
-          const backendCode = refreshErr.error?.error?.code;
-
-          if (backendCode === 'USER_DISABLED') {
-            authService.logoutWithReason('Usuario deshabilitado');
-            return EMPTY;
-          }
-
-          const message = errorMessage.processErrorResponse(refreshErr);
-
-          authService.logoutWithReason(message);
-
+          authService.logoutAndRedirect();
           return EMPTY;
         }),
       );

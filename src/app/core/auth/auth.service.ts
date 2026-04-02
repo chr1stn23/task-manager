@@ -3,7 +3,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { AuthRequestDTO, RegisterRequestDTO } from '../../shared/models/request/auth-request.model';
 import { ApiResponseWrapper } from '../../shared/models/api-response.model';
 import { AuthResponseDTO } from '../../shared/models/response/auth-response.model';
-import { catchError, Observable, tap } from 'rxjs';
+import { catchError, EMPTY, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserResponseDTO } from '../../shared/models/response/user-response.model';
 
@@ -18,21 +18,17 @@ export class AuthService {
 
   isAdmin = computed(() => this.currentUser()?.roles.includes('ROLE_ADMIN') ?? false);
 
-  authError = signal<string | null>(null);
+  private isLoggingOut = false;
 
   private readonly httpOptions = { withCredentials: true };
 
   register(data: RegisterRequestDTO): Observable<ApiResponseWrapper<AuthResponseDTO>> {
-    this.authError.set(null);
-
     return this.http
       .post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/register', data, this.httpOptions)
       .pipe(tap((response) => this.handleAuthResponse(response)));
   }
 
   login(credentials: AuthRequestDTO): Observable<ApiResponseWrapper<AuthResponseDTO>> {
-    this.authError.set(null);
-
     return this.http
       .post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/login', credentials, this.httpOptions)
       .pipe(tap((response) => this.handleAuthResponse(response)));
@@ -49,7 +45,11 @@ export class AuthService {
     const token = response.data.token;
     localStorage.setItem(this.TOKEN_KEY, token);
     this.currentUserToken.set(token);
-    this.loadUserProfile().subscribe();
+    this.loadUserProfile().subscribe({
+      error: () => {
+        this.currentUser.set(null);
+      },
+    });
   }
 
   logout() {
@@ -57,17 +57,21 @@ export class AuthService {
       .post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/logout', {}, this.httpOptions)
       .pipe(
         tap(() => this.cleanLocalAuth()),
-        catchError((err) => {
+        catchError(() => {
           this.cleanLocalAuth();
-          throw err;
+          return EMPTY;
         }),
       );
   }
 
-  logoutWithReason(reason: string) {
+  logoutAndRedirect() {
+    if (this.isLoggingOut) return;
+    this.isLoggingOut = true;
+
     this.cleanLocalAuth();
-    this.authError.set(reason);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login'], { replaceUrl: true }).finally(() => {
+      this.isLoggingOut = false;
+    });
   }
 
   loadUserProfile(): Observable<ApiResponseWrapper<UserResponseDTO>> {
