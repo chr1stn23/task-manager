@@ -2,6 +2,8 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { catchError, switchMap, throwError, BehaviorSubject, filter, take } from 'rxjs';
+import { ToastService } from '../../shared/services/toast.service';
+import { ErrorMessagesService } from '../../shared/services/error-mesage.service';
 
 let isRefreshing = false;
 const refreshTokenSubject = new BehaviorSubject<string | null>(null);
@@ -9,6 +11,9 @@ const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.currentUserToken();
+
+  const toast = inject(ToastService);
+  const errorMessage = inject(ErrorMessagesService);
 
   const isAuthPath =
     req.url.toLowerCase().includes('auth/login') ||
@@ -27,6 +32,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status !== 401) {
+        const message = errorMessage.processErrorResponse(error);
+        toast.error(message);
         return throwError(() => error);
       }
 

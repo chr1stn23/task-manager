@@ -9,7 +9,7 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import { getFieldError } from '../../../../shared/utils/form-errors';
 import { UserResponseDTO } from '../../../../shared/models/response/user-response.model';
 
-import { of, switchMap, map, catchError, finalize } from 'rxjs';
+import { of, switchMap, map, finalize } from 'rxjs';
 import { LoaderService } from '../../../../shared/services/loader.service';
 
 @Component({
@@ -86,13 +86,6 @@ export class ProfileEditComponent implements OnInit {
             }),
           );
         }),
-
-        catchError((error) => {
-          console.log('Error updating profile:', error);
-          this.toast.error('Error al actualizar el perfil');
-          return of(null);
-        }),
-
         finalize(() => {
           this.loader.hide();
         }),

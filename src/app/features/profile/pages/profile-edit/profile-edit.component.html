@@ -35,11 +35,7 @@
       </div>
       <div class="card-actions">
         <button type="button" class="btn-outline secondary" routerLink="..">Cancelar</button>
-        <button
-          type="submit"
-          class="btn-save"
-          [disabled]="profileForm.invalid || loader.isLoading()"
-        >
+        <button type="submit" class="btn-save" [disabled]="profileForm.invalid">
           Guardar Cambios
         </button>
       </div>

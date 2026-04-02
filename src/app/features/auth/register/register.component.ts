@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
 import { getFieldError } from '../../../shared/utils/form-errors';
+import { LoaderService } from '../../../shared/services/loader.service';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,8 @@ export class RegisterComponent {
   authService = inject(AuthService);
   private router = inject(Router);
 
-  isLoading = signal(false);
+  loader = inject(LoaderService);
+
   submitted = signal(false);
 
   registerForm: FormGroup = this.fb.group({
@@ -40,7 +42,7 @@ export class RegisterComponent {
     this.submitted.set(true);
     if (this.registerForm.invalid) return;
 
-    this.isLoading.set(true);
+    this.loader.show();
 
     this.authService.register(this.registerForm.value).subscribe({
       next: (response) => {
@@ -48,10 +50,10 @@ export class RegisterComponent {
           this.router.navigate(['/tasks']);
         }
 
-        this.isLoading.set(false);
+        this.loader.hide();
       },
       error: () => {
-        this.isLoading.set(false);
+        this.loader.hide();
       },
     });
   }

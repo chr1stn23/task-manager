@@ -43,8 +43,8 @@
         <div class="alert-error">{{ authService.authError() }}</div>
       }
 
-      <button type="submit" [disabled]="registerForm.invalid || isLoading()">
-        {{ isLoading() ? 'Creando cuenta...' : 'Registrarse' }}
+      <button type="submit" [disabled]="registerForm.invalid || loader.isLoading()">
+        {{ loader.isLoading() ? 'Creando cuenta...' : 'Registrarse' }}
       </button>
 
       <div class="footer-links">
