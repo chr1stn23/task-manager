@@ -4,6 +4,14 @@
       <h3>Resumen de Tareas</h3>
       <p class="section-desc">Estado actual de tus proyectos y prioridades.</p>
     </div>
+    @if (summary()?.deleted) {
+      <div class="deleted-badge">
+        <lucide-icon [img]="icons.deleted" size="14"></lucide-icon>
+        <span
+          >Papelera: <strong>{{ summary()?.deleted }}</strong></span
+        >
+      </div>
+    }
   </div>
 
   <hr />
@@ -14,84 +22,84 @@
       <p>Sincronizando tareas...</p>
     </div>
   } @else if (summary()) {
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="icon-wrapper">
-          <lucide-icon [img]="icons.total" size="22"></lucide-icon>
-        </div>
-        <div class="stat-info">
-          <p class="stat-label">Total</p>
-          <p class="stat-value">{{ summary()?.total }}</p>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="icon-wrapper color-todo">
-          <lucide-icon [img]="icons.todo" size="22"></lucide-icon>
-        </div>
-        <div class="stat-info">
-          <p class="stat-label">Pendientes</p>
-          <p class="stat-value">{{ summary()?.todo }}</p>
+    <div class="dashboard-content">
+      <div class="total-section">
+        <div class="stat-card total-card">
+          <div class="icon-wrapper">
+            <lucide-icon [img]="icons.total" size="32"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <p class="stat-label">Tareas Totales</p>
+            <p class="stat-value highlight">{{ summary()?.total }}</p>
+          </div>
         </div>
       </div>
 
-      <div class="stat-card">
-        <div class="icon-wrapper color-progress">
-          <lucide-icon [img]="icons.inProgress" size="22"></lucide-icon>
+      <div class="groups-grid">
+        <div class="category-group">
+          <span class="group-label">Por Estado</span>
+          <div class="cards-row">
+            <div class="stat-card card-todo">
+              <div class="icon-wrapper color-todo">
+                <lucide-icon [img]="icons.todo" size="28"></lucide-icon>
+              </div>
+              <div class="stat-info">
+                <p class="stat-label">Pendientes</p>
+                <p class="stat-value">{{ summary()?.todo }}</p>
+              </div>
+            </div>
+            <div class="stat-card card-progress">
+              <div class="icon-wrapper color-progress">
+                <lucide-icon [img]="icons.inProgress" size="28"></lucide-icon>
+              </div>
+              <div class="stat-info">
+                <p class="stat-label">En Progreso</p>
+                <p class="stat-value">{{ summary()?.inProgress }}</p>
+              </div>
+            </div>
+            <div class="stat-card card-done">
+              <div class="icon-wrapper color-done">
+                <lucide-icon [img]="icons.done" size="28"></lucide-icon>
+              </div>
+              <div class="stat-info">
+                <p class="stat-label">Completadas</p>
+                <p class="stat-value">{{ summary()?.done }}</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="stat-info">
-          <p class="stat-label">En Progreso</p>
-          <p class="stat-value">{{ summary()?.inProgress }}</p>
-        </div>
-      </div>
 
-      <div class="stat-card">
-        <div class="icon-wrapper color-done">
-          <lucide-icon [img]="icons.done" size="22"></lucide-icon>
-        </div>
-        <div class="stat-info">
-          <p class="stat-label">Completadas</p>
-          <p class="stat-value">{{ summary()?.done }}</p>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="icon-wrapper color-high">
-          <lucide-icon [img]="icons.high" size="22"></lucide-icon>
-        </div>
-        <div class="stat-info">
-          <p class="stat-label">Prioridad Alta</p>
-          <p class="stat-value">{{ summary()?.high }}</p>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="icon-wrapper color-medium">
-          <lucide-icon [img]="icons.medium" size="22"></lucide-icon>
-        </div>
-        <div class="stat-info">
-          <p class="stat-label">Prioridad Media</p>
-          <p class="stat-value">{{ summary()?.medium }}</p>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="icon-wrapper color-low">
-          <lucide-icon [img]="icons.low" size="22"></lucide-icon>
-        </div>
-        <div class="stat-info">
-          <p class="stat-label">Prioridad Baja</p>
-          <p class="stat-value">{{ summary()?.low }}</p>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="icon-wrapper color-deleted">
-          <lucide-icon [img]="icons.deleted" size="22"></lucide-icon>
-        </div>
-        <div class="stat-info">
-          <p class="stat-label">Eliminadas</p>
-          <p class="stat-value">{{ summary()?.deleted }}</p>
+        <div class="category-group">
+          <span class="group-label">Por Prioridad</span>
+          <div class="cards-row">
+            <div class="stat-card card-low">
+              <div class="icon-wrapper color-low">
+                <lucide-icon [img]="icons.low" size="28"></lucide-icon>
+              </div>
+              <div class="stat-info">
+                <p class="stat-label">Baja</p>
+                <p class="stat-value">{{ summary()?.low }}</p>
+              </div>
+            </div>
+            <div class="stat-card card-medium">
+              <div class="icon-wrapper color-medium">
+                <lucide-icon [img]="icons.medium" size="28"></lucide-icon>
+              </div>
+              <div class="stat-info">
+                <p class="stat-label">Media</p>
+                <p class="stat-value">{{ summary()?.medium }}</p>
+              </div>
+            </div>
+            <div class="stat-card card-high">
+              <div class="icon-wrapper color-high">
+                <lucide-icon [img]="icons.high" size="28"></lucide-icon>
+              </div>
+              <div class="stat-info">
+                <p class="stat-label">Alta</p>
+                <p class="stat-value">{{ summary()?.high }}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
