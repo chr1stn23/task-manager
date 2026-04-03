@@ -18,6 +18,8 @@ export interface ApiResponseWrapper<T> {
 })
 export class ErrorMessagesService {
   private readonly errorMap: Record<string, string> = {
+    NOT_FOUND: 'Recurso no encontrado',
+    ACCESS_DENIED: 'No tienes permiso para acceder a este recurso',
     NICKNAME_ALREADY_EXISTS: 'El nombre de usuario ya está registrado',
     EMAIL_ALREADY_EXISTS: 'El correo electrónico ya está registrado',
     USER_DISABLED: 'El usuario está deshabilitado',

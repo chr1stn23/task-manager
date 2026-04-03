@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
 import { SessionService } from '../../../../core/services/session.service';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
@@ -14,6 +13,7 @@ import {
   TabletSmartphone,
   Terminal,
 } from 'lucide-angular';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-profile-sessions',
@@ -25,7 +25,7 @@ import {
 export class ProfileSessionsComponent implements OnInit {
   private sessionService = inject(SessionService);
   private authService = inject(AuthService);
-  private router = inject(Router);
+  private toast = inject(ToastService);
 
   readonly icons = {
     windows: Monitor,
@@ -87,7 +87,8 @@ export class ProfileSessionsComponent implements OnInit {
         this.sessionService.revokeAllSessions().subscribe({
           next: () => {
             this.showConfirmModal.set(false);
-            this.authService.logout().subscribe(() => this.router.navigate(['/login']));
+            this.toast.success('Se cerraron todas tus sesiones. Inicia sesión nuevamente.');
+            this.authService.logoutAndRedirect();
           },
         });
       },

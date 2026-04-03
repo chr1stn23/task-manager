@@ -37,19 +37,21 @@ export class AuthService {
   refreshToken(): Observable<ApiResponseWrapper<AuthResponseDTO>> {
     return this.http
       .post<ApiResponseWrapper<AuthResponseDTO>>('api/auth/refresh', {}, this.httpOptions)
-      .pipe(tap((response) => this.handleAuthResponse(response)));
+      .pipe(tap((response) => this.handleAuthResponse(response, false)));
   }
 
-  private handleAuthResponse(response: ApiResponseWrapper<AuthResponseDTO>) {
+  private handleAuthResponse(response: ApiResponseWrapper<AuthResponseDTO>, loadProfile = true) {
     if (!response.success || !response.data) return;
+
     const token = response.data.token;
     localStorage.setItem(this.TOKEN_KEY, token);
     this.currentUserToken.set(token);
-    this.loadUserProfile().subscribe({
-      error: () => {
-        this.currentUser.set(null);
-      },
-    });
+
+    if (loadProfile) {
+      this.loadUserProfile().subscribe({
+        error: () => this.currentUser.set(null),
+      });
+    }
   }
 
   logout() {

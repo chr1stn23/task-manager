@@ -32,22 +32,53 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       const backendCode = error.error?.error?.code;
+      const is401 = error.status === 401;
 
-      if (backendCode === 'USER_DISABLED') {
-        toast.error('Usuario deshabilitado.');
-        authService.logoutAndRedirect();
-        return EMPTY;
+      // CASOS TERMINALES (NO REFRESH)
+      const nonRefreshable401 = [
+        'USER_DISABLED',
+        'INVALID_CREDENTIALS',
+        'UNAUTHORIZED',
+        'REFRESH_TOKEN_EXPIRED',
+        'REFRESH_TOKEN_REVOKED',
+      ];
+
+      if (is401 && (!backendCode || nonRefreshable401.includes(backendCode))) {
+        const message = errorMessage.processErrorResponse(error);
+        toast.error(message);
+
+        if (
+          backendCode === 'USER_DISABLED' ||
+          backendCode === 'REFRESH_TOKEN_EXPIRED' ||
+          backendCode === 'REFRESH_TOKEN_REVOKED'
+        ) {
+          authService.logoutAndRedirect();
+          return EMPTY;
+        }
+
+        return throwError(() => error);
       }
 
-      if (error.status !== 401 || isPublicPath || isPasswordPath) {
+      // OTROS ERRORES (NO 401)
+      if (!is401 || isPublicPath || isPasswordPath) {
         const message = errorMessage.processErrorResponse(error);
         toast.error(message);
         return throwError(() => error);
       }
 
+      // SOLO REFRESH SI TOKEN EXPIRÓ
+      const canRefresh = backendCode === 'EXPIRED_TOKEN';
+
+      if (!canRefresh) {
+        const message = errorMessage.processErrorResponse(error);
+        toast.error(message);
+        return throwError(() => error);
+      }
+
+      // REFRESH EN PROGRESO
       if (isRefreshing) {
         return refreshTokenSubject.pipe(
-          filter((t) => t !== null),
+          filter((t): t is string => t !== null),
           take(1),
           switchMap((newToken) =>
             next(
@@ -59,6 +90,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         );
       }
 
+      // INICIAR REFRESH
       isRefreshing = true;
       refreshTokenSubject.next(null);
 
