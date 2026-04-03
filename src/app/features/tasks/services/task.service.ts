@@ -3,7 +3,10 @@ import { inject, Injectable } from '@angular/core';
 import { Priority, TaskStatus } from '../../../shared/models/enums';
 import { Observable } from 'rxjs';
 import { ApiResponseWrapper } from '../../../shared/models/api-response.model';
-import { TaskResponseDTO } from '../../../shared/models/response/task-response.model';
+import {
+  TaskResponseDTO,
+  TaskSummaryDTO,
+} from '../../../shared/models/response/task-response.model';
 import { Page } from '../../../shared/models/page.model';
 import { TaskRequestDTO } from '../../../shared/models/request/task-request.model';
 
@@ -48,5 +51,9 @@ export class TaskService {
 
   restoreTask(id: number): Observable<ApiResponseWrapper<string>> {
     return this.http.patch<ApiResponseWrapper<string>>(`${this.API_URL}/${id}/restore`, {});
+  }
+
+  getMyTaskSummary(): Observable<ApiResponseWrapper<TaskSummaryDTO>> {
+    return this.http.get<ApiResponseWrapper<TaskSummaryDTO>>(`${this.API_URL}/summary`);
   }
 }

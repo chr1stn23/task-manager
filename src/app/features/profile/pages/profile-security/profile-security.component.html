@@ -4,6 +4,7 @@
     <p>Gestiona la protección de tu cuenta y el acceso.</p>
   </header>
 
+  <!-- ACTUALIZAR CONTRASEÑA -->
   <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="security-card">
     <div class="section-header">
       <div class="header-text">
@@ -64,6 +65,10 @@
     </div>
   </form>
 
+  <!-- SESIONES -->
+  <app-profile-sessions />
+
+  <!-- ZONA DE PELIGRO -->
   <section class="security-card danger-zone">
     <div class="section-header">
       <div class="header-text">

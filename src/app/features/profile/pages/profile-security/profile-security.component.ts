@@ -15,10 +15,11 @@ import { LoaderService } from '../../../../shared/services/loader.service';
 import { finalize } from 'rxjs';
 import { getFieldError } from '../../../../shared/utils/form-errors';
 import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
+import { ProfileSessionsComponent } from '../../components/profile-sessions/profile-sessions.component';
 
 @Component({
   selector: 'app-profile-security',
-  imports: [ReactiveFormsModule, ConfirmModalComponent],
+  imports: [ReactiveFormsModule, ConfirmModalComponent, ProfileSessionsComponent],
   templateUrl: './profile-security.component.html',
   styleUrl: './profile-security.component.scss',
 })

@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { ProfileSessionsComponent } from '../../components/profile-sessions/profile-sessions.component';
+import { TaskSummaryComponent } from '../../components/task-summary/task-summary.component';
 
 @Component({
   selector: 'app-profile-overview',
   standalone: true,
-  imports: [CommonModule, RouterLink, ProfileSessionsComponent],
+  imports: [CommonModule, RouterLink, TaskSummaryComponent],
   templateUrl: './profile-overview.component.html',
   styleUrl: './profile-overview.component.scss',
 })

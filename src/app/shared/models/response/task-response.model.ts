@@ -8,3 +8,14 @@ export interface TaskResponseDTO {
   priority: Priority;
   dueDate: string; // ISO string format
 }
+
+export interface TaskSummaryDTO {
+  total: number;
+  todo: number;
+  inProgress: number;
+  done: number;
+  low: number;
+  medium: number;
+  high: number;
+  deleted: number;
+}

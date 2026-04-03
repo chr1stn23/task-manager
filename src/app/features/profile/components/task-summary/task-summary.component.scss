@@ -1,0 +1,117 @@
+.profile-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  margin-bottom: 2rem;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .header-text {
+      h3 {
+        font-size: 1.4rem;
+        color: #1e293b;
+        margin: 0 0 0.3rem 0;
+      }
+      .section-desc {
+        color: #64748b;
+        font-size: 0.95rem;
+      }
+    }
+  }
+
+  hr {
+    border: 0;
+    height: 1px;
+    background: #f1f5f9;
+    margin: 1.25rem 0;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.2rem;
+  margin-top: 0.5rem;
+
+  .stat-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #e2e8f0;
+      background: #f8fafc;
+    }
+
+    .icon-wrapper {
+      width: 45px;
+      height: 45px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      &.color-todo {
+        color: #64748b;
+        background: #f8fafc;
+      }
+      &.color-progress {
+        color: #2563eb;
+        background: #eff6ff;
+      }
+      &.color-done {
+        color: #10b981;
+        background: #ecfdf5;
+      }
+      &.color-high {
+        color: #ef4444;
+        background: #fef2f2;
+      }
+      &.color-medium {
+        color: #f59e0b;
+        background: #fffbeb;
+      }
+      &.color-low {
+        color: #0ea5e9;
+        background: #f0f9ff;
+      }
+      &.color-deleted {
+        color: #94a3b8;
+        background: #f1f5f9;
+      }
+    }
+
+    .stat-info {
+      .stat-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #94a3b8;
+        margin: 0;
+        text-transform: uppercase;
+      }
+      .stat-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
