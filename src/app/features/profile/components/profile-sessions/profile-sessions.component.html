@@ -43,7 +43,7 @@
             </div>
             <div class="session-details">
               <p class="device-name">
-                {{ session.deviceName }}
+                {{ getDeviceName(session.deviceName) }}
                 @if (session.current) {
                   <span class="current-badge">Sesión Actual</span>
                 }

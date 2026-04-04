@@ -24,16 +24,8 @@ export class NavbarComponent {
   };
 
   isMenuOpen = signal<boolean>(false);
-
   showLogoutConfirm = signal<boolean>(false);
-
   isMobileMenuOpen = signal<boolean>(false);
-  isMobile = signal(window.innerWidth <= 768);
-
-  @HostListener('window:resize')
-  onResize() {
-    this.isMobile.set(window.innerWidth <= 768);
-  }
 
   toggleMobileMenu() {
     this.isMenuOpen.set(false);
@@ -66,6 +58,7 @@ export class NavbarComponent {
   @HostListener('document:click', ['$event'])
   closeMenu(event: Event) {
     const target = event.target as HTMLElement;
+
     if (!target.closest('.user-dropdown')) {
       this.isMenuOpen.set(false);
     }

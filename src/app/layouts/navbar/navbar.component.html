@@ -17,52 +17,50 @@
         </li>
       }
 
-      @if (!isMobile()) {
-        <li class="user-dropdown">
-          <button class="dropdown-trigger" (click)="toggleMenu()">
-            <div class="nav-avatar">
-              @if (authService.currentUser()?.profileImageUrl) {
-                <img [src]="authService.currentUser()?.profileImageUrl" alt="User" />
-              } @else {
-                {{ authService.currentUser()?.firstName?.charAt(0)
-                }}{{ authService.currentUser()?.lastName?.charAt(0) }}
-              }
-            </div>
-            <span class="user-name"
-              >Hola, <strong> {{ authService.currentUser()?.nickName }} </strong></span
+      <li class="user-dropdown">
+        <button class="dropdown-trigger" (click)="toggleMenu()">
+          <div class="nav-avatar">
+            @if (authService.currentUser()?.profileImageUrl) {
+              <img [src]="authService.currentUser()?.profileImageUrl" alt="User" />
+            } @else {
+              {{ authService.currentUser()?.firstName?.charAt(0)
+              }}{{ authService.currentUser()?.lastName?.charAt(0) }}
+            }
+          </div>
+          <span class="user-name">
+            Hola, <strong>{{ authService.currentUser()?.nickName }}</strong>
+          </span>
+          <lucide-icon
+            [img]="icons.chevron"
+            class="arrow"
+            [class.open]="isMenuOpen()"
+            size="16"
+          ></lucide-icon>
+        </button>
+
+        @if (isMenuOpen()) {
+          <div class="dropdown-menu">
+            <a
+              routerLink="/profile"
+              routerLinkActive="active"
+              (click)="toggleMenu()"
+              class="dropdown-item"
+              >Mi Cuenta</a
             >
-            <lucide-icon
-              [img]="icons.chevron"
-              class="arrow"
-              [class.open]="isMenuOpen()"
-              size="16"
-            ></lucide-icon>
-          </button>
+            <a class="dropdown-item logout" (click)="onLogoutClick()">Cerrar Sesión</a>
+          </div>
+        }
+      </li>
 
-          @if (isMenuOpen()) {
-            <div class="dropdown-menu">
-              <a
-                routerLink="/profile"
-                routerLinkActive="active"
-                (click)="toggleMenu()"
-                class="dropdown-item"
-                >Mi Cuenta</a
-              >
-              <a class="dropdown-item logout" (click)="onLogoutClick()">Cerrar Sesión</a>
-            </div>
-          }
-        </li>
-      } @else {
-        <li>
-          <a routerLink="/profile" routerLinkActive="active" (click)="toggleMobileMenu()"
-            >Mi Cuenta</a
-          >
-        </li>
+      <li class="mobile-profile">
+        <a routerLink="/profile" routerLinkActive="active" (click)="toggleMobileMenu()"
+          >Mi Cuenta</a
+        >
+      </li>
 
-        <li>
-          <a (click)="onLogoutClick()" class="logout-link">Cerrar Sesión</a>
-        </li>
-      }
+      <li class="mobile-logout">
+        <a (click)="onLogoutClick()" class="logout-link">Cerrar Sesión</a>
+      </li>
     } @else {
       <li>
         <a routerLink="/login" routerLinkActive="active" (click)="toggleMobileMenu()"

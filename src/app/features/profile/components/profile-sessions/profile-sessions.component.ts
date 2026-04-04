@@ -95,4 +95,17 @@ export class ProfileSessionsComponent implements OnInit {
     });
     this.showConfirmModal.set(true);
   }
+
+  getDeviceName(deviceName: string): string {
+    const map: Record<string, string> = {
+      'Windows PC': 'Windows PC',
+      'MacBook/iMac': 'MacBook/iMac',
+      'Android Device': 'Dispositivo Android',
+      'iOS Device': 'Dispositivo iOS',
+      'Linux Device': 'Dispositivo Linux',
+      'Unknown Device': 'Dispositivo Desconocido',
+    };
+
+    return map[deviceName] || 'Dispositivo Desconocido';
+  }
 }
