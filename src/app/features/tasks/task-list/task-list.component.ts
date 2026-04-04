@@ -1,19 +1,31 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { TaskService } from '../services/task.service';
 import { TaskResponseDTO } from '../../../shared/models/response/task-response.model';
 import { Priority, TaskStatus } from '../../../shared/models/enums';
-import { ActivatedRoute, Router } from '@angular/router';
+
 import { TaskFormComponent } from '../components/task-form/task-form.component';
 import { TaskCardComponent } from '../components/task-card/task-card.component';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { TaskFiltersComponent } from '../components/task-filters/task-filters.component';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+
 import { ToastService } from '../../../shared/services/toast.service';
 import { LoaderService } from '../../../shared/services/loader.service';
+
+import { Page } from '../../../shared/models/page.model';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [TaskFormComponent, TaskCardComponent, ConfirmModalComponent, TaskFiltersComponent],
+  imports: [
+    TaskFormComponent,
+    TaskCardComponent,
+    ConfirmModalComponent,
+    TaskFiltersComponent,
+    PaginationComponent,
+  ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })
@@ -25,22 +37,29 @@ export class TaskListComponent implements OnInit {
   private toast = inject(ToastService);
   public loader = inject(LoaderService);
 
-  tasks = signal<TaskResponseDTO[]>([]);
-  isLoading = signal<boolean>(false);
+  pageData = signal<Page<TaskResponseDTO> | null>(null);
 
-  pageSize = signal<number>(6);
-  currentPage = signal<number>(0);
-  totalPages = signal<number>(0);
-  totalElements = signal<number>(0);
-  showDeleted = signal<boolean>(false);
-  searchTerm = signal<string>('');
+  tasks = computed(() => this.pageData()?.content ?? []);
+  totalPages = computed(() => this.pageData()?.totalPages ?? 0);
+  totalElements = computed(() => this.pageData()?.totalElements ?? 0);
+  hasNext = computed(() => this.pageData()?.hasNext ?? false);
+  hasPrevious = computed(() => this.pageData()?.hasPrevious ?? false);
+
+  isLoading = signal(false);
+  private loadingTimeout: ReturnType<typeof setTimeout> | undefined;
+
+  pageSize = signal(6);
+  currentPage = signal(0);
+
+  showDeleted = signal(false);
+  searchTerm = signal('');
   selectedStatus = signal<TaskStatus | undefined>(undefined);
   selectedPriority = signal<Priority | undefined>(undefined);
 
-  showModal = signal<boolean>(false);
+  showModal = signal(false);
   selectedTask = signal<TaskResponseDTO | undefined>(undefined);
 
-  showDeleteConfirm = signal<boolean>(false);
+  showDeleteConfirm = signal(false);
   taskIdToDelete = signal<number | null>(null);
 
   ngOnInit() {
@@ -56,40 +75,11 @@ export class TaskListComponent implements OnInit {
     this.loadTasks();
   }
 
-  editTask(task: TaskResponseDTO) {
-    this.selectedTask.set(task);
-    this.showModal.set(true);
-  }
-
-  openModal() {
-    this.selectedTask.set(undefined);
-    this.showModal.set(true);
-  }
-
-  closeModal() {
-    this.selectedTask.set(undefined);
-    this.showModal.set(false);
-  }
-
-  private updateUrlAndLoad() {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        status: this.selectedStatus() || null,
-        priority: this.selectedPriority() || null,
-        deleted: this.showDeleted() ? true : null,
-        search: this.searchTerm() || null,
-        page: this.currentPage() > 0 ? this.currentPage() + 1 : null,
-        size: this.pageSize() !== 10 ? this.pageSize() : null,
-      },
-      queryParamsHandling: 'merge',
-    });
-
-    this.loadTasks();
-  }
-
   loadTasks() {
-    this.isLoading.set(true);
+    this.loadingTimeout = setTimeout(() => {
+      this.isLoading.set(true);
+    }, 300);
+
     this.taskService
       .getTasks(
         this.showDeleted(),
@@ -101,24 +91,30 @@ export class TaskListComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
+          clearTimeout(this.loadingTimeout);
           this.isLoading.set(false);
 
-          if (!res.success || !res.data) {
-            this.isLoading.set(false);
-            return;
-          }
+          if (!res.success || !res.data) return;
 
-          this.tasks.set(res.data.content);
-          this.totalElements.set(res.data.page.totalElements);
-          this.totalPages.set(res.data.page.totalPages);
+          this.pageData.set(res.data);
         },
         error: () => {
+          clearTimeout(this.loadingTimeout);
           this.isLoading.set(false);
           this.toast.error('Error al cargar las tareas');
         },
       });
   }
 
+  changePage(newPage: number) {
+    this.currentPage.set(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.updateUrlAndLoad();
+  }
+
+  // =========================
+  // FILTERS
+  // =========================
   onPageSizeChange(size: number) {
     this.pageSize.set(size);
     this.currentPage.set(0);
@@ -151,11 +147,6 @@ export class TaskListComponent implements OnInit {
     this.updateUrlAndLoad();
   }
 
-  changePage(newPage: number) {
-    this.currentPage.set(newPage);
-    this.updateUrlAndLoad();
-  }
-
   resetFilters() {
     this.selectedStatus.set(undefined);
     this.selectedPriority.set(undefined);
@@ -172,6 +163,44 @@ export class TaskListComponent implements OnInit {
     this.loadTasks();
   }
 
+  // =========================
+  // URL SYNC
+  // =========================
+  private updateUrlAndLoad() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        status: this.selectedStatus() || null,
+        priority: this.selectedPriority() || null,
+        deleted: this.showDeleted() ? true : null,
+        search: this.searchTerm() || null,
+        page: this.currentPage() > 0 ? this.currentPage() + 1 : null,
+        size: this.pageSize() !== 6 ? this.pageSize() : null,
+      },
+      queryParamsHandling: 'merge',
+    });
+
+    this.loadTasks();
+  }
+
+  // =========================
+  // TASK ACTIONS
+  // =========================
+  editTask(task: TaskResponseDTO) {
+    this.selectedTask.set(task);
+    this.showModal.set(true);
+  }
+
+  openModal() {
+    this.selectedTask.set(undefined);
+    this.showModal.set(true);
+  }
+
+  closeModal() {
+    this.selectedTask.set(undefined);
+    this.showModal.set(false);
+  }
+
   deleteTask(id: number) {
     this.taskIdToDelete.set(id);
     this.showDeleteConfirm.set(true);
@@ -179,28 +208,27 @@ export class TaskListComponent implements OnInit {
 
   confirmDelete() {
     const id = this.taskIdToDelete();
-    if (id) {
-      this.loader.show();
-      this.taskService.deleteTask(id).subscribe({
-        next: () => {
-          this.loader.hide();
-          this.toast.success('Tarea eliminada con éxito');
+    if (!id) return;
 
-          if (this.tasks().length === 1 && this.currentPage() > 0) {
-            this.currentPage.update((p) => p - 1);
-          }
+    this.loader.show();
 
-          this.updateUrlAndLoad();
-          this.closeConfirm();
-        },
-        error: (err) => {
-          this.loader.hide();
-          const errorMsg = err.error?.error?.message || 'Error al eliminar la tarea';
-          this.toast.error(errorMsg);
-          this.closeConfirm();
-        },
-      });
-    }
+    this.taskService.deleteTask(id).subscribe({
+      next: () => {
+        this.loader.hide();
+        this.toast.success('Tarea eliminada con éxito');
+
+        if (this.tasks().length === 1 && this.currentPage() > 0) {
+          this.currentPage.update((p) => p - 1);
+        }
+
+        this.updateUrlAndLoad();
+        this.closeConfirm();
+      },
+      error: () => {
+        this.loader.hide();
+        this.closeConfirm();
+      },
+    });
   }
 
   closeConfirm() {

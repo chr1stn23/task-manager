@@ -1,0 +1,56 @@
+<div class="pagination">
+  <!-- DESKTOP -->
+  <div class="desktop">
+    <button class="nav-btn" (click)="prev()" [disabled]="!page().hasPrevious">
+      <span class="label">Anterior</span>
+      <lucide-icon [img]="icons.prev" [size]="14"></lucide-icon>
+    </button>
+
+    <div class="pages">
+      @for (p of visiblePages(); track p.type === 'page' ? p.value : 'dots-' + $index) {
+        @if (p.type === 'dots') {
+          <span class="dots">...</span>
+        } @else {
+          <button
+            class="page-btn"
+            [class.active]="p.value === page().page"
+            (click)="goTo(p.value)"
+            [attr.aria-current]="p.value === page().page ? 'page' : null"
+          >
+            {{ p.value + 1 }}
+          </button>
+        }
+      }
+    </div>
+
+    <button class="nav-btn" (click)="next()" [disabled]="!page().hasNext">
+      <span class="label">Siguiente</span>
+      <lucide-icon [img]="icons.next" [size]="14"></lucide-icon>
+    </button>
+  </div>
+
+  <!-- MOBILE -->
+  <div class="mobile">
+    <button class="nav-btn" (click)="prev()" [disabled]="!page().hasPrevious">
+      <lucide-icon [img]="icons.prev" [size]="14"></lucide-icon>
+    </button>
+
+    <span class="mobile-info"> {{ page().page + 1 }} / {{ page().totalPages }} </span>
+
+    <button class="nav-btn" (click)="next()" [disabled]="!page().hasNext">
+      <lucide-icon [img]="icons.next" [size]="14"></lucide-icon>
+    </button>
+
+    <div class="go-to">
+      <input
+        #pageInput
+        type="number"
+        [value]="page().page + 1"
+        (keydown.enter)="goToInput(pageInput.value)"
+        min="1"
+        [max]="page().totalPages"
+      />
+      <button (click)="goToInput(pageInput.value)">Ir</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1.5rem;
+
+  lucide-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.desktop {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pages {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.page-btn,
+.nav-btn {
+  border: none;
+  background: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page-btn:hover,
+.nav-btn:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.page-btn.active {
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+}
+
+.nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.dots {
+  padding: 0.5rem;
+  color: #6b7280;
+}
+
+.icon {
+  font-size: 1rem;
+}
+
+.mobile {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .desktop {
+    display: none;
+  }
+
+  .mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .mobile-info {
+    font-weight: 600;
+    font-size: 0.95rem;
+    min-width: 70px;
+    text-align: center;
+  }
+
+  .nav-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 1rem;
+  }
+
+  .go-to {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .go-to input {
+    width: 55px;
+    padding: 0.35rem;
+    border-radius: 0.4rem;
+    border: 1px solid #d1d5db;
+    text-align: center;
+    font-size: 0.85rem;
+    transition: border 0.2s ease;
+  }
+
+  .go-to input:focus {
+    outline: none;
+    border-color: #2563eb;
+  }
+
+  .go-to button {
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.4rem;
+    border: none;
+    background: #2563eb;
+    color: white;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .go-to button:hover {
+    background: #1d4ed8;
+  }
+}

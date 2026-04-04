@@ -82,56 +82,6 @@
   }
 }
 
-.pagination {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 2rem;
-  padding-bottom: 2rem;
-
-  @media (min-width: 640px) {
-    gap: 1.5rem;
-    margin-top: 3rem;
-  }
-
-  button {
-    flex: 1;
-    max-width: 120px;
-    padding: 0.5rem 0.5rem;
-    font-size: 0.9rem;
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-    background: white;
-    font-weight: 600;
-    color: #475569;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    @media (min-width: 640px) {
-      flex: none;
-      padding: 0.5rem 1.25rem;
-    }
-
-    &:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    &:hover:not(:disabled) {
-      background: #f8fafc;
-      border-color: #94a3b8;
-    }
-  }
-
-  .page-info {
-    font-size: 0.9rem;
-    color: #64748b;
-    font-weight: 600;
-  }
-}
-
 .empty-state,
 .loading {
   grid-column: 1 / -1;

@@ -41,19 +41,8 @@
       }
     </div>
 
-    @if (totalPages() > 1) {
-      <div class="pagination">
-        <button [disabled]="currentPage() === 0" (click)="changePage(currentPage() - 1)">
-          Anterior
-        </button>
-        <span class="page-info">Página {{ currentPage() + 1 }} de {{ totalPages() }}</span>
-        <button
-          [disabled]="currentPage() + 1 === totalPages()"
-          (click)="changePage(currentPage() + 1)"
-        >
-          Siguiente
-        </button>
-      </div>
+    @if (pageData()) {
+      <app-pagination [page]="pageData()!" (pageChange)="changePage($event)" />
     }
   }
 </div>
