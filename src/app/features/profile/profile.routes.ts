@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { ProfileLayoutComponent } from './profile-layout/profile-layout.component';
+import { TwoColumnLayoutComponent } from '../../layouts/two-column-layout/two-column-layout.component';
 
 export const PROFILE_ROUTES: Routes = [
   {
     path: '',
-    component: ProfileLayoutComponent,
+    component: TwoColumnLayoutComponent,
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       {

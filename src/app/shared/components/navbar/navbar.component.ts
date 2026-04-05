@@ -1,8 +1,8 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '../../core/auth/auth.service';
 import { ChevronDown, LogOut, LucideAngularModule, Menu, User, X } from 'lucide-angular';
-import { ConfirmModalComponent } from '../../shared/components/confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',

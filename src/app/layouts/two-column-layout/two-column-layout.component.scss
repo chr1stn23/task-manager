@@ -1,4 +1,4 @@
-.profile-container {
+.layout-container {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.5rem;
@@ -22,7 +22,7 @@
   }
 }
 
-.sidebar {
+.layout-sidebar {
   display: block;
   width: 100%;
   min-width: 0;
@@ -44,7 +44,7 @@
   }
 }
 
-.profile-content {
+.layout-content {
   padding: 1rem;
   overflow-y: auto;
   min-height: 0;
