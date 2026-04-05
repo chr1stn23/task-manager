@@ -1,0 +1,11 @@
+<nav class="sidebar-nav">
+  @for (item of items(); track item.route) {
+    <a [routerLink]="item.route" routerLinkActive="active" class="nav-item">
+      @if (item.icon) {
+        <lucide-icon [img]="item.icon" size="20"></lucide-icon>
+      }
+
+      {{ item.label }}
+    </a>
+  }
+</nav>

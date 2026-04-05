@@ -5,6 +5,9 @@ export const PROFILE_ROUTES: Routes = [
   {
     path: '',
     component: TwoColumnLayoutComponent,
+    data: {
+      sidebar: 'profile',
+    },
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       {
