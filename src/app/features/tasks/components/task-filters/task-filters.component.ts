@@ -1,6 +1,5 @@
-import { Component, input, OnDestroy, OnInit, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Priority, TaskStatus } from '../../../../shared/models/enums';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-task-filters',
@@ -8,7 +7,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
   templateUrl: './task-filters.component.html',
   styleUrl: './task-filters.component.scss',
 })
-export class TaskFiltersComponent implements OnInit, OnDestroy {
+export class TaskFiltersComponent {
   selectedStatus = input<TaskStatus | undefined>(undefined);
   selectedPriority = input<Priority | undefined>(undefined);
   pageSize = input<number>(10);
@@ -22,21 +21,8 @@ export class TaskFiltersComponent implements OnInit, OnDestroy {
   reset = output<void>();
   viewToggled = output<boolean>();
 
-  private searchSubject = new Subject<string>();
-
-  ngOnInit() {
-    this.searchSubject.pipe(debounceTime(400), distinctUntilChanged()).subscribe((value) => {
-      this.searchTermChange.emit(value);
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.searchSubject.complete();
-  }
-
-  onSearchKeyup(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.searchSubject.next(value);
+  onSearchInput(value: string) {
+    this.searchTermChange.emit(value);
   }
 
   onStatusChange(event: Event) {

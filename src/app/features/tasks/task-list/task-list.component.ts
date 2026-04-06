@@ -46,7 +46,8 @@ export class TaskListComponent implements OnInit {
   hasPrevious = computed(() => this.pageData()?.hasPrevious ?? false);
 
   isLoading = signal(false);
-  private loadingTimeout: ReturnType<typeof setTimeout> | undefined;
+  private loadingTimeout?: ReturnType<typeof setTimeout>;
+  private searchTimeout?: ReturnType<typeof setTimeout>;
 
   pageSize = signal(6);
   currentPage = signal(0);
@@ -63,16 +64,23 @@ export class TaskListComponent implements OnInit {
   taskIdToDelete = signal<number | null>(null);
 
   ngOnInit() {
-    const params = this.route.snapshot.queryParams;
+    this.route.queryParams.subscribe((params) => {
+      const status = params['status'];
+      this.selectedStatus.set(this.isValidStatus(status) ? status : undefined);
 
-    if (params['status']) this.selectedStatus.set(params['status']);
-    if (params['priority']) this.selectedPriority.set(params['priority']);
-    if (params['deleted']) this.showDeleted.set(params['deleted'] === 'true');
-    if (params['search']) this.searchTerm.set(params['search']);
-    if (params['page']) this.currentPage.set(Number(params['page']) - 1);
-    if (params['size']) this.pageSize.set(Number(params['size']));
+      const priority = params['priority'];
+      this.selectedPriority.set(this.isValidPriority(priority) ? priority : undefined);
 
-    this.loadTasks();
+      this.showDeleted.set(params['deleted'] === 'true');
+
+      this.searchTerm.set(params['search'] ?? '');
+
+      this.currentPage.set(params['page'] ? Number(params['page']) - 1 : 0);
+
+      this.pageSize.set(params['size'] ? Number(params['size']) : 6);
+
+      this.loadTasks();
+    });
   }
 
   loadTasks() {
@@ -81,14 +89,14 @@ export class TaskListComponent implements OnInit {
     }, 300);
 
     this.taskService
-      .getTasks(
-        this.showDeleted(),
-        this.searchTerm(),
-        this.selectedStatus(),
-        this.selectedPriority(),
-        this.currentPage(),
-        this.pageSize(),
-      )
+      .getTasks({
+        page: this.currentPage(),
+        size: this.pageSize(),
+        search: this.searchTerm() || undefined,
+        status: this.selectedStatus(),
+        priority: this.selectedPriority(),
+        deleted: this.showDeleted() ? true : undefined,
+      })
       .subscribe({
         next: (res) => {
           clearTimeout(this.loadingTimeout);
@@ -101,7 +109,6 @@ export class TaskListComponent implements OnInit {
         error: () => {
           clearTimeout(this.loadingTimeout);
           this.isLoading.set(false);
-          this.toast.error('Error al cargar las tareas');
         },
       });
   }
@@ -109,7 +116,7 @@ export class TaskListComponent implements OnInit {
   changePage(newPage: number) {
     this.currentPage.set(newPage);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    this.updateUrlAndLoad();
+    this.updateUrl();
   }
 
   // =========================
@@ -118,19 +125,19 @@ export class TaskListComponent implements OnInit {
   onPageSizeChange(size: number) {
     this.pageSize.set(size);
     this.currentPage.set(0);
-    this.updateUrlAndLoad();
+    this.updateUrl();
   }
 
   onFilterStatus(status: TaskStatus | undefined) {
     this.selectedStatus.set(status);
     this.currentPage.set(0);
-    this.updateUrlAndLoad();
+    this.updateUrl();
   }
 
   onFilterPriority(priority: Priority | undefined) {
     this.selectedPriority.set(priority);
     this.currentPage.set(0);
-    this.updateUrlAndLoad();
+    this.updateUrl();
   }
 
   toggleView(viewDeleted: boolean) {
@@ -138,13 +145,17 @@ export class TaskListComponent implements OnInit {
 
     this.showDeleted.set(viewDeleted);
     this.currentPage.set(0);
-    this.updateUrlAndLoad();
+    this.updateUrl();
   }
 
   onSearch(query: string) {
-    this.searchTerm.set(query);
-    this.currentPage.set(0);
-    this.updateUrlAndLoad();
+    clearTimeout(this.searchTimeout);
+
+    this.searchTimeout = setTimeout(() => {
+      this.searchTerm.set(query);
+      this.currentPage.set(0);
+      this.updateUrl();
+    }, 400);
   }
 
   resetFilters() {
@@ -159,14 +170,12 @@ export class TaskListComponent implements OnInit {
       relativeTo: this.route,
       queryParams: {},
     });
-
-    this.loadTasks();
   }
 
   // =========================
   // URL SYNC
   // =========================
-  private updateUrlAndLoad() {
+  private updateUrl() {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
@@ -179,8 +188,6 @@ export class TaskListComponent implements OnInit {
       },
       queryParamsHandling: 'merge',
     });
-
-    this.loadTasks();
   }
 
   // =========================
@@ -221,7 +228,7 @@ export class TaskListComponent implements OnInit {
           this.currentPage.update((p) => p - 1);
         }
 
-        this.updateUrlAndLoad();
+        this.updateUrl();
         this.closeConfirm();
       },
       error: () => {
@@ -234,5 +241,13 @@ export class TaskListComponent implements OnInit {
   closeConfirm() {
     this.taskIdToDelete.set(null);
     this.showDeleteConfirm.set(false);
+  }
+
+  private isValidStatus(status: unknown): status is TaskStatus {
+    return typeof status === 'string' && Object.values(TaskStatus).includes(status as TaskStatus);
+  }
+
+  private isValidPriority(priority: unknown): priority is Priority {
+    return typeof priority === 'string' && Object.values(Priority).includes(priority as Priority);
   }
 }

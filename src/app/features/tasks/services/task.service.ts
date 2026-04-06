@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Priority, TaskStatus } from '../../../shared/models/enums';
 import { Observable } from 'rxjs';
@@ -9,28 +9,30 @@ import {
 } from '../../../shared/models/response/task-response.model';
 import { Page } from '../../../shared/models/page.model';
 import { TaskRequestDTO } from '../../../shared/models/request/task-request.model';
+import { buildHttpParams } from '../../../shared/utils/build-http-params';
+import { ParamValue } from '../../../shared/types/http.types';
+
+export interface GetTasksParams {
+  page?: number;
+  size?: number;
+
+  sort?: string | string[];
+
+  search?: string;
+  status?: TaskStatus;
+  priority?: Priority;
+  deleted?: boolean;
+}
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
   private http = inject(HttpClient);
   private readonly API_URL = 'api/tasks';
 
-  getTasks(
-    deleted?: boolean,
-    search?: string,
-    status?: TaskStatus,
-    priority?: Priority,
-    page: number = 0,
-    size: number = 10,
-  ): Observable<ApiResponseWrapper<Page<TaskResponseDTO>>> {
-    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
-
-    if (deleted !== undefined) params = params.set('deleted', deleted);
-    if (search) params = params.set('search', search);
-    if (status) params = params.set('status', status);
-    if (priority) params = params.set('priority', priority);
-
-    return this.http.get<ApiResponseWrapper<Page<TaskResponseDTO>>>(this.API_URL, { params });
+  getTasks(params: GetTasksParams): Observable<ApiResponseWrapper<Page<TaskResponseDTO>>> {
+    return this.http.get<ApiResponseWrapper<Page<TaskResponseDTO>>>(this.API_URL, {
+      params: buildHttpParams(params as Record<string, ParamValue>),
+    });
   }
 
   getTaskById(id: number): Observable<ApiResponseWrapper<TaskResponseDTO>> {

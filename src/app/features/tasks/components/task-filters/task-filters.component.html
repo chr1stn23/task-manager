@@ -6,7 +6,7 @@
       id="search"
       [value]="searchTerm()"
       placeholder="Buscar por titulo o descripción..."
-      (input)="onSearchKeyup($event)"
+      (input)="onSearchInput($any($event.target).value)"
     />
   </div>
   <div class="filter-group">
