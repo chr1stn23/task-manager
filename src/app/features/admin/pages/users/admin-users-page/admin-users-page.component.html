@@ -1,1 +1,17 @@
-<p>admin-users-page works!</p>
+<div class="users-container">
+  <header class="users-header">
+    <h1>Gestión de Usuarios</h1>
+    <p>Administra y gestiona los usuarios del sistema.</p>
+  </header>
+  <app-admin-user-filters
+    [searchUserTerm]="searchUserTerm()"
+    [searchEmailTerm]="searchEmailTerm()"
+    [showDisabledUsers]="showDisabled()"
+    [pageSize]="pageSize()"
+    (searchUserChange)="onSearchUser($event)"
+    (searchEmailChange)="onSearchEmail($event)"
+    (toggleDisabled)="toggleDisabled($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+    (reset)="resetFilters()"
+  ></app-admin-user-filters>
+</div>

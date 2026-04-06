@@ -1,0 +1,37 @@
+.users-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+  animation: fadeIn 0.4s ease-out;
+
+  @media (max-width: 768px) {
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .users-header {
+    margin: 1.5rem;
+
+    @media (max-width: 768px) {
+      margin: 0 1rem;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.8rem;
+      color: #0f172a;
+      font-weight: 700;
+
+      @media (max-width: 768px) {
+        font-size: 1.5rem;
+      }
+    }
+    p {
+      color: #64748b;
+      font-size: 1rem;
+    }
+  }
+}
