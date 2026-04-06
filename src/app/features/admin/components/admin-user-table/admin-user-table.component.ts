@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { UserListResponseDTO } from '../../../../shared/models/response/user-response.model';
 import { CommonModule } from '@angular/common';
 import {
@@ -10,6 +10,7 @@ import {
   ArrowDown,
   ArrowUpDown,
 } from 'lucide-angular';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-admin-user-table',
@@ -18,6 +19,8 @@ import {
   styleUrl: './admin-user-table.component.scss',
 })
 export class AdminUserTableComponent {
+  private authService = inject(AuthService);
+
   users = input.required<UserListResponseDTO[]>();
 
   currentSort = input<string[]>(['firstName,asc']);
@@ -35,20 +38,26 @@ export class AdminUserTableComponent {
   toggleStatus = output<number>();
   sortChange = output<string>();
 
-  getSortIcon(column: string) {
-    const current = this.currentSort()[0];
-    if (!current) return this.icons.sortNone;
+  getSortInfo(column: string) {
+    const currentList = this.currentSort();
+    const index = currentList.findIndex((s) => s.startsWith(`${column},`));
 
-    const [currentColumn, direction] = current.split(',');
-
-    if (currentColumn === column) {
-      return direction === 'asc' ? this.icons.sortUp : this.icons.sortDown;
+    if (index === -1) {
+      return { icon: this.icons.sortNone, priority: null };
     }
 
-    return this.icons.sortNone;
+    const direction = currentList[index].split(',')[1];
+    return {
+      icon: direction === 'asc' ? this.icons.sortUp : this.icons.sortDown,
+      priority: index + 1,
+    };
   }
 
   getInitials(user: UserListResponseDTO): string {
     return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+  }
+
+  isCurrentUser(userId: number): boolean {
+    return this.authService.currentUser()?.id === userId;
   }
 }

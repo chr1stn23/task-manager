@@ -56,6 +56,10 @@ export class AdminUsersPageComponent implements OnInit {
   private searchUserTimeout?: ReturnType<typeof setTimeout>;
   private searchEmailTimeout?: ReturnType<typeof setTimeout>;
 
+  private readonly VALID_SORT_FIELDS = ['firstName', 'lastName', 'nickName', 'email'];
+  private readonly VALID_SORT_DIRECTIONS = ['asc', 'desc'];
+  private readonly DEFAULT_SORT = ['firstName,asc'];
+
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       this.searchUserTerm.set(params['search'] ?? '');
@@ -64,7 +68,15 @@ export class AdminUsersPageComponent implements OnInit {
 
       this.currentPage.set(params['page'] ? Number(params['page']) - 1 : 0);
       this.pageSize.set(params['size'] ? Number(params['size']) : 10);
-      this.sort.set(params['sort'] ? [params['sort']] : ['firstName,asc']);
+
+      const sortParam = params['sort'];
+      if (sortParam) {
+        const sortArray = Array.isArray(sortParam) ? sortParam : [sortParam];
+        const validatedSort = this.validateSortParams(sortArray);
+        this.sort.set(validatedSort);
+      } else {
+        this.sort.set(this.DEFAULT_SORT);
+      }
 
       this.loadUsers();
     });
@@ -107,7 +119,7 @@ export class AdminUsersPageComponent implements OnInit {
         search: this.searchUserTerm() || null,
         email: this.searchEmailTerm() || null,
         disabled: this.showDisabled() ? true : null,
-        sort: this.sort()[0],
+        sort: this.sort(),
       },
       queryParamsHandling: 'merge',
     });
@@ -146,15 +158,27 @@ export class AdminUsersPageComponent implements OnInit {
   }
 
   onSort(column: string) {
-    const current = this.sort()[0];
-    const [currentCol, currentDir] = current.split(',');
+    let currentSortList = [...this.sort()];
 
-    let newDir = 'asc';
-    if (currentCol === column) {
-      newDir = currentDir === 'asc' ? 'desc' : 'asc';
+    const index = currentSortList.findIndex((s) => s.startsWith(`${column},`));
+
+    if (index !== -1) {
+      const [_, direction] = currentSortList[index].split(',');
+
+      if (direction === 'asc') {
+        currentSortList[index] = `${column},desc`;
+      } else {
+        currentSortList.splice(index, 1);
+      }
+    } else {
+      currentSortList.push(`${column},asc`);
     }
 
-    this.sort.set([`${column},${newDir}`]);
+    if (currentSortList.length === 0) {
+      currentSortList = ['firstName,asc'];
+    }
+
+    this.sort.set(currentSortList);
     this.currentPage.set(0);
     this.updateUrl();
   }
@@ -186,5 +210,17 @@ export class AdminUsersPageComponent implements OnInit {
 
   onToggleStatus(userId: number) {
     this.toast.success('Cambiar estado de usuario con id: ' + userId);
+  }
+
+  //-----------------------
+  private validateSortParams(sortArray: string[]): string[] {
+    const validatedSort = sortArray.filter((sort) => {
+      const [field, direction] = sort.split(',');
+      return (
+        this.VALID_SORT_FIELDS.includes(field) && this.VALID_SORT_DIRECTIONS.includes(direction)
+      );
+    });
+
+    return validatedSort.length > 0 ? validatedSort : this.DEFAULT_SORT;
   }
 }

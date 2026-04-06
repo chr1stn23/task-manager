@@ -2,18 +2,66 @@
   <table class="user-table">
     <thead>
       <tr>
-        <th></th>
-        <th (click)="sortChange.emit('firstName')" class="sortable">
-          Nombres <lucide-icon [name]="getSortIcon('firstName')" [size]="14"></lucide-icon>
+        <th>Foto</th>
+        <th
+          (click)="sortChange.emit('firstName')"
+          class="sortable"
+          [class.active-sort]="getSortInfo('firstName').priority"
+        >
+          <div class="header-content">
+            Nombres
+            <div class="sort-indicator">
+              <lucide-icon [name]="getSortInfo('firstName').icon" [size]="14"></lucide-icon>
+              @if (getSortInfo('firstName').priority; as p) {
+                <span class="priority-badge">{{ p }}</span>
+              }
+            </div>
+          </div>
         </th>
-        <th (click)="sortChange.emit('lastName')" class="sortable">
-          Apellidos <lucide-icon [name]="getSortIcon('lastName')" [size]="14"></lucide-icon>
+        <th
+          (click)="sortChange.emit('lastName')"
+          class="sortable"
+          [class.active-sort]="getSortInfo('lastName').priority"
+        >
+          <div class="header-content">
+            Apellidos
+            <div class="sort-indicator">
+              <lucide-icon [name]="getSortInfo('lastName').icon" [size]="14"></lucide-icon>
+              @if (getSortInfo('lastName').priority; as p) {
+                <span class="priority-badge">{{ p }}</span>
+              }
+            </div>
+          </div>
         </th>
-        <th (click)="sortChange.emit('nickName')" class="sortable">
-          Username <lucide-icon [name]="getSortIcon('nickName')" [size]="14"></lucide-icon>
+        <th
+          (click)="sortChange.emit('nickName')"
+          class="sortable"
+          [class.active-sort]="getSortInfo('nickName').priority"
+        >
+          <div class="header-content">
+            Usuario
+            <div class="sort-indicator">
+              <lucide-icon [name]="getSortInfo('nickName').icon" [size]="14"></lucide-icon>
+              @if (getSortInfo('nickName').priority; as p) {
+                <span class="priority-badge">{{ p }}</span>
+              }
+            </div>
+          </div>
         </th>
-        <th (click)="sortChange.emit('email')" class="sortable">
-          Email <lucide-icon [name]="getSortIcon('email')" [size]="14"></lucide-icon>
+        <th
+          (click)="sortChange.emit('email')"
+          class="sortable"
+          [class.active-sort]="getSortInfo('email').priority"
+        >
+          <div class="header-content">
+            Email
+            <div class="sort-indicator">
+              <lucide-icon [name]="getSortInfo('email').icon" [size]="14"></lucide-icon>
+              @if (getSortInfo('email').priority; as p) {
+                <span class="priority-badge">{{ p }}</span>
+              }
+            </div>
+          </div>
         </th>
         <th>Estado</th>
         <th class="text-center">Acciones</th>
@@ -21,7 +69,7 @@
     </thead>
     <tbody>
       @for (user of users(); track user.id) {
-        <tr>
+        <tr [class.current-user]="isCurrentUser(user.id)">
           <td>
             @if (user.profileImageUrl) {
               <img [src]="user.profileImageUrl" [alt]="user.nickName" class="avatar" />
