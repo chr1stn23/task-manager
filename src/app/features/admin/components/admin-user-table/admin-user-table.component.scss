@@ -1,0 +1,193 @@
+:host {
+  display: block;
+  margin: 1.5rem 0;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+
+  thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #edf2f7;
+
+    th {
+      padding: 1rem;
+      color: #4a5568;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #edf2f7;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #f7fafc;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    td {
+      padding: 1rem;
+      vertical-align: middle;
+      color: #2d3748;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+  }
+}
+
+.avatar,
+.avatar-fallback {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+
+.avatar-fallback {
+  background-color: #ebf4ff;
+  color: #3182ce;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.8rem;
+  border: 1px solid #bee3f8;
+}
+
+// Estilo para el @username
+.nickname {
+  font-size: 0.85rem;
+  color: #718096;
+  font-weight: 500;
+  background-color: #f1f5f9;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+// Badges de estado
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+
+  &.bg-success {
+    background-color: #c6f6d5;
+    color: #22543d;
+  }
+
+  &.bg-danger {
+    background-color: #fed7d7;
+    color: #822727;
+  }
+}
+
+// Contenedor de acciones
+.actions {
+  display: flex;
+  gap: 8px;
+  // Opcional: si quieres centrar los iconos en su columna
+  // justify-content: center;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #64748b;
+
+    &:hover {
+      background-color: #f8fafc;
+      border-color: #cbd5e0;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    lucide-icon {
+      display: flex;
+    }
+  }
+
+  .text-danger {
+    color: #ef4444;
+    &:hover {
+      border-color: #fecaca;
+      background-color: #fef2f2;
+    }
+  }
+
+  .text-success {
+    color: #22c55e;
+    &:hover {
+      border-color: #bbf7d0;
+      background-color: #f0fdf4;
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem !important;
+  color: #94a3b8;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #edf2f7;
+    color: #3182ce;
+  }
+
+  lucide-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 4px;
+    opacity: 0.6;
+  }
+
+  &.active-sort {
+    color: #3182ce;
+    lucide-icon {
+      opacity: 1;
+      color: #3182ce;
+    }
+  }
+}

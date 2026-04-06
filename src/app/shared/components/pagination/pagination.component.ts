@@ -1,7 +1,7 @@
 import { Component, input, output, computed } from '@angular/core';
 import { Page } from '../../models/page.model';
 import { TaskResponseDTO } from '../../models/response/task-response.model';
-import { UserResponseDTO } from '../../models/response/user-response.model';
+import { UserListResponseDTO } from '../../models/response/user-response.model';
 import { ChevronLeft, ChevronRight, LucideAngularModule } from 'lucide-angular';
 
 type PageItem = { type: 'page'; value: number } | { type: 'dots' };
@@ -13,7 +13,7 @@ type PageItem = { type: 'page'; value: number } | { type: 'dots' };
   styleUrl: './pagination.component.scss',
 })
 export class PaginationComponent {
-  page = input.required<Page<TaskResponseDTO | UserResponseDTO>>();
+  page = input.required<Page<TaskResponseDTO | UserListResponseDTO>>();
   pageChange = output<number>();
 
   protected readonly icons = {

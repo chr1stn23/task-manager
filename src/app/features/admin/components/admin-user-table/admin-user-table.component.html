@@ -1,0 +1,72 @@
+<div class="table-responsive">
+  <table class="user-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th (click)="sortChange.emit('firstName')" class="sortable">
+          Nombres <lucide-icon [name]="getSortIcon('firstName')" [size]="14"></lucide-icon>
+        </th>
+        <th (click)="sortChange.emit('lastName')" class="sortable">
+          Apellidos <lucide-icon [name]="getSortIcon('lastName')" [size]="14"></lucide-icon>
+        </th>
+        <th (click)="sortChange.emit('nickName')" class="sortable">
+          Username <lucide-icon [name]="getSortIcon('nickName')" [size]="14"></lucide-icon>
+        </th>
+        <th (click)="sortChange.emit('email')" class="sortable">
+          Email <lucide-icon [name]="getSortIcon('email')" [size]="14"></lucide-icon>
+        </th>
+        <th>Estado</th>
+        <th class="text-center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of users(); track user.id) {
+        <tr>
+          <td>
+            @if (user.profileImageUrl) {
+              <img [src]="user.profileImageUrl" [alt]="user.nickName" class="avatar" />
+            } @else {
+              <div class="avatar-fallback">{{ getInitials(user) }}</div>
+            }
+          </td>
+
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
+          <td>
+            <span class="nickname">@{{ user.nickName }}</span>
+          </td>
+          <td>{{ user.email }}</td>
+
+          <td>
+            <span class="badge" [ngClass]="user.enabled ? 'bg-success' : 'bg-danger'">
+              {{ user.enabled ? 'Activo' : 'Deshabilitado' }}
+            </span>
+          </td>
+
+          <td>
+            <div class="actions">
+              <button (click)="userDetail.emit(user.id)" title="Detalles de usuario">
+                <lucide-icon [name]="icons.detail" [size]="18"></lucide-icon>
+              </button>
+
+              <button
+                (click)="toggleStatus.emit(user.id)"
+                [title]="user.enabled ? 'Deshabilitar' : 'Habilitar'"
+                [ngClass]="{ 'text-danger': user.enabled, 'text-success': !user.enabled }"
+              >
+                <lucide-icon
+                  [name]="user.enabled ? icons.disable : icons.enable"
+                  [size]="18"
+                ></lucide-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" class="empty-state">No se encontraron usuarios.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

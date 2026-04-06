@@ -14,4 +14,18 @@
     (pageSizeChange)="onPageSizeChange($event)"
     (reset)="resetFilters()"
   ></app-admin-user-filters>
+  @if (isLoading()) {
+    <div class="loading">Cargando los usuarios...</div>
+  } @else {
+    <app-admin-user-table
+      [users]="users()"
+      [currentSort]="sort()"
+      (userDetail)="onUserDetail($event)"
+      (toggleStatus)="onToggleStatus($event)"
+      (sortChange)="onSort($event)"
+    />
+    @if (pageData()) {
+      <app-pagination [page]="pageData()!" (pageChange)="changePage($event)" />
+    }
+  }
 </div>

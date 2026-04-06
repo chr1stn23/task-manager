@@ -9,11 +9,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../../../../shared/services/toast.service';
 import { LoaderService } from '../../../../../shared/services/loader.service';
 import { AdminUserFiltersComponent } from '../../../components/admin-user-filters/admin-user-filters.component';
+import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
+import { AdminUserTableComponent } from '../../../components/admin-user-table/admin-user-table.component';
 
 @Component({
   selector: 'app-admin-users-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdminUserFiltersComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AdminUserFiltersComponent,
+    PaginationComponent,
+    AdminUserTableComponent,
+  ],
   templateUrl: './admin-users-page.component.html',
   styleUrl: './admin-users-page.component.scss',
 })
@@ -56,6 +64,7 @@ export class AdminUsersPageComponent implements OnInit {
 
       this.currentPage.set(params['page'] ? Number(params['page']) - 1 : 0);
       this.pageSize.set(params['size'] ? Number(params['size']) : 10);
+      this.sort.set(params['sort'] ? [params['sort']] : ['firstName,asc']);
 
       this.loadUsers();
     });
@@ -98,6 +107,7 @@ export class AdminUsersPageComponent implements OnInit {
         search: this.searchUserTerm() || null,
         email: this.searchEmailTerm() || null,
         disabled: this.showDisabled() ? true : null,
+        sort: this.sort()[0],
       },
       queryParamsHandling: 'merge',
     });
@@ -135,6 +145,20 @@ export class AdminUsersPageComponent implements OnInit {
     this.updateUrl();
   }
 
+  onSort(column: string) {
+    const current = this.sort()[0];
+    const [currentCol, currentDir] = current.split(',');
+
+    let newDir = 'asc';
+    if (currentCol === column) {
+      newDir = currentDir === 'asc' ? 'desc' : 'asc';
+    }
+
+    this.sort.set([`${column},${newDir}`]);
+    this.currentPage.set(0);
+    this.updateUrl();
+  }
+
   changePage(page: number) {
     this.currentPage.set(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -152,5 +176,15 @@ export class AdminUsersPageComponent implements OnInit {
       relativeTo: this.route,
       queryParams: {},
     });
+  }
+
+  //----------------------
+
+  onUserDetail(userId: number) {
+    this.toast.success('Usuario seleccionado con id: ' + userId);
+  }
+
+  onToggleStatus(userId: number) {
+    this.toast.success('Cambiar estado de usuario con id: ' + userId);
   }
 }
