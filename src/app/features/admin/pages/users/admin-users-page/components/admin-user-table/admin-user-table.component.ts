@@ -1,5 +1,4 @@
 import { Component, inject, input, output } from '@angular/core';
-import { UserListResponseDTO } from '../../../../shared/models/response/user-response.model';
 import { CommonModule } from '@angular/common';
 import {
   UserCheck,
@@ -10,9 +9,9 @@ import {
   ArrowDown,
   ArrowUpDown,
 } from 'lucide-angular';
-import { AuthService } from '../../../../core/auth/auth.service';
-import { AvatarComponent } from '../../../../shared/components/avatar/avatar.component';
-
+import { AvatarComponent } from '../../../../../../../shared/components/avatar/avatar.component';
+import { AuthService } from '../../../../../../../core/auth/auth.service';
+import { UserListResponseDTO } from '../../../../../../../shared/models/response/user-response.model';
 @Component({
   selector: 'app-admin-user-table',
   imports: [CommonModule, LucideAngularModule, AvatarComponent],

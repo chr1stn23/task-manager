@@ -1,1 +1,99 @@
-<p>admin-user-detail-page works!</p>
+<div class="user-detail-container">
+  @defer (when !loading()) {
+    @if (user()) {
+      <header class="user-detail-header">
+        <div class="header-title-row">
+          <button class="btn-back" routerLink="/admin/users" title="Volver a la lista">
+            <lucide-icon [name]="icons.back" [size]="24"></lucide-icon>
+          </button>
+          <h1>Perfil de Usuario</h1>
+        </div>
+        <p>Gestiona la información personal y seguridad de la cuenta.</p>
+      </header>
+
+      <div class="detail-card">
+        <div class="card-top">
+          <div class="user-info">
+            <app-avatar
+              [imageUrl]="user()?.profileImageUrl"
+              [firstName]="user()?.firstName"
+              [lastName]="user()?.lastName"
+              [size]="70"
+            />
+            <div class="details">
+              <h2>{{ user()?.firstName }} {{ user()?.lastName }}</h2>
+              <span class="badge" [class.admin]="isAdmin()">
+                {{ isAdmin() ? 'Administrador' : 'Usuario Standard' }}
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <button
+              class="btn-outline"
+              (click)="toggleStatus()"
+              [title]="user()?.enabled ? 'Desactivar' : 'Activar'"
+              [ngClass]="{ 'text-danger': user()?.enabled, 'text-success': !user()?.enabled }"
+            >
+              {{ user()?.enabled ? 'Desactivar' : 'Activar' }}
+              <lucide-icon
+                [name]="user()?.enabled ? icons.disable : icons.enable"
+                [size]="18"
+              ></lucide-icon>
+            </button>
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Correo Electrónico</label>
+            <p>{{ user()?.email }}</p>
+          </div>
+          <div class="info-item">
+            <label>ID de Usuario</label>
+            <p>#{{ user()?.id }}</p>
+          </div>
+          <div class="info-item">
+            <label>Nombre de Usuario</label>
+            <p>{{ user()?.nickName }}</p>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="not-found-container">
+        <div class="not-found-content">
+          <div class="icon-wrapper">
+            <lucide-icon [img]="icons.user" [size]="50" />
+          </div>
+          <h2>Usuario no encontrado</h2>
+          <p>Lo sentimos, no pudimos encontrar ningún usuario con el ID proporcionado.</p>
+          <button class="btn-primary" routerLink="../">Volver a la lista</button>
+        </div>
+      </div>
+    }
+  } @loading (after 150ms; minimum 500ms) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Consultando datos del usuario...</p>
+    </div>
+  } @placeholder {
+    <div class="loading-container"></div>
+  }
+</div>
+
+@if (showToggleStatusConfirm()) {
+  <app-confirm-modal
+    [modalTitle]="user()?.enabled ? 'Desactivar usuario' : 'Activar usuario'"
+    [message]="
+      user()?.enabled
+        ? '¿Estás seguro de activar este usuario?'
+        : '¿Estás seguro de desactivar este usuario?'
+    "
+    [confirmText]="user()?.enabled ? 'Desactivar' : 'Activar'"
+    [variant]="user()?.enabled ? 'danger' : 'success'"
+    (confirm)="confirmToggle()"
+    (cancel)="closeConfirm()"
+  />
+}

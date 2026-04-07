@@ -8,10 +8,10 @@ import { Page } from '../../../../../shared/models/page.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../../../../shared/services/toast.service';
 import { LoaderService } from '../../../../../shared/services/loader.service';
-import { AdminUserFiltersComponent } from '../../../components/admin-user-filters/admin-user-filters.component';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
-import { AdminUserTableComponent } from '../../../components/admin-user-table/admin-user-table.component';
 import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
+import { AdminUserFiltersComponent } from './components/admin-user-filters/admin-user-filters.component';
+import { AdminUserTableComponent } from './components/admin-user-table/admin-user-table.component';
 
 @Component({
   selector: 'app-admin-users-page',
@@ -209,7 +209,9 @@ export class AdminUsersPageComponent implements OnInit {
   //----------------------
 
   onUserDetail(userId: number) {
-    this.toast.success('Usuario seleccionado con id: ' + userId);
+    this.router.navigate([userId], {
+      relativeTo: this.route,
+    });
   }
 
   onToggleStatus(user: UserListResponseDTO) {

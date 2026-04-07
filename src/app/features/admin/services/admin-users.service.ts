@@ -37,6 +37,10 @@ export class AdminUsersService {
     });
   }
 
+  getUserById(id: number): Observable<ApiResponseWrapper<UserResponseDTO>> {
+    return this.http.get<ApiResponseWrapper<UserResponseDTO>>(`${this.API_URL}/${id}`, {});
+  }
+
   disableUser(id: number): Observable<ApiResponseWrapper<string>> {
     return this.http.patch<ApiResponseWrapper<string>>(`${this.API_URL}/${id}/disable`, {});
   }
