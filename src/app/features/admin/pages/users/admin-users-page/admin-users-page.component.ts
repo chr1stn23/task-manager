@@ -51,14 +51,13 @@ export class AdminUsersPageComponent implements OnInit {
   searchUserTerm = signal('');
   searchEmailTerm = signal('');
 
-  sort = signal<string[]>(['firstName,asc']);
+  sort = signal<string[]>([]);
 
   private searchUserTimeout?: ReturnType<typeof setTimeout>;
   private searchEmailTimeout?: ReturnType<typeof setTimeout>;
 
   private readonly VALID_SORT_FIELDS = ['firstName', 'lastName', 'nickName', 'email'];
   private readonly VALID_SORT_DIRECTIONS = ['asc', 'desc'];
-  private readonly DEFAULT_SORT = ['firstName,asc'];
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -75,7 +74,7 @@ export class AdminUsersPageComponent implements OnInit {
         const validatedSort = this.validateSortParams(sortArray);
         this.sort.set(validatedSort);
       } else {
-        this.sort.set(this.DEFAULT_SORT);
+        this.sort.set([]);
       }
 
       this.loadUsers();
@@ -175,7 +174,7 @@ export class AdminUsersPageComponent implements OnInit {
     }
 
     if (currentSortList.length === 0) {
-      currentSortList = ['firstName,asc'];
+      currentSortList = [];
     }
 
     this.sort.set(currentSortList);
@@ -221,6 +220,6 @@ export class AdminUsersPageComponent implements OnInit {
       );
     });
 
-    return validatedSort.length > 0 ? validatedSort : this.DEFAULT_SORT;
+    return validatedSort.length > 0 ? validatedSort : [];
   }
 }

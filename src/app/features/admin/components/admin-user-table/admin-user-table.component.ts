@@ -23,7 +23,7 @@ export class AdminUserTableComponent {
 
   users = input.required<UserListResponseDTO[]>();
 
-  currentSort = input<string[]>(['firstName,asc']);
+  currentSort = input<string[]>([]);
 
   readonly icons = {
     detail: Eye,
