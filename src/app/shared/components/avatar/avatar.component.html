@@ -1,0 +1,13 @@
+<div
+  class="avatar-container"
+  [style.width.px]="size()"
+  [style.height.px]="size()"
+  [style.font-size.px]="fontSize()"
+  [style.border-radius.px]="borderRadius()"
+>
+  @if (imageUrl()) {
+    <img [src]="imageUrl()" [alt]="altText()" />
+  } @else {
+    <span class="initials">{{ initials() }}</span>
+  }
+</div>

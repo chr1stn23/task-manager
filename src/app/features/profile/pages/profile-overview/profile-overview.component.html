@@ -9,13 +9,12 @@
       <div class="card-top">
         <div class="user-info">
           <!-- AVATAR -->
-          <div class="avatar">
-            @if (user()?.profileImageUrl) {
-              <img [src]="user()?.profileImageUrl!" alt="Profile image" class="avatar-img" />
-            } @else {
-              {{ user()?.firstName?.charAt(0) }}{{ user()?.lastName?.charAt(0) }}
-            }
-          </div>
+          <app-avatar
+            [imageUrl]="user()?.profileImageUrl"
+            [firstName]="user()?.firstName"
+            [lastName]="user()?.lastName"
+            [size]="70"
+          />
 
           <!-- USER DETAILS -->
           <div class="details">

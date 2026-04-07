@@ -3,11 +3,18 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ChevronDown, LogOut, LucideAngularModule, Menu, User, X } from 'lucide-angular';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { AuthService } from '../../../core/auth/auth.service';
+import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, LucideAngularModule, ConfirmModalComponent],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    LucideAngularModule,
+    ConfirmModalComponent,
+    AvatarComponent,
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })

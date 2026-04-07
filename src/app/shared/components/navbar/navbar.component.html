@@ -19,14 +19,12 @@
 
       <li class="user-dropdown">
         <button class="dropdown-trigger" (click)="toggleMenu()">
-          <div class="nav-avatar">
-            @if (authService.currentUser()?.profileImageUrl) {
-              <img [src]="authService.currentUser()?.profileImageUrl" alt="User" />
-            } @else {
-              {{ authService.currentUser()?.firstName?.charAt(0)
-              }}{{ authService.currentUser()?.lastName?.charAt(0) }}
-            }
-          </div>
+          <app-avatar
+            [imageUrl]="authService.currentUser()?.profileImageUrl"
+            [firstName]="authService.currentUser()?.firstName"
+            [lastName]="authService.currentUser()?.lastName"
+            [size]="28"
+          />
           <span class="user-name">
             Hola, <strong>{{ authService.currentUser()?.nickName }}</strong>
           </span>
