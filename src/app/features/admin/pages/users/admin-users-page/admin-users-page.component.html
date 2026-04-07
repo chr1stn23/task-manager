@@ -29,3 +29,18 @@
     }
   }
 </div>
+
+@if (showConfirm()) {
+  <app-confirm-modal
+    [modalTitle]="userToToggle()?.enabled ? 'Desactivar usuario' : 'Activar usuario'"
+    [message]="
+      userToToggle()?.enabled
+        ? '¿Estás seguro de activar este usuario?'
+        : '¿Estás seguro de desactivar este usuario?'
+    "
+    [confirmText]="userToToggle()?.enabled ? 'Desactivar' : 'Activar'"
+    [variant]="userToToggle()?.enabled ? 'danger' : 'success'"
+    (confirm)="confirmToggle()"
+    (cancel)="closeConfirm()"
+  />
+}

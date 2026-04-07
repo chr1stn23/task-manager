@@ -88,7 +88,7 @@
 
           <td>
             <span class="badge" [ngClass]="user.enabled ? 'bg-success' : 'bg-danger'">
-              {{ user.enabled ? 'Activo' : 'Deshabilitado' }}
+              {{ user.enabled ? 'Activo' : 'Inactivo' }}
             </span>
           </td>
 
@@ -99,8 +99,8 @@
               </button>
 
               <button
-                (click)="toggleStatus.emit(user.id)"
-                [title]="user.enabled ? 'Deshabilitar' : 'Habilitar'"
+                (click)="toggleStatus.emit(user)"
+                [title]="user.enabled ? 'Desactivar' : 'Activar'"
                 [ngClass]="{ 'text-danger': user.enabled, 'text-success': !user.enabled }"
               >
                 <lucide-icon

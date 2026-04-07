@@ -30,17 +30,15 @@
     border-radius: 12px;
   }
 
-  .icon-warning {
+  .icon-container {
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
-    color: #f59e0b;
 
     lucide-icon {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #fef3c7;
       width: 60px;
       height: 60px;
       border-radius: 50%;
@@ -48,6 +46,30 @@
       ::ng-deep svg {
         width: 32px;
         height: 32px;
+      }
+    }
+
+    &.icon-danger {
+      color: #ef4444;
+
+      lucide-icon {
+        background: #fee2e2;
+      }
+    }
+
+    &.icon-success {
+      color: #22c55e;
+
+      lucide-icon {
+        background: #dcfce7;
+      }
+    }
+
+    &.icon-warning {
+      color: #f59e0b;
+
+      lucide-icon {
+        background: #fef3c7;
       }
     }
   }
@@ -118,12 +140,30 @@
   }
 
   .btn-confirm {
-    background: #ef4444;
     color: white;
 
-    &:hover {
-      background: #dc2626;
-      transform: translateY(-1px);
+    &.btn-danger {
+      background: #ef4444;
+
+      &:hover {
+        background: #dc2626;
+      }
+    }
+
+    &.btn-success {
+      background: #22c55e;
+
+      &:hover {
+        background: #16a34a;
+      }
+    }
+
+    &.btn-warning {
+      background: #f59e0b;
+
+      &:hover {
+        background: #d97706;
+      }
     }
   }
 }

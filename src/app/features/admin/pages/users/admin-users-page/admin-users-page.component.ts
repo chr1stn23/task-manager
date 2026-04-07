@@ -11,6 +11,7 @@ import { LoaderService } from '../../../../../shared/services/loader.service';
 import { AdminUserFiltersComponent } from '../../../components/admin-user-filters/admin-user-filters.component';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
 import { AdminUserTableComponent } from '../../../components/admin-user-table/admin-user-table.component';
+import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-admin-users-page',
@@ -21,6 +22,7 @@ import { AdminUserTableComponent } from '../../../components/admin-user-table/ad
     AdminUserFiltersComponent,
     PaginationComponent,
     AdminUserTableComponent,
+    ConfirmModalComponent,
   ],
   templateUrl: './admin-users-page.component.html',
   styleUrl: './admin-users-page.component.scss',
@@ -58,6 +60,9 @@ export class AdminUsersPageComponent implements OnInit {
 
   private readonly VALID_SORT_FIELDS = ['firstName', 'lastName', 'nickName', 'email'];
   private readonly VALID_SORT_DIRECTIONS = ['asc', 'desc'];
+
+  showConfirm = signal(false);
+  userToToggle = signal<UserListResponseDTO | null>(null);
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -207,8 +212,50 @@ export class AdminUsersPageComponent implements OnInit {
     this.toast.success('Usuario seleccionado con id: ' + userId);
   }
 
-  onToggleStatus(userId: number) {
-    this.toast.success('Cambiar estado de usuario con id: ' + userId);
+  onToggleStatus(user: UserListResponseDTO) {
+    this.userToToggle.set(user);
+    this.showConfirm.set(true);
+  }
+
+  confirmToggle() {
+    const user = this.userToToggle();
+    if (!user) return;
+
+    const isDisabling = user.enabled;
+
+    const action$ = isDisabling
+      ? this.adminUsersService.disableUser(user.id)
+      : this.adminUsersService.enableUser(user.id);
+
+    const successMessage = isDisabling
+      ? 'Usuario desactivado correctamente'
+      : 'Usuario activado correctamente';
+
+    this.loader.show();
+
+    action$.subscribe({
+      next: () => {
+        this.loader.hide();
+        this.toast.success(successMessage);
+
+        const updated = this.users().map((u) =>
+          u.id === user.id ? { ...u, enabled: !u.enabled } : u,
+        );
+
+        this.pageData.update((p) => (p ? { ...p, content: updated } : p));
+
+        this.closeConfirm();
+      },
+      error: () => {
+        this.loader.hide();
+        this.closeConfirm();
+      },
+    });
+  }
+
+  closeConfirm() {
+    this.userToToggle.set(null);
+    this.showConfirm.set(false);
   }
 
   //-----------------------

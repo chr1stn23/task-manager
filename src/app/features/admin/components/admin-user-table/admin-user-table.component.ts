@@ -36,7 +36,7 @@ export class AdminUserTableComponent {
   };
 
   userDetail = output<number>();
-  toggleStatus = output<number>();
+  toggleStatus = output<UserListResponseDTO>();
   sortChange = output<string>();
 
   getSortInfo(column: string) {

@@ -36,4 +36,12 @@ export class AdminUsersService {
       params: buildHttpParams(params as Record<string, ParamValue>),
     });
   }
+
+  disableUser(id: number): Observable<ApiResponseWrapper<string>> {
+    return this.http.patch<ApiResponseWrapper<string>>(`${this.API_URL}/${id}/disable`, {});
+  }
+
+  enableUser(id: number): Observable<ApiResponseWrapper<string>> {
+    return this.http.patch<ApiResponseWrapper<string>>(`${this.API_URL}/${id}/enable`, {});
+  }
 }

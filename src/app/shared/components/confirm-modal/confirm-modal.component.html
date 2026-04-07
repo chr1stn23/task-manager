@@ -1,14 +1,31 @@
 <div class="modal-overlay" (click)="cancel.emit()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="icon-warning">
-      <lucide-icon [img]="TriangleAlert" />
+    <div
+      class="icon-container"
+      [ngClass]="{
+        'icon-danger': variant() === 'danger',
+        'icon-success': variant() === 'success',
+        'icon-warning': variant() === 'warning',
+      }"
+    >
+      <lucide-icon [img]="currentIcon" />
     </div>
     <h3>{{ modalTitle() }}</h3>
     <p>{{ message() }}</p>
 
     <div class="modal-actions">
       <button class="btn-cancel" (click)="cancel.emit()">Cancelar</button>
-      <button class="btn-confirm" (click)="confirm.emit()">{{ confirmText() }}</button>
+      <button
+        class="btn-confirm"
+        [ngClass]="{
+          'btn-danger': variant() === 'danger',
+          'btn-success': variant() === 'success',
+          'btn-warning': variant() === 'warning',
+        }"
+        (click)="confirm.emit()"
+      >
+        {{ confirmText() }}
+      </button>
     </div>
   </div>
 </div>
