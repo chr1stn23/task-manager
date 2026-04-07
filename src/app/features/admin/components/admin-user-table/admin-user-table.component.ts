@@ -11,10 +11,11 @@ import {
   ArrowUpDown,
 } from 'lucide-angular';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { AvatarComponent } from '../../../../shared/components/avatar/avatar.component';
 
 @Component({
   selector: 'app-admin-user-table',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, AvatarComponent],
   templateUrl: './admin-user-table.component.html',
   styleUrl: './admin-user-table.component.scss',
 })

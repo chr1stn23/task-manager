@@ -11,10 +11,11 @@ import { UserResponseDTO } from '../../../../shared/models/response/user-respons
 
 import { of, switchMap, map, finalize } from 'rxjs';
 import { LoaderService } from '../../../../shared/services/loader.service';
+import { AvatarComponent } from '../../../../shared/components/avatar/avatar.component';
 
 @Component({
   selector: 'app-profile-edit',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, AvatarComponent],
   templateUrl: './profile-edit.component.html',
   styleUrl: './profile-edit.component.scss',
 })

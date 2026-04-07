@@ -7,18 +7,12 @@
   <div class="avatar-section">
     <div class="avatar-wrapper">
       <div class="avatar">
-        @if (previewUrl() || authService.currentUser()?.profileImageUrl) {
-          <img
-            [src]="previewUrl() || authService.currentUser()?.profileImageUrl"
-            alt="Foto de perfil"
-            class="avatar-img"
-          />
-        } @else {
-          <span class="avatar-initials">
-            {{ authService.currentUser()?.firstName?.charAt(0)
-            }}{{ authService.currentUser()?.lastName?.charAt(0) }}
-          </span>
-        }
+        <app-avatar
+          [imageUrl]="previewUrl() || authService.currentUser()?.profileImageUrl"
+          [firstName]="authService.currentUser()?.firstName"
+          [lastName]="authService.currentUser()?.lastName"
+          [size]="140"
+        />
       </div>
 
       <input type="file" #fileInput hidden accept="image/*" (change)="onFileSelected($event)" />

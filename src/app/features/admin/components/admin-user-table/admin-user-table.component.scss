@@ -69,27 +69,6 @@
   }
 }
 
-.avatar,
-.avatar-fallback {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  display: block;
-}
-
-.avatar-fallback {
-  background-color: #ebf4ff;
-  color: #3182ce;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 0.8rem;
-  border: 1px solid #bee3f8;
-}
-
 .nickname {
   font-size: 0.85rem;
   color: #718096;

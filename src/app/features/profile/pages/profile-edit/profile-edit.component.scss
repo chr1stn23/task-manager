@@ -13,8 +13,7 @@
     margin: 1.5rem;
 
     @media (max-width: 768px) {
-      margin: 0 1rem;
-      margin-bottom: 1rem;
+      margin: 0 1rem 1rem;
     }
 
     h1 {
@@ -24,14 +23,17 @@
       font-size: 1.8rem;
       color: #0f172a;
       font-weight: 700;
+      margin: 0; // ← Añadido para resetear
 
       @media (max-width: 768px) {
         font-size: 1.5rem;
       }
     }
+
     p {
       color: #64748b;
       font-size: 1rem;
+      margin: 0; // ← Añadido para resetear
     }
   }
 
@@ -60,6 +62,7 @@
         color: #1e293b;
         margin: 0;
       }
+
       .section-desc {
         color: #64748b;
         font-size: 0.9rem;
@@ -75,16 +78,6 @@
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 0.75rem;
-        }
-
-        .btn-outline,
-        .btn-save {
-          width: 100%;
-          padding: 0.8rem 0.5rem;
-          font-size: 0.9rem;
-          text-align: center;
-          display: flex;
-          justify-content: center;
         }
       }
     }
@@ -133,13 +126,12 @@
       min-height: 1.4rem;
       display: block;
       visibility: hidden;
-
       padding: 0.2rem 0.4rem;
       line-height: 1.2;
-    }
 
-    .error.show {
-      visibility: visible;
+      &.show {
+        visibility: visible;
+      }
     }
   }
 
@@ -159,32 +151,42 @@
     gap: 1rem;
   }
 
-  .btn-outline {
+  .btn-outline,
+  .btn-save {
     padding: 0.6rem 1.5rem;
-    border: 1px solid #e2e8f0;
-    background: white;
     border-radius: 10px;
     font-weight: 600;
-    color: #475569;
     cursor: pointer;
+    transition: all 0.2s;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      padding: 0.8rem 0.5rem;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .btn-outline {
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #475569;
+
     &:hover {
       background: #f8fafc;
     }
   }
 
   .btn-save {
-    padding: 0.6rem 1.5rem;
+    border: none;
     background: #2563eb;
     color: white;
-    border: none;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
 
     &:hover:not(:disabled) {
       background: #1d4ed8;
     }
+
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
@@ -193,12 +195,14 @@
 }
 
 .avatar-section {
+  height: fit-content;
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
 
   @media (max-width: 768px) {
     margin-bottom: 1.5rem;
+    padding: 0 1rem;
   }
 }
 
@@ -211,51 +215,25 @@
   @media (max-width: 768px) {
     flex-direction: row;
     justify-content: center;
-    width: 100%;
-    padding: 0 1rem;
+    width: auto;
     gap: 1.5rem;
+    flex-wrap: wrap;
   }
 }
 
 .avatar {
   width: 140px;
   height: 140px;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
-  border: 3px solid #e2e8f0;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
+  transition: transform 0.2s ease;
 
   &:hover {
     transform: scale(1.03);
   }
-
-  @media (max-width: 768px) {
-    width: 140px !important;
-    height: 140px !important;
-  }
-}
-
-.avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.3s ease;
-}
-
-.avatar-initials {
-  font-size: 3rem;
-  font-weight: 800;
-  color: white;
-  text-transform: uppercase;
-  line-height: 1;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
 }
 
 .avatar-btn {
@@ -263,9 +241,9 @@
   border-radius: 10px;
   border: 1px solid #e2e8f0;
   background: white;
-  cursor: pointer;
   font-weight: 600;
   color: #475569;
+  cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
@@ -276,13 +254,6 @@
   @media (max-width: 768px) {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .avatar {
-    width: 90px;
-    height: 90px;
   }
 }
 

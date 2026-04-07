@@ -71,11 +71,12 @@
       @for (user of users(); track user.id) {
         <tr [class.current-user]="isCurrentUser(user.id)">
           <td>
-            @if (user.profileImageUrl) {
-              <img [src]="user.profileImageUrl" [alt]="user.nickName" class="avatar" />
-            } @else {
-              <div class="avatar-fallback">{{ getInitials(user) }}</div>
-            }
+            <app-avatar
+              [imageUrl]="user.profileImageUrl"
+              [firstName]="user.firstName"
+              [lastName]="user.lastName"
+              [size]="38"
+            />
           </td>
 
           <td>{{ user.firstName }}</td>
