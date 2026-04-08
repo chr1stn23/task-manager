@@ -1,4 +1,4 @@
-import { LayoutDashboard, ShieldCheck, SquareCheck, User, UserPen, Users } from 'lucide-angular';
+import { LayoutDashboard, ShieldCheck, User, UserPen, Users } from 'lucide-angular';
 import { SidebarItem } from '../models/sidebar-item.model';
 
 export const SIDEBARS: Record<string, SidebarItem[]> = {
@@ -11,6 +11,5 @@ export const SIDEBARS: Record<string, SidebarItem[]> = {
   admin: [
     { label: 'Dashboard', route: 'dashboard', icon: LayoutDashboard },
     { label: 'Usuarios', route: 'users', icon: Users },
-    { label: 'Tareas', route: 'tasks', icon: SquareCheck },
   ],
 };

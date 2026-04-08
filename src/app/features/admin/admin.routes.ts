@@ -31,13 +31,6 @@ export const ADMIN_ROUTES: Routes = [
             (m) => m.AdminUserDetailPageComponent,
           ),
       },
-      {
-        path: 'tasks',
-        loadComponent: () =>
-          import('./pages/tasks/admin-tasks-page/admin-tasks-page.component').then(
-            (m) => m.AdminTasksPageComponent,
-          ),
-      },
     ],
   },
 ];
