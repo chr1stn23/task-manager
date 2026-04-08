@@ -300,6 +300,15 @@ $slate-900: #0f172a;
   }
 }
 
+.tab-content {
+  position: relative;
+  min-height: 500px;
+}
+
+.fade-in-tab {
+  animation: tabAppear 0.4s ease-out forwards;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

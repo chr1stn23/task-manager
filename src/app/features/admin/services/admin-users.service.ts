@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { UserCreateDTO } from '../../../shared/models/request/user-request.model';
+import {
+  UserCreateDTO,
+  UserUpdateByAdminDTO,
+} from '../../../shared/models/request/user-request.model';
 import { Observable } from 'rxjs';
 import { ApiResponseWrapper } from '../../../shared/models/api-response.model';
 import {
@@ -39,6 +42,16 @@ export class AdminUsersService {
 
   getUserById(id: number): Observable<ApiResponseWrapper<UserResponseDTO>> {
     return this.http.get<ApiResponseWrapper<UserResponseDTO>>(`${this.API_URL}/${id}`, {});
+  }
+
+  updateUserById(
+    request: UserUpdateByAdminDTO,
+    userId: number,
+  ): Observable<ApiResponseWrapper<UserResponseDTO>> {
+    return this.http.patch<ApiResponseWrapper<UserResponseDTO>>(
+      `${this.API_URL}/${userId}`,
+      request,
+    );
   }
 
   disableUser(id: number): Observable<ApiResponseWrapper<string>> {

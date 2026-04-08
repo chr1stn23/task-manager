@@ -59,6 +59,10 @@
             <label>Nombre de Usuario</label>
             <p>{{ user()?.nickName }}</p>
           </div>
+          <div class="info-item">
+            <label>Estado</label>
+            <p>{{ user()?.enabled ? 'Activo' : 'Inactivo' }}</p>
+          </div>
         </div>
       </div>
 
@@ -73,16 +77,20 @@
       </div>
 
       <div class="tab-content">
-        @switch (activeTab()) {
-          @case ('edit') {
-            <app-user-edit-tab [user]="user()" />
-          }
-          @case ('tasks') {
+        @if (activeTab() === 'edit') {
+          <div class="fade-in-tab">
+            <app-user-edit-tab [user]="user()" (userUpdated)="onUserUpdated($event)" />
+          </div>
+        }
+        @if (activeTab() === 'tasks') {
+          <div class="fade-in-tab">
             <app-user-tasks-tab [userId]="user()?.id" />
-          }
-          @case ('sessions') {
+          </div>
+        }
+        @if (activeTab() === 'sessions') {
+          <div class="fade-in-tab">
             <app-user-sessions-tab [userId]="user()?.id" />
-          }
+          </div>
         }
       </div>
     } @else {

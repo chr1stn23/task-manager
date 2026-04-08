@@ -17,16 +17,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; // Permite que el badge baje si no hay espacio
+    flex-wrap: wrap;
     gap: 1rem;
 
     @media (max-width: 576px) {
-      align-items: flex-start; // Alinea a la izquierda en móvil
+      align-items: flex-start;
     }
 
     .header-text {
       flex: 1;
-      min-width: 200px; // Evita que el texto del título se comprima demasiado
+      min-width: 200px;
+
+      h3 {
+        font-size: 1.4rem;
+        color: #1e293b;
+        margin: 0;
+      }
+
+      .section-desc {
+        color: #64748b;
+        font-size: 0.95rem;
+        margin-top: 0.2rem;
+      }
     }
 
     .deleted-badge {

@@ -23,7 +23,7 @@
       font-size: 1.8rem;
       color: #0f172a;
       font-weight: 700;
-      margin: 0; // ← Añadido para resetear
+      margin: 0;
 
       @media (max-width: 768px) {
         font-size: 1.5rem;
@@ -33,7 +33,7 @@
     p {
       color: #64748b;
       font-size: 1rem;
-      margin: 0; // ← Añadido para resetear
+      margin: 0;
     }
   }
 

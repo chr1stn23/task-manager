@@ -117,4 +117,8 @@ export class AdminUserDetailPageComponent implements OnInit {
   closeConfirm() {
     this.showToggleStatusConfirm.set(false);
   }
+
+  onUserUpdated(updatedUser: UserResponseDTO): void {
+    this.user.set(updatedUser);
+  }
 }
