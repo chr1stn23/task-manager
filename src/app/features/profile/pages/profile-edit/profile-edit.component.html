@@ -27,12 +27,6 @@
         <h3>Información Personal</h3>
         <p class="section-desc">Estos datos serán visibles en tu perfil público.</p>
       </div>
-      <div class="card-actions">
-        <button type="button" class="btn-outline secondary" routerLink="..">Cancelar</button>
-        <button type="submit" class="btn-save" [disabled]="profileForm.invalid">
-          Guardar Cambios
-        </button>
-      </div>
     </div>
 
     <hr />
@@ -65,6 +59,13 @@
         @let emailError = getError('email');
         <small class="error" [class.show]="emailError"> {{ emailError }} </small>
       </div>
+    </div>
+
+    <div class="footer-actions">
+      <button type="button" class="btn-outline secondary" routerLink="..">Cancelar</button>
+      <button type="submit" class="btn-save" [disabled]="profileForm.invalid">
+        Guardar Cambios
+      </button>
     </div>
   </form>
 </div>

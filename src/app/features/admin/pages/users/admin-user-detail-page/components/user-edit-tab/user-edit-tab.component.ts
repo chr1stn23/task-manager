@@ -1,11 +1,14 @@
 import { Component, inject, input, signal, OnInit, output } from '@angular/core';
 import { UserResponseDTO } from '../../../../../../../shared/models/response/user-response.model';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { getFieldError } from '../../../../../../../shared/utils/form-errors';
@@ -47,17 +50,43 @@ export class UserEditTabComponent implements OnInit {
     roles: this.fb.array([], [Validators.required]),
   });
 
-  resetPasswordForm: FormGroup = this.fb.group({
-    newPassword: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(20),
-        Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]+$/),
+  passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const newPassword = control.get('newPassword');
+    const confirmPassword = control.get('confirmPassword');
+
+    if (!newPassword || !confirmPassword) {
+      return null;
+    }
+
+    if (!newPassword.value || !confirmPassword.value) {
+      return null;
+    }
+
+    return newPassword.value === confirmPassword.value ? null : { notSame: true };
+  };
+
+  resetPasswordForm: FormGroup = this.fb.group(
+    {
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(20),
+          Validators.pattern(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]+$/,
+          ),
+        ],
       ],
-    ],
-  });
+      confirmPassword: [
+        '',
+        [Validators.required, Validators.minLength(8), Validators.maxLength(20)],
+      ],
+    },
+    {
+      validators: this.passwordMatchValidator,
+    },
+  );
 
   ngOnInit(): void {
     this.resetForm();
@@ -183,6 +212,7 @@ export class UserEditTabComponent implements OnInit {
     email: 'El correo',
     roles: 'Los roles',
     newPassword: 'La nueva contraseña',
+    confirmPassword: 'La confirmación',
   };
 
   getError(field: string): string | null {
@@ -190,6 +220,16 @@ export class UserEditTabComponent implements OnInit {
   }
 
   getPassError(field: string): string | null {
+    const confirmPassword = this.resetPasswordForm.get('confirmPassword');
+
+    if (field === 'confirmPassword') {
+      if (this.resetPasswordForm.hasError('notSame') && confirmPassword?.touched) {
+        return 'Las contraseñas no coinciden';
+      }
+
+      return getFieldError(this.resetPasswordForm, field, this.resetPassSubmitted(), this.labels);
+    }
+
     return getFieldError(this.resetPasswordForm, field, this.resetPassSubmitted(), this.labels);
   }
 }

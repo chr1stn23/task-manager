@@ -63,10 +63,7 @@ export class ProfileSecurityComponent {
           ),
         ],
       ],
-      confirmPassword: [
-        '',
-        [Validators.required, Validators.minLength(8), Validators.maxLength(20)],
-      ],
+      confirmPassword: ['', [Validators.required]],
     },
     {
       validators: this.passwordMatchValidator,

@@ -5,12 +5,6 @@
         <h3>Información Personal</h3>
         <p class="section-desc">Estos datos serán visibles en el perfil público.</p>
       </div>
-      <div class="card-actions">
-        <button type="button" class="btn-outline secondary" (click)="resetForm()">Cancelar</button>
-        <button type="submit" class="btn-save" [disabled]="profileForm.invalid">
-          Guardar Cambios
-        </button>
-      </div>
     </div>
 
     <hr />
@@ -64,6 +58,13 @@
         <small class="error" [class.show]="rolesError"> {{ rolesError }} </small>
       </div>
     </div>
+
+    <div class="footer-actions">
+      <button type="button" class="btn-outline secondary" (click)="resetForm()">Cancelar</button>
+      <button type="submit" class="btn-save" [disabled]="profileForm.invalid">
+        Guardar Cambios
+      </button>
+    </div>
   </form>
 
   <hr />
@@ -74,11 +75,6 @@
         <h3>Restablecer Contraseña</h3>
         <p class="section-desc">Ingresa una nueva contraseña para este usuario.</p>
       </div>
-      <div class="card-actions">
-        <button type="submit" class="btn-save" [disabled]="resetPasswordForm.invalid">
-          Actualizar Contraseña
-        </button>
-      </div>
     </div>
 
     <div class="info-grid">
@@ -88,6 +84,24 @@
         @let newPasswordError = getPassError('newPassword');
         <small class="error" [class.show]="newPasswordError"> {{ newPasswordError }} </small>
       </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Repite la contraseña"
+        />
+        @let confirmErr = getPassError('confirmPassword');
+        <small class="error" [class.show]="confirmErr">{{ confirmErr }}</small>
+      </div>
+    </div>
+
+    <div class="footer-actions">
+      <button type="submit" class="btn-save" [disabled]="resetPasswordForm.invalid">
+        Actualizar Contraseña
+      </button>
     </div>
   </form>
 </div>

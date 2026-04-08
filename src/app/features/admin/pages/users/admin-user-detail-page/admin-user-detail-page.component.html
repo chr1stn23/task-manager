@@ -35,7 +35,6 @@
               [title]="user()?.enabled ? 'Desactivar' : 'Activar'"
               [ngClass]="{ 'text-danger': user()?.enabled, 'text-success': !user()?.enabled }"
             >
-              {{ user()?.enabled ? 'Desactivar' : 'Activar' }}
               <lucide-icon
                 [name]="user()?.enabled ? icons.disable : icons.enable"
                 [size]="18"

@@ -2,7 +2,13 @@
   <div class="section-header">
     <div class="header-text">
       <h3>Resumen de Tareas</h3>
-      <p class="section-desc">Estado actual de tus proyectos y prioridades.</p>
+      <p class="section-desc">
+        {{
+          userId()
+            ? 'Estado actual de sus proyectos y prioridades.'
+            : 'Estado actual de tus proyectos y prioridades.'
+        }}
+      </p>
     </div>
     @if (summary()?.deleted) {
       <div class="deleted-badge">
