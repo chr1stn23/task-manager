@@ -9,11 +9,25 @@ import { ArrowLeft, LucideAngularModule, User, UserCheck, UserX } from 'lucide-a
 import { LoaderService } from '../../../../../shared/services/loader.service';
 import { ToastService } from '../../../../../shared/services/toast.service';
 import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
+import { UserEditTabComponent } from './components/user-edit-tab/user-edit-tab.component';
+import { UserTasksTabComponent } from './components/user-tasks-tab/user-tasks-tab.component';
+import { UserSessionsTabComponent } from './components/user-sessions-tab/user-sessions-tab.component';
+
+type UserTab = 'edit' | 'tasks' | 'sessions';
 
 @Component({
   selector: 'app-admin-user-detail-page',
   standalone: true,
-  imports: [CommonModule, AvatarComponent, LucideAngularModule, RouterLink, ConfirmModalComponent],
+  imports: [
+    CommonModule,
+    AvatarComponent,
+    LucideAngularModule,
+    RouterLink,
+    ConfirmModalComponent,
+    UserEditTabComponent,
+    UserTasksTabComponent,
+    UserSessionsTabComponent,
+  ],
   templateUrl: './admin-user-detail-page.component.html',
   styleUrl: './admin-user-detail-page.component.scss',
 })
@@ -39,6 +53,12 @@ export class AdminUserDetailPageComponent implements OnInit {
   });
 
   showToggleStatusConfirm = signal<boolean>(false);
+
+  activeTab = signal<UserTab>('edit');
+
+  setTab(tab: UserTab) {
+    this.activeTab.set(tab);
+  }
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');

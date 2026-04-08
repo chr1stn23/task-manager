@@ -51,7 +51,7 @@ $slate-900: #0f172a;
       &:hover {
         background-color: $slate-200;
         color: $slate-900;
-        transform: translateX(-4px); // Efecto visual de "retroceso"
+        transform: translateX(-4px);
       }
 
       lucide-icon {
@@ -63,7 +63,7 @@ $slate-900: #0f172a;
       color: $slate-500;
       font-size: 1rem;
       margin: 0;
-      padding-left: 0.25rem; // Alinea el texto con el inicio del título H1
+      padding-left: 0.25rem;
     }
   }
 }
@@ -201,7 +201,6 @@ $slate-900: #0f172a;
   }
 }
 
-// --- Contenedores de Estado (Loading & Not Found) ---
 .loading-container,
 .not-found-container {
   display: flex;
@@ -267,6 +266,36 @@ $slate-900: #0f172a;
     &:hover {
       background: #1d4ed8;
       transform: translateY(-1px);
+    }
+  }
+}
+
+.tabs-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: -1px;
+  padding: 0 1rem;
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid transparent;
+    background: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: $slate-500;
+    border-radius: 12px 12px 0 0;
+    transition: all 0.2s;
+
+    &.active {
+      background: white;
+      border-color: $slate-200;
+      border-bottom-color: white;
+      color: $primary;
+    }
+
+    &:hover:not(.active) {
+      color: $slate-900;
+      background: $slate-200;
     }
   }
 }

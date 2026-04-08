@@ -61,6 +61,30 @@
           </div>
         </div>
       </div>
+
+      <div class="tabs-container">
+        <button [class.active]="activeTab() === 'edit'" (click)="setTab('edit')">
+          Información
+        </button>
+        <button [class.active]="activeTab() === 'tasks'" (click)="setTab('tasks')">Tareas</button>
+        <button [class.active]="activeTab() === 'sessions'" (click)="setTab('sessions')">
+          Sesiones
+        </button>
+      </div>
+
+      <div class="tab-content">
+        @switch (activeTab()) {
+          @case ('edit') {
+            <app-user-edit-tab [user]="user()" />
+          }
+          @case ('tasks') {
+            <app-user-tasks-tab [userId]="user()?.id" />
+          }
+          @case ('sessions') {
+            <app-user-sessions-tab [userId]="user()?.id" />
+          }
+        }
+      </div>
     } @else {
       <div class="not-found-container">
         <div class="not-found-content">
