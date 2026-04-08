@@ -14,10 +14,11 @@ import { AdminUsersService } from '../../../../../services/admin-users.service';
 import { LoaderService } from '../../../../../../../shared/services/loader.service';
 import { ToastService } from '../../../../../../../shared/services/toast.service';
 import { finalize } from 'rxjs';
+import { ConfirmModalComponent } from '../../../../../../../shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-user-edit-tab',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ConfirmModalComponent],
   templateUrl: './user-edit-tab.component.html',
   styleUrl: './user-edit-tab.component.scss',
 })
@@ -27,7 +28,11 @@ export class UserEditTabComponent implements OnInit {
   userUpdated = output<UserResponseDTO>();
 
   submitted = signal(false);
+  resetPassSubmitted = signal(false);
+
   availableRoles = Object.values(Role);
+
+  showResetModal = signal(false);
 
   private fb = inject(FormBuilder);
   private adminUsersService = inject(AdminUsersService);
@@ -40,6 +45,18 @@ export class UserEditTabComponent implements OnInit {
     nickName: ['', [Validators.required, Validators.maxLength(30)]],
     email: ['', [Validators.required, Validators.email]],
     roles: this.fb.array([], [Validators.required]),
+  });
+
+  resetPasswordForm: FormGroup = this.fb.group({
+    newPassword: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(20),
+        Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]+$/),
+      ],
+    ],
   });
 
   ngOnInit(): void {
@@ -101,17 +118,62 @@ export class UserEditTabComponent implements OnInit {
 
       this.adminUsersService
         .updateUserById(updateRequest, currentUser.id)
-        .pipe(finalize(() => this.loader.hide()))
+        .pipe(
+          finalize(() => {
+            this.loader.hide();
+            this.submitted.set(false);
+          }),
+        )
         .subscribe({
           next: (response) => {
             if (response.data) {
               this.userUpdated.emit(response.data);
             }
             this.toast.success('Usuario actualizado correctamente.');
-            this.submitted.set(false);
           },
         });
     }
+  }
+
+  openResetPasswordModal(): void {
+    if (this.resetPasswordForm.valid) {
+      this.showResetModal.set(true);
+    } else {
+      this.resetPasswordForm.markAllAsTouched();
+    }
+  }
+
+  confirmResetPassword(): void {
+    this.resetPassSubmitted.set(true);
+
+    const currentUser = this.user();
+    if (!currentUser) return;
+
+    this.showResetModal.set(false);
+    this.loader.show();
+
+    const request = {
+      newPassword: this.resetPasswordForm.get('newPassword')?.value,
+    };
+
+    this.adminUsersService
+      .resetPassword(currentUser.id, request)
+      .pipe(
+        finalize(() => {
+          this.loader.hide();
+          this.resetPassSubmitted.set(false);
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.toast.success('Contraseña restablecida correctamente.');
+          this.resetPasswordForm.reset();
+        },
+      });
+  }
+
+  cancelResetModal(): void {
+    this.showResetModal.set(false);
   }
 
   labels = {
@@ -120,9 +182,14 @@ export class UserEditTabComponent implements OnInit {
     nickName: 'El nombre de usuario',
     email: 'El correo',
     roles: 'Los roles',
+    newPassword: 'La nueva contraseña',
   };
 
   getError(field: string): string | null {
     return getFieldError(this.profileForm, field, this.submitted(), this.labels);
+  }
+
+  getPassError(field: string): string | null {
+    return getFieldError(this.resetPasswordForm, field, this.resetPassSubmitted(), this.labels);
   }
 }

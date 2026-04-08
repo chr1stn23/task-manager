@@ -1,66 +1,103 @@
-<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-card">
-  <div class="section-header">
-    <div class="header-text">
-      <h3>Información Personal</h3>
-      <p class="section-desc">Estos datos serán visibles en el perfil público.</p>
+<div class="profile-card">
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <div class="section-header">
+      <div class="header-text">
+        <h3>Información Personal</h3>
+        <p class="section-desc">Estos datos serán visibles en el perfil público.</p>
+      </div>
+      <div class="card-actions">
+        <button type="button" class="btn-outline secondary" (click)="resetForm()">Cancelar</button>
+        <button type="submit" class="btn-save" [disabled]="profileForm.invalid">
+          Guardar Cambios
+        </button>
+      </div>
     </div>
-    <div class="card-actions">
-      <button type="button" class="btn-outline secondary" (click)="resetForm()">Cancelar</button>
-      <button type="submit" class="btn-save" [disabled]="profileForm.invalid">
-        Guardar Cambios
-      </button>
+
+    <hr />
+
+    <div class="info-grid">
+      <div class="form-group">
+        <label for="firstName">Nombre</label>
+        <input id="firstName" type="text" formControlName="firstName" />
+        @let firstNameError = getError('firstName');
+        <small class="error" [class.show]="firstNameError"> {{ firstNameError }} </small>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Apellidos</label>
+        <input id="lastName" type="text" formControlName="lastName" />
+        @let lastNameError = getError('lastName');
+        <small class="error" [class.show]="lastNameError"> {{ lastNameError }} </small>
+      </div>
+
+      <div class="form-group">
+        <label for="nickName">Nombre de Usuario</label>
+        <input id="nickName" type="text" formControlName="nickName" />
+        @let nickNameError = getError('nickName');
+        <small class="error" [class.show]="nickNameError"> {{ nickNameError }} </small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Correo Electrónico</label>
+        <input id="email" type="email" formControlName="email" />
+        @let emailError = getError('email');
+        <small class="error" [class.show]="emailError"> {{ emailError }} </small>
+      </div>
+
+      <div class="full-width roles-section">
+        <label>Roles de Usuario</label>
+        <div class="roles-container">
+          @for (role of availableRoles; track role) {
+            <label class="role-item">
+              <input
+                type="checkbox"
+                [value]="role"
+                [checked]="rolesArray.value.includes(role)"
+                (change)="onRoleChange($event)"
+                class="role-checkbox"
+              />
+              <span class="role-text">{{ role.replace('ROLE_', '') }}</span>
+            </label>
+          }
+        </div>
+        @let rolesError = getError('roles');
+        <small class="error" [class.show]="rolesError"> {{ rolesError }} </small>
+      </div>
     </div>
-  </div>
+  </form>
 
   <hr />
 
-  <div class="info-grid">
-    <div class="form-group">
-      <label for="firstName">Nombre</label>
-      <input id="firstName" type="text" formControlName="firstName" />
-      @let firstNameError = getError('firstName');
-      <small class="error" [class.show]="firstNameError"> {{ firstNameError }} </small>
-    </div>
-
-    <div class="form-group">
-      <label for="lastName">Apellidos</label>
-      <input id="lastName" type="text" formControlName="lastName" />
-      @let lastNameError = getError('lastName');
-      <small class="error" [class.show]="lastNameError"> {{ lastNameError }} </small>
-    </div>
-
-    <div class="form-group">
-      <label for="nickName">Nombre de Usuario</label>
-      <input id="nickName" type="text" formControlName="nickName" />
-      @let nickNameError = getError('nickName');
-      <small class="error" [class.show]="nickNameError"> {{ nickNameError }} </small>
-    </div>
-
-    <div class="form-group">
-      <label for="email">Correo Electrónico</label>
-      <input id="email" type="email" formControlName="email" />
-      @let emailError = getError('email');
-      <small class="error" [class.show]="emailError"> {{ emailError }} </small>
-    </div>
-
-    <div class="full-width roles-section">
-      <label>Roles de Usuario</label>
-      <div class="roles-container">
-        @for (role of availableRoles; track role) {
-          <label class="role-item">
-            <input
-              type="checkbox"
-              [value]="role"
-              [checked]="rolesArray.value.includes(role)"
-              (change)="onRoleChange($event)"
-              class="role-checkbox"
-            />
-            <span class="role-text">{{ role.replace('ROLE_', '') }}</span>
-          </label>
-        }
+  <form [formGroup]="resetPasswordForm" (ngSubmit)="openResetPasswordModal()">
+    <div class="section-header">
+      <div class="header-text">
+        <h3>Restablecer Contraseña</h3>
+        <p class="section-desc">Ingresa una nueva contraseña para este usuario.</p>
       </div>
-      @let rolesError = getError('roles');
-      <small class="error" [class.show]="rolesError"> {{ rolesError }} </small>
+      <div class="card-actions">
+        <button type="submit" class="btn-save" [disabled]="resetPasswordForm.invalid">
+          Actualizar Contraseña
+        </button>
+      </div>
     </div>
-  </div>
-</form>
+
+    <div class="info-grid">
+      <div class="form-group">
+        <label for="newPassword">Nueva Contraseña</label>
+        <input id="newPassword" type="password" formControlName="newPassword" />
+        @let newPasswordError = getPassError('newPassword');
+        <small class="error" [class.show]="newPasswordError"> {{ newPasswordError }} </small>
+      </div>
+    </div>
+  </form>
+</div>
+@if (showResetModal()) {
+  <app-confirm-modal
+    variant="warning"
+    modalTitle="¿Restablecer Contraseña?"
+    message="Esta acción cambiará el acceso del usuario inmediatamente. ¿Deseas continuar?"
+    confirmText="Sí, Cambiar"
+    (confirm)="confirmResetPassword()"
+    (cancel)="cancelResetModal()"
+  />
+}

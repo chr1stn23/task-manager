@@ -13,6 +13,7 @@ import {
 import { Page } from '../../../shared/models/page.model';
 import { buildHttpParams } from '../../../shared/utils/build-http-params';
 import { ParamValue } from '../../../shared/types/http.types';
+import { ResetPasswordByAdminDTO } from '../../../shared/models/request/password-request.models';
 
 export interface GetUsersParams {
   page?: number;
@@ -50,6 +51,16 @@ export class AdminUsersService {
   ): Observable<ApiResponseWrapper<UserResponseDTO>> {
     return this.http.patch<ApiResponseWrapper<UserResponseDTO>>(
       `${this.API_URL}/${userId}`,
+      request,
+    );
+  }
+
+  resetPassword(
+    userId: number,
+    request: ResetPasswordByAdminDTO,
+  ): Observable<ApiResponseWrapper<string>> {
+    return this.http.patch<ApiResponseWrapper<string>>(
+      `${this.API_URL}/${userId}/reset-password`,
       request,
     );
   }

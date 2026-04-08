@@ -217,6 +217,19 @@ label {
   display: block;
 }
 
+.password-section {
+  margin-top: 1rem;
+}
+
+.btn-warning {
+  background: #f59e0b;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #d97706;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
