@@ -18,6 +18,13 @@ export const ADMIN_ROUTES: Routes = [
           ),
       },
       {
+        path: 'users/new',
+        loadComponent: () =>
+          import('./pages/users/admin-user-create-page/admin-user-create-page.component').then(
+            (m) => m.AdminUserCreatePageComponent,
+          ),
+      },
+      {
         path: 'users',
         loadComponent: () =>
           import('./pages/users/admin-users-page/admin-users-page.component').then(

@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AdminUsersService } from '../../../services/admin-users.service';
 import { UserListResponseDTO } from '../../../../../shared/models/response/user-response.model';
 import { Page } from '../../../../../shared/models/page.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../../shared/services/toast.service';
 import { LoaderService } from '../../../../../shared/services/loader.service';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
@@ -23,6 +23,7 @@ import { AdminUserTableComponent } from './components/admin-user-table/admin-use
     PaginationComponent,
     AdminUserTableComponent,
     ConfirmModalComponent,
+    RouterLink,
   ],
   templateUrl: './admin-users-page.component.html',
   styleUrl: './admin-users-page.component.scss',

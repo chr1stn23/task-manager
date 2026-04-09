@@ -1,7 +1,10 @@
 <div class="users-container">
   <header class="users-header">
-    <h1>Gestión de Usuarios</h1>
-    <p>Administra y gestiona los usuarios del sistema.</p>
+    <div>
+      <h1>Gestión de Usuarios</h1>
+      <p>Administra y gestiona los usuarios del sistema.</p>
+    </div>
+    <button class="btn-primary" routerLink="new">Nueva Usuario</button>
   </header>
   <app-admin-user-filters
     [searchUserTerm]="searchUserTerm()"

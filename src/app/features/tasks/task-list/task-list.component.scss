@@ -15,13 +15,14 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin: 0 1rem;
+  margin-bottom: 1rem;
 
   @media (min-width: 640px) {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin: 1.5rem;
   }
 
   h1 {

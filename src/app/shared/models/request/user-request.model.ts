@@ -7,7 +7,7 @@ export interface UserCreateDTO {
   nickName: string;
   email: string;
   password: string;
-  role: Role[];
+  roles: Role[];
   enabled: boolean;
 }
 
@@ -17,7 +17,7 @@ export interface UserUpdateByAdminDTO {
   lastName?: string;
   nickName: string;
   email: string;
-  role?: Role[];
+  roles?: Role[];
   enabled?: boolean;
 }
 
