@@ -1,1 +1,53 @@
-<p>admin-dashboard works!</p>
+<div class="dashboard-layout">
+  <header class="dashboard-header">
+    <div>
+      <h1>Dashboard Administrativo</h1>
+      <p>Vista general de usuarios activos, tareas en progreso y sesiones de sistema.</p>
+    </div>
+  </header>
+  @if (stats()) {
+    <div class="kpi-row">
+      <div class="card kpi">
+        <span>Total de Usuarios</span>
+        <h2>{{ stats()?.activeUsers }}</h2>
+      </div>
+      <div class="card kpi">
+        <span>Total de Tareas</span>
+        <h2>{{ stats()?.totalTasks }}</h2>
+      </div>
+      <div class="card kpi">
+        <span>Sesiones Activas</span>
+        <h2>{{ stats()?.liveSessions }}</h2>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="card chart-container">
+        <h3>Estado de Tareas</h3>
+        <div class="canvas-wrapper">
+          <canvas #statusChart></canvas>
+        </div>
+      </div>
+      <div class="card chart-container">
+        <h3>Prioridades de Tareas</h3>
+        <div class="canvas-wrapper">
+          <canvas #priorityChart></canvas>
+        </div>
+      </div>
+
+      <div class="card list-container">
+        <h3>Top Usuarios</h3>
+        @for (user of stats()?.topUsers; track user.nickName) {
+          <div class="user-item">
+            <span class="nickname">{{ user.nickName }}</span>
+            <span class="badge">{{ user.taskCount }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="loading-state">
+      <p>Cargando estadísticas...</p>
+    </div>
+  }
+</div>
